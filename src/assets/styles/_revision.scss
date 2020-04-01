@@ -1,0 +1,83 @@
+.tabla-revision {
+    font-size: 0.85rem;
+    border-radius: 1em !important;
+    thead {
+        tr {
+            background-color: transparent !important;
+        }
+        th {
+            background-color: $main;
+        }
+        color: $white;
+    }
+}
+
+.tabla-revision-individual {
+    font-size: 0.85rem;
+    thead {
+        tr {
+            background-color: transparent !important;
+        }
+        th {
+            background-color: $indochine;
+        }
+        color: $white;
+    }
+}
+
+.bg-indochine {
+	background-color: $indochine;
+}
+
+.campoRubrica-seleccionado {
+    background-color: #84CA10;
+}
+
+.forum-area-revision {
+    height: 750px;
+    max-height: 750px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: $lightGray; 
+	padding: 10px !important; 
+    border-top-left-radius: 1.25rem !important;
+    border-bottom-left-radius: 1.25rem !important;
+}
+
+.datos-revision {
+	border-style: solid;
+	border-width: thin;
+    border-color: $lightGray;
+}
+
+.comentario-en-revision-first, .comentario-en-revision-second, .comentario-en-revision-third {
+    background-color: $revision;
+}
+
+.comentario-en-revision-first:before {
+    border-right: 18px solid $revision !important;
+}
+
+.comentario-en-revision-second:before {
+	border-bottom: 18px solid $revision !important;
+}
+
+.comentario-en-revision-third:before {
+	border-bottom: 18px solid $revision !important;
+}
+
+.comentario-sin-revision-first, .comentario-sin-revision-second, .comentario-sin-revision-third {
+    background-color: $sinRevision;
+}
+
+.comentario-sin-revision-first:before {
+    border-right: 18px solid $sinRevision !important;
+}
+
+.comentario-sin-revision-second:before {
+	border-bottom: 18px solid $sinRevision !important;
+}
+
+.comentario-sin-revision-third:before {
+	border-bottom: 18px solid $sinRevision !important;
+}

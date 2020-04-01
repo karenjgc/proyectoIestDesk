@@ -1,0 +1,45 @@
+<div class="container-fluid div-editor">
+    <div class="row d-flex flex-column mb-5">
+        <ng-container *ngIf="datosVideoCards && datosVideoCards.length > 0">
+            <div class="d-flex flex-fill px-5 pt-4 pb-2">
+                <input class="w-20 form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                <div class="flex-fill page-footer" *ngIf="datosVideoCards.length > 15">
+                    <pagination-controls 
+                        (pageChange)="p = $event" 
+                        previousLabel="Anterior"
+                        nextLabel="Siguiente">
+                    </pagination-controls>
+                </div>
+            </div>
+            <ul class="list-group flex-fill px-5 mb-5 pb-5">
+                <li class="elemento-multimedia list-group-item d-flex justify-content-between align-items-center py-1 px-2" *ngFor='let videoCard of datosVideoCards | searchfilter:"titulo,etiquetas":busquedaTitulo | paginate: { itemsPerPage: 15, currentPage: p }'>
+                    <div class="d-flex flex-fill cursor-pointer" (click)="openModal(videoCard)">
+                        <img class="img-xsm mx-1 mr-2 mt-2" src="assets/images/editor/formato-archivos/video.png">
+                        <div class="flex-column">
+                            {{ (videoCard.titulo.length > 80) ? (videoCard.titulo.trim() | slice:0:80).trim() +'...' : (videoCard.titulo) }}
+                            <div>
+                                <span *ngFor='let etiqueta of videoCard.etiquetasArray' class="badge badge-pill badge-light bg-gris-bootstrap font-weight-normal mr-1">
+                                    {{ etiqueta.display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <small class="text-muted pr-1 mr-1 border-right" *ngIf="!videoCard.botonesOcultos">{{ videoCard.fechaHora }}</small>
+                        <img class="rounded-circle p-1 bg-gris-rata cursor-pointer eliminar-elemento" src="./assets/images/temario/cerrar.png" container="body" placement="bottom" ngbTooltip="Eliminar" (click)="eliminarOda(videoCard)">
+                    </div>
+                </li>
+            </ul>
+        </ng-container>
+        <ng-container *ngIf="videosCards && videosCards.length == 0">
+            <h5 class="mx-auto">No se ha asignado contenido de videos.</h5>
+        </ng-container>
+    </div>
+    <a class="float-right boton-flotante-editor" placement="left" (click)="openModal()">
+        <i class="fa fa-plus icono-boton-flotante"></i>
+        <span class="tooltip-izquierda">Agregar vídeo</span>
+    </a>
+</div>
+
+<ngx-smart-modal #confirmacionDialogVideo identifier="confirmacionDialogVideo" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="1" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="accionDialog" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

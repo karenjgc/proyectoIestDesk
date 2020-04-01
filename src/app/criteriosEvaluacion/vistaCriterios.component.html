@@ -1,0 +1,65 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="28"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>
+			<a [routerLink]="['/criterios-de-evaluacion']"><label class="current">Criterios de Evaluación</label></a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid idesk-content px-4">
+    <div class="border rounded-lg d-flex flex-column justify-content-md-center mb-4" *ngIf="existeInfo">
+		<div class="flex-fill text-center" *ngIf="rolActual == 1">
+			<label class="w-100 py-1 bg-gris rounded-t-lg font-weight-bold"> 
+				Criterios de Evaluación
+				<span class="float-right cursor-pointer mr-3" (click)="goToEditar()">
+					<i class="fas fa-pencil-alt" id="editar"></i>
+				</span>
+			</label>
+		</div>
+        <div class="flex-fill flex-column p-2">
+			<div class="d-flex flex-fill flex-column flex-lg-row mx-2 p-0">
+				<ng-container *ngFor="let c of objectKeys(criterios)">
+					<div class="d-flex flex-fill flex-column border rounded-lg min-height-sm mb-2 mb-md-0 mx-2" *ngIf="criterios[c].length > 0">
+					   <label class="w-100 m-0 p-1 bg-naranja rounded-t-lg font-weight-bold font-white pl-3 text-center">{{ criterios[c][0].nombreAlt }}</label>
+						
+					   <div class="d-flex m-2" *ngFor="let cEval of criterios[c]">				
+							<div style="width:5rem;" class="flex-fill mr-4 ml-2 text-right">
+								<label class="float-right font-weight-bold mr-2"> {{ cEval.criterio }} </label>
+							</div>
+							<div class="flex-fill ml-4 me-2">
+								<label class="float-left mr-2"> {{ cEval.valor }} </label>
+							</div>
+						</div>
+						<hr class="m-0 mx-5">
+						<div class="d-flex m-2">
+							<div style="width:5rem;" class="flex-fill mr-4 ml-2">
+								<label class="float-right font-weight-bold mr-2"> Total </label>
+							</div>
+							<div class="flex-fill ml-4 me-2">
+								<label class="float-left mr-2"> 100 </label>
+							</div>
+						</div>
+					</div>
+				</ng-container>
+			</div>
+			<div class="flex-fill my-3 px-2" *ngIf="comentarios && comentarios != ''">
+				<label class="text-strong mx-2">ESPECIFICACIONES DEL PROFESOR </label>
+				<div class="flex-fill rounded-lg bg-gris-muy-claro p-2" [innerHTML]="comentarios | safeHtml"></div>
+			</div>
+		</div>
+    </div>
+
+	<div class="row justify-content-md-center px-4" *ngIf="rolActual == 2 && !existeInfo">
+		<div class="col-12 mx-5 px-4 mt-4">
+			<div class="row acordion-row border rounded-lg pl-3 pr-2">
+				<div class="col-12 p-2 text-center">
+					<label class="text-strong my-2">AÚN NO EXISTEN CRITERIOS DE EVALUACIÓN </label>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>

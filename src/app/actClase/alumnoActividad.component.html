@@ -1,0 +1,267 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="6"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/actividades-clase']"><label class="path">Actividades de Clase</label></a>	
+            <a [routerLink]="['/actividades-clase/maestro-actividad']"><label class="current">{{ nombreActividad }}</label></a>		
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="container">
+   <div class="row">
+       <div class="col-12" >
+            <!-- Juego Inactivo -->
+            <ng-container>
+                <div class="col-12 border p-3 rounded-lg text-center" *ngIf="!actividad">
+                    <img style="height: 20rem;" src="./assets/images/actividades/delfin-inactivo.png">
+                </div>
+            </ng-container>
+            
+            <!-- Espera de Inicio de Juego -->
+            <ng-container *ngIf="actividad && actividad.idTipoActividad == 1">
+                <ng-container *ngIf="actividad && actividadClase && !actividadClase.iniciado && actividadClase.estadoJuego != 'Terminado'">
+                    <div class="col-6 p-1 d-flex mx-auto rounded-lg background-primary">
+                        <div class="p-1 mr-2">
+                            <img style="height: 5rem;" src="./assets/images/actividades/ruleta-icono.png">
+                        </div>
+                        <div>
+                            <h2>Actividad</h2>
+                            <label>Los Animales de la Selva</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Nombre del Equipo -->
+                    <div *ngIf="actividadClase.equipo" class="col-6 my-3 mx-auto flex-column text-center p-0">
+                        <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                            <label class="font-weight-bold">Equipo</label>
+                        </div>
+                        <div [class]="'flex-fill nombre-equipo rounded-b-lg pt-1 bg-' + actividadClase.colores[actividadClase.equipo]">
+                            <label [class]="font-weight-bold">{{ actividadClase.equipo }}</label>
+                        </div>
+                    </div>
+                    
+                    <!--Integrantes del Equipo -->
+                    <div *ngIf="actividadClase.equipo" class="col-6 my-3 mx-auto flex-column text-center p-0">
+                        <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                            <label class="font-weight-bold">Integrantes</label>
+                        </div>
+                        <div *ngFor="let integrante of actividadClase.equipos[actividadClase.equipo]; let i = index;" [class]="'flex-fill bg-' + actividadClase.colores[actividadClase.equipo]" 
+                        [ngClass]="{'actividad-clase-integrante' : ( i < actividadClase.equipos[actividadClase.equipo].length - 1), 'actividad-clase-integrante-final' : (i == actividadClase.equipos[actividadClase.equipo].length - 1), 'actividad-clase-integrante-actual' : integrante == usuario }">
+                            <label>{{ integrante }}</label>
+                        </div>
+                    </div>
+                    
+                    <!--Gif Delfín -->
+                    <div *ngIf="!actividadClase.equipo" class="col-6 d-flex p-5 my-2 mx-auto border rounded-lg  justify-content-center">           
+                        <img class="img-xl" src="./assets/images/actividades/delfin-esperando.png" alt="">
+                    </div>
+        
+                    <!--Conexión-->
+                    <div class="col-6 d-flex p-5 my-2 mx-auto border rounded-lg justify-content-center" *ngIf="!actividadClase.equipo">
+                        <span class="dot-online mr-1"></span>
+                        <label class="font-weight-bold">{{ actividadClase.estadoConexion }}</label>
+                    </div>
+                </ng-container>
+        
+                <!--Comienzo de Juego-->
+                <ng-container *ngIf="actividad && actividadClase && actividadClase.iniciado">
+                    <!-- Ruleta con accion girar-->
+                    <div class="col-12 d-flex flex-xl-row flex-md-column ng-star-inserted" *ngIf="actividadClase.equipo && !actividadClase.mostrarPregunta">
+                        <div class="col-xl-6 col-lg-12 text-center">
+                            <div class="contenedor-ruleta">
+                                <div class="image-holder" *ngIf="actividadClase.mostrarPregunta || actividadClase.turnoActual">
+                                    <img class="ruleta-xl cursor-pointer background-image" src="./assets/images/actividades/ruleta-colores.png" [class.girar-ruleta]="actividadClase.ruletaAnimacion">
+                                    <div class="responsive-overlay">
+                                        <img class="ruleta-xl cursor-pointer" src="./assets/images/actividades/ruleta-centro.png" (click)="girarRuleta()">
+                                    </div>
+                                </div>
+
+                                <div class="image-holder" *ngIf="actividadClase.mostrarPregunta || !actividadClase.turnoActual">
+                                    <img class="ruleta-xl cursor-pointer background-image" src="./assets/images/actividades/ruleta-inactiva.png">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-12 pt-5">
+                            <div class="col-12 actividad-clase-integrante-actual rounded-lg text-center py-2">
+                                <label class="font-weight-bold">
+                                        {{ 'Aciertos:  ' + actividadClase.puntaje[actividadClase.equipo] }}
+                                </label>
+                            </div>
+                            
+                            <div *ngIf="actividadClase.equipo" class="col-12 my-2 flex-column text-center p-0 py-3">
+                                <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                                    <label class="font-weight-bold">Equipo</label>
+                                </div>
+                                <div class="flex-fill nombre-equipo rounded-b-lg pt-1">
+                                    <label class="font-weight-bold">{{ actividadClase.equipo }}</label>
+                                </div>
+                            </div>
+        
+                            <div *ngIf="actividadClase.equipo" class="col-12 my-2 flex-column text-center p-0">
+                                <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                                    <label class="font-weight-bold">Turno Actual</label>
+                                </div>
+                                <div class="flex-fill actividad-clase-integrante-actual rounded-b-lg pt-1">
+                                    <label class="font-weight-bold">{{ actividadClase.turno }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="!actividadClase.equipo || actividadClase.mostrarPregunta" class="d-flex">
+                        <div class="col-6 flex-column">
+                            <div class="col-12 text-center">
+                                <img class="ruleta-md cursor-pointer background-image" src="./assets/images/actividades/ruleta-inactiva.png" [ngClass]="{ 'ruleta-deshabilitada' :  actividadClase.mostrarPregunta || !actividadClase.turnoActual}">
+                            </div>
+                            <div class="col-12 mt-3">
+                                <div class="col-6 actividad-clase-integrante-actual rounded-lg text-center py-2 mx-auto">
+                                    <label class="font-weight-bold">
+                                            {{ 'Aciertos:  ' + actividadClase.puntaje[actividadClase.equipo] }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="actividadClase.preguntaActual && actividadClase.mostrarPregunta" class="col-6 d-flex flex-column">
+                            <label class="font-weight-bold titulo-pregunta rounded-lg text-center py-2">
+                                {{ actividadClase.preguntaActual[0].pregunta }}
+                            </label>
+                            <ng-container *ngFor="let respuesta of actividadClase.preguntaActual; let i=index">
+                                <button class="fondo-pregunta rounded-lg my-2 py-2" (click)="actividadClase.enviarRespuesta(respuesta, i)" [disabled]="!(actividadClase.turnoActual && !actividadClase.contestado)" 
+                                [class.botonInactivo]="!(actividadClase.turnoActual && !actividadClase.contestado)" [class.respuestaIncorrecta]="actividadClase.contestado && respuesta.correcta == 0 && actividadClase.indice == i" [class.respuestaCorrecta]="actividadClase.contestado && respuesta.correcta == 1">
+                                    {{ respuesta.respuesta }}
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+           
+            <!--Fin de Juego-->
+            <!-- JEOPARDO -->
+
+            <ng-container *ngIf="actividad && actividad.idTipoActividad == 2">
+                <!--ESTADO INICIAL-->
+                <ng-container *ngIf="actividad && actividadClase && !actividadClase.iniciado && actividadClase.estadoJuego != 'Terminado'">
+                    <div class="col-6 p-1 d-flex mx-auto rounded-lg background-primary">
+                        <div class="p-1 mr-2">
+                            <img style="height: 5rem;" src="./assets/images/actividades/jeopardy-icono.png">
+                        </div>
+                        <div>
+                            <h2>Actividad</h2>
+                            <label>Jeopardy</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Nombre del Equipo -->
+                    <div *ngIf="actividadClase.equipo" class="col-6 my-3 mx-auto flex-column text-center p-0">
+                        <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                            <label class="font-weight-bold">Equipo</label>
+                        </div>
+                        <div [class]="'flex-fill nombre-equipo rounded-b-lg pt-1 bg-' + actividadClase.colores[actividadClase.equipo]">
+                            <label [class]="font-weight-bold">{{ actividadClase.equipo }}</label>
+                        </div>
+                    </div>
+                    
+                    <!--Integrantes del Equipo -->
+                    <div *ngIf="actividadClase.equipo" class="col-6 my-3 mx-auto flex-column text-center p-0">
+                        <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                            <label class="font-weight-bold">Integrantes</label>
+                        </div>
+                        <div *ngFor="let integrante of actividadClase.equipos[actividadClase.equipo]; let i = index;" [class]="'flex-fill bg-' + actividadClase.colores[actividadClase.equipo]" 
+                        [ngClass]="{'actividad-clase-integrante' : ( i < actividadClase.equipos[actividadClase.equipo].length - 1), 'actividad-clase-integrante-final' : (i == actividadClase.equipos[actividadClase.equipo].length - 1), 'actividad-clase-integrante-actual' : integrante == usuario }">
+                            <label>{{ integrante }}</label>
+                        </div>
+                    </div>
+                    
+                    <!--Gif Delfín -->
+                    <div *ngIf="!actividadClase.equipo" class="col-6 d-flex p-5 my-2 mx-auto border rounded-lg  justify-content-center">           
+                        <img class="img-xl" src="./assets/images/actividades/delfin-esperando.png" alt="">
+                    </div>
+        
+                    <!--Conexión-->
+                    <div class="col-6 d-flex p-5 my-2 mx-auto border rounded-lg justify-content-center" *ngIf="!actividadClase.equipo">
+                        <span class="dot-online mr-1"></span>
+                        <label class="font-weight-bold">{{ actividadClase.estadoConexion }}</label>
+                    </div>
+                </ng-container>
+                <!--/ESTADO INICIAL-->
+                <!--JUEGO-->
+                <ng-container *ngIf="actividad && actividadClase && actividadClase.iniciado">
+                    <div class="d-flex rounded-lg">
+                        <div class="d-flex w-100 align-self-start text-center rounded tablero-jeopardy">
+                            <div class="flex-fill" *ngFor="let categoria of objectKeys(actividadClase.categoriasPreguntasRespuestas);let i = index;">
+                                <h4 [class]="'p-1 font-white ' + actividadClase.coloresCategorias[i]">{{ (i+1) }}</h4>
+                                <ng-container *ngFor="let pregunta of objectKeys(actividadClase.categoriasPreguntasRespuestas[categoria]);let i = index;">
+                                    <h5 class="p-1 cursor-pointer font-weight-bold" [class.cursor-not-allowed]='actividadClase.mostrarPregunta' [class.pregunta-contestada]="actividadClase.categoriasPreguntasRespuestas[categoria][pregunta].contestado == 1" (click)="actividadClase.elegirPregunta(actividadClase.categoriasPreguntasRespuestas[categoria][pregunta], (i + 1) * 100)">
+                                        {{ (i + 1) * 100 }}
+                                    </h5>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 ml-5 flex-column" *ngIf="actividadClase.preguntaActual && actividadClase.mostrarPregunta">
+                            <div class="d-flex flex-column font-weight-bold titulo-pregunta rounded-lg text-center ">
+                                <label class="flex-fill rounded-t-lg actividad-clase-jeopardy-pregunta-titulo background-black">
+                                    {{ actividadClase.preguntaActual.respuestas[0].categoria + ' - ' + actividadClase.preguntaActual.puntos + ' puntos' }}
+                                </label>
+                                <label class="flex-fill">
+                                    {{ actividadClase.preguntaActual.respuestas[0].pregunta }}
+                                </label>
+                            </div>
+                            <ng-container *ngFor="let respuesta of actividadClase.preguntaActual.respuestas; let i=index">
+                                <button class="fondo-pregunta rounded-lg my-2 py-2" (click)="actividadClase.enviarRespuesta(respuesta, i)" [disabled]="!(actividadClase.turnoActual && !actividadClase.contestado)" 
+                                [class.botonInactivo]="!(actividadClase.turnoActual && !actividadClase.contestado)" [class.respuestaIncorrecta]="actividadClase.contestado && respuesta.correcta == 0 && actividadClase.indice == i" [class.respuestaCorrecta]="actividadClase.contestado && respuesta.correcta == 1">
+                                    {{ respuesta.respuesta }}
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div [class]="'flex-fill flex-column text-center m-3 p-0 rounded-lg border-xl border-' + actividadClase.colores[actividadClase.equipo] " *ngIf="!actividadClase.mostrarPregunta">
+                            <div [class]="'flex-fill rounded-t-lg pt-1 font-white bg-' + actividadClase.colores[actividadClase.equipo]">
+                                <label class="font-weight-bold">{{ actividadClase.equipo }}</label>
+                            </div>
+                            <div class="flex-fill rounded-b-lg pt-1">
+                                <label class="pt-2 font-weight-bold"> {{ actividadClase.puntaje + ' pts.'}}</label>
+                            </div>
+                        </div>
+
+                        <div class="flex-fill flex-column text-center m-3 p-0" *ngIf="!actividadClase.mostrarPregunta">
+                            <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                                <label class="font-weight-bold">Turno actual</label>
+                            </div>
+                            <div class="d-flex flex-fill nombre-equipo background-black">
+                                <label class="w-100 m-0 font-weight-bold">Equipo</label>
+                                <label class="w-100 m-0 font-weight-bold">Integrante</label>
+                            </div>
+                            <div [class]="'d-flex flex-fill rounded-b-lg bg-' + actividadClase.colores[actividadClase.equipoTurno]">
+                                <label class="w-100 m-1 font-white font-weight-bold">{{ actividadClase.equipoTurno }}</label>
+                                <label class="w-100 m-1 font-white font-weight-bold">{{ (actividadClase.turnoActual ? 'Tu turno' : actividadClase.turno) }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <!--/JEOPARDO-->
+
+            <!--Ganadores-->
+            <div class="border rounded-lg p-2 text-center" *ngIf="actividadClase && actividadClase.estadoJuego == 'Terminado'">
+                <img [src]="imagenPosiciones[actividadClase.posicion]" style="height: 25rem;">
+                <div class="col-6 my-2 flex-column mx-auto text-center p-0 py-3">
+                    <div class="flex-fill titulo-equipo rounded-t-lg pt-1">
+                        <label class="font-weight-bold">Equipo</label>
+                    </div>
+                    <div [class]="'flex-fill nombre-equipo rounded-b-lg pt-1 actividad-clase-equipo-nombre bg-' + actividadClase.colores[actividadClase.equipo]">
+                        <label class="font-weight-bold">{{ actividadClase.equipo }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</div>

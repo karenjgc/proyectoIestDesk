@@ -1,0 +1,28 @@
+.box-reutilizar {
+    border: 1px solid $lightGray;
+    overflow: hidden;
+    height: 400px;
+
+    .listado, .vista-previa {
+        height: 400px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .vista-previa {
+        margin-top: 10px;
+    }
+
+    .elemento{
+        background-color: $lightGray;
+        color: $main;
+        border-radius: 5px;
+        margin: 5px;
+        padding: 5px;
+        &:hover {
+            background-color: $notSoGray;
+            color: $white;
+            cursor: pointer !important;
+        }
+    }
+}

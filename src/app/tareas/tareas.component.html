@@ -1,0 +1,85 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="3"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/tareas']"><label class="current">Tareas</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-tareas-maestro">
+                <thead>
+					<tr>
+						<th width="20%">Título</th>
+						<th>Tema</th>
+						<th>Fecha Publicación</th>
+						<th>Fecha Cierre</th>
+						<th>Modalidad de Trabajo</th>
+						<th *ngIf="rolActual == 1">Entregadas</th>
+						<th *ngIf="rolActual == 1">Revisadas</th>
+						<th *ngIf="rolActual == 1">Revisar</th>
+						<th *ngIf="rolActual == 2">Estatus</th>
+					</tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tareita of tareas">
+                        <td class="datatable-options">
+                            <div class="w-100 link-elemento pointer" (click)="gotoTarea(tareita.idTarea, tareita.titulo)">{{ tareita.titulo }}</div>
+                            <span class="options" *ngIf="rolActual == 1"><br><a (click)="editar(tareita.idTarea)">Editar</a> | <span class="delete-homework pointer" (click)="confEliminar(tareita.idTarea, tareita.titulo)">Eliminar</span></span>
+                        </td>
+                        <td>{{ tareita.tema }}</td>
+                        <td class="text-center">{{ tareita.fechaPublicacion }}</td>
+						<td class="text-center">{{ tareita.fechaCierre }} <span *ngIf="tareita.reabierta == 1" ngbTooltip="Reabierta" class="text-danger">&nbsp;*&nbsp;</span></td>
+                        <td class="text-center">
+                            <img src="assets/images/elements/individual.png" ngbTooltip="Individual" placement="top" class="img-table" *ngIf="tareita.idModTrabajo == 1">
+                            <img src="assets/images/elements/grupal.png" ngbTooltip="Equipos" placement="top" class="img-table pointer" *ngIf="tareita.idModTrabajo != 1" (click)="verEquipos(tareita.idPlantillaEquipos, muestraEquipos)">
+                        </td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            {{ tareita.entregadas }}
+                        </td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            {{ tareita.revisadas }}
+                        </td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            <img src="assets/images/elements/sin_revisar.png" class="img-table pointer" (click)="revisarTarea(tareita.idTarea)"><!--img src="assets/images/elements/sin_revisar.png" class="img-table pointer" (click)="revisarTarea(tareita.idTarea)"-->
+                        </td>
+						<td *ngIf="rolActual == 2">{{ tareita.estatus }}</td>
+                    </tr>
+                    <tr *ngIf="!tareas">
+                        <td colspan="8" *ngIf="rolActual == 1">Sin tareas asignadas a este curso</td>
+                        <td colspan="6" *ngIf="rolActual == 2">Sin tareas publicadas en este curso</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #muestraEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+		<h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada"></idesk-vistaEquipos>
+    </div>
+</ng-template>

@@ -1,0 +1,49 @@
+<div class="row border rounded-lg">
+	<div class="col-12" *ngIf="!previsualizador">
+		<div class="row align-items-center heading-archivos rounded-t-lg">
+			<div [class]="(nombreActividad != undefined) ? 'col-11 linea-archivos' : 'col-12 linea-archivos'">
+				<button class="text-center pointer bloque-archivo" (click)="mostrarArchivo(ar.ruta, ar.extension, ar.nombreArchivo)" *ngFor="let ar of arrArchivos">
+					<img [src]="ar.imgMini">
+					<label class="text-truncate">{{ ar.nombreArchivo }}</label>
+				</button>
+			</div>
+
+			<div class="col-1 text-center mx-0 pl-0 pr-2" *ngIf="mostrarDescarga">
+				<button class="text-center pointer support mx-0 px-0" (click)="avisa()" *ngIf="ruta1arch == ''">
+					<img src="assets/images/elements/download.png" width="37px">
+				</button>
+				<a [href]="ruta1arch" [download]="nombre1arch" target="_self" *ngIf="ruta1arch != ''">
+					<button class="text-center pointer support mx-0 px-0">
+						<img src="assets/images/elements/download.png" width="37px">
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-12 text-center">
+		<div class="embed-responsive embed-responsive-16by9 " *ngIf="tipo == 3 || tipo == 1 || tipo == 0">
+			<iframe class="embed-responsive-item" [src]="ruta | safeUrl" frameborder="0" *ngIf="tipo == 3"></iframe>
+			<!--embed [src]="ruta | safeUrl" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html" *ngIf="tipo == 1"-->
+			<iframe class="embed-responsive-item" [src]="ruta | safeUrl" frameborder="0" *ngIf="tipo == 1"></iframe>
+			<iframe class="embed-responsive-item" [src]="ruta | safeUrl" frameborder="0" *ngIf="tipo == 0"></iframe>
+		</div>
+		<img [src]="ruta | safeUrl" class="img-fluid" *ngIf="tipo == 2">
+		<div class="row my-4" *ngIf="tipo == 4 || tipo == -1">
+			<div class="col-12 text-center">
+				<a [href]="ruta" [download]="nombre" [target]="target">
+					<img class="pointer" [src]="rutaImagen">
+				</a>
+			</div>
+			<div class="col-12 text-center">
+				<a [href]="ruta" [download]="nombre" [target]="target">
+					<label class="pointer col-form-label">{{ nombre }}</label>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+<ngx-smart-modal #confirmacion identifier="confirmacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="0" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+    </div>
+</ngx-smart-modal>

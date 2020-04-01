@@ -1,0 +1,69 @@
+<div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-cogs"></i> Configuraciones</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container-fluid idesk-content">
+        <div class="row p-1" *ngIf="rolActual == 2">
+                
+            <div class="col-12">
+                <div class="dividor w-100 rounded-t-lg rounded-b-lg mb-3"></div>
+                <h5 class="pl-3"><strong>Notificaciones</strong></h5>
+                <div class="dividor w-100 rounded-t-lg rounded-b-lg mt-3"></div>
+            </div>
+
+            <form class="px-4 pt-3 w-100">
+                <table class="w-100">
+                    <ng-container *ngFor="let c of objectKeys(configuraciones)">
+                        <tr>
+                            <td class="titulo-configuracion" colspan="2">
+                                <label class="text-strong">{{ c }}</label>
+                            </td>
+                        </tr>
+                        <ng-container *ngFor="let conf of configuraciones[c]">
+                            <tr>
+                                <td class="pl-4" width="30%">
+                                    <label class="col-form-label">{{ conf.tipoConfiguracion }}</label>
+                                </td>
+                                <td>
+                                    <label class="col-form-label label-switch">No&nbsp;</label>
+                                    <ui-switch [(ngModel)]="conf.habilitado" [name]="conf.idTipoConfiguracion"></ui-switch>
+                                    <label class="col-form-label label-switch">&nbsp;Sí</label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </ng-container>
+                </table>
+            </form>
+        </div>
+
+        <div class="row p-3" *ngIf="rolActual == 2">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary btn-sm" (click)="guardaConfiguraciones()"><i class="fas fa-save"></i> Guardar</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-light btn-sm" (click)="activeModal.dismiss()"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+        </div>
+
+        <div class="row p-1">
+            <div class="col-12">
+                <div class="dividor w-100 rounded-t-lg rounded-b-lg mb-3"></div>
+                <h5 class="pl-3"><strong>Google Drive</strong></h5>
+                <div class="dividor w-100 rounded-t-lg rounded-b-lg mt-3"></div>
+            </div>
+            
+            <div class="col-12 px-4 pt-3">
+                <label (click)="entraGoogle()" *ngIf="!sesionIniciada"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Iniciar sesión</label>
+                <label (click)="cierraGoogle()" *ngIf="sesionIniciada"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Cerrar sesión</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

@@ -1,0 +1,81 @@
+<div class="sticky-top" *ngIf="mostrarMenu">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="26"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/rubricas-iest']"><label class="path">Rúbricas IEST</label></a>	
+            <a><label class="current">{{ nombre }}</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="d-flex flex-column border rounded-lg">
+        <div class="row justify-content-md-center" *ngIf="rubrica">
+            <div class="col-10 text-right" *ngIf="rolActual == 1 && mostrarMenu == true">
+                <button class="btn btn-primary btn-sm mt-2 mr-2" id="editar" (click)="gotoEditar(rubrica.idRubrica)">
+                    <i class="fas fa-pencil-alt"></i>
+                    &nbsp;Editar
+                </button>
+            </div>
+
+            <div class="col-11">
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-strong col-form-label">TÍTULO </label>
+                    </div>
+                    <label class="col-12 col-form-label">{{ rubrica.nombre }}</label>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-strong col-form-label">DESCRIPCIÓN </label>
+                    </div>
+                    <div class="col-12 col-form-label" [innerHTML]="rubrica.descripcion | safeHtml"></div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-strong col-form-label">NIVEL DE ESTUDIOS</label>
+                    </div>
+                    <label class="col-12 col-form-label">{{ rubrica.Grado }}</label>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-strong col-form-label">PRODUCTO </label>
+                    </div>
+                    <label class="col-12 col-form-label">{{ rubrica.producto }}</label>
+                </div>
+            </div>
+
+            <div class="col-11">
+                <br> &nbsp;
+                <div class="table-responsive">
+                    <table class="table table-rounded-lg tabla-rubrica" cellspacing="0">
+                        <thead class="head-rubrica">
+                            <tr class="text-center top-table">
+                                <th rowspan="2">Categorías</th>
+                                <th [attr.colspan]="niveles">Niveles</th>
+                            </tr>
+                            <tr class="text-center">
+                                <th *ngFor="let n of niv; let i = index">{{ n.nombreValor }}<br>{{ n.valor }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let r of tablaRubrica" class="niveles">
+                                <td class="categorias" [innerHTML]="r.titulo | safeHtml"></td>
+                                <td *ngFor="let n of r.niveles" [innerHTML]="n.descripcion | safeHtml"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacionRub" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

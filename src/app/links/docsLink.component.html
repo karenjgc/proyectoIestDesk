@@ -1,0 +1,133 @@
+<div class="container-fluid">
+    <div class="row text-center">
+		<div class="col-1" *ngIf="_tipoAdjunto == 1">
+            <button type="button" class="btn support btn-link" (click)="abreAlta(1, agregarLink)">
+                <img src="assets/images/elements/youtube.png" class="icon-link">
+            </button> 
+        </div>
+        <div class="col-1" *ngIf="_tipoAdjunto == 1">
+            <button type="button" class="btn support btn-link" (click)="abreAlta(2, agregarLink)">
+                <img src="assets/images/elements/vimeo.png" class="icon-link">
+            </button> 
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn support btn-link" (click)="abreAlta(3, agregarLink)">
+                <img src="assets/images/elements/drive.png" class="icon-link">
+            </button> 
+        </div>
+        <div class="col-1" *ngIf="rolActual == 1 && _tipoAdjunto != 2">
+            <button type="button" class="btn support btn-link" (click)="abreAlta(4, agregarLink)">
+                <img src="assets/images/elements/link.png" class="icon-link">
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+		<div class="col-12" *ngFor="let l of linksEdicion">
+            <label>
+                <span class="icon-main-color pointer" (click)="abreLink(l, vistaLink)"><i class="fas fa-link"></i></span>
+                <span class="pointer" (click)="abreLink(l, vistaLink)">&nbsp;{{ l.nombre }} </span>
+                &nbsp;<span class="icon-main-color pointer" (click)="abreEdita(l.idTipoLink, agregarLink, l)"><i class="fas fa-edit"></i></span>
+                &nbsp;<span class="icon-main-color pointer" (click)="eliminaLink(l.idLink, 1)"><i class="fas fa-times"></i></span>
+			</label>
+        </div>
+		
+        <div class="col-12" *ngFor="let l of infoLinks">
+            <label>
+                <span class="icon-main-color pointer" (click)="abreLink(l, vistaLink)"><i class="fas fa-link"></i></span>
+                <span class="pointer" (click)="abreLink(l, vistaLink)">&nbsp;{{ l.nombre }} </span>
+                &nbsp;<span class="icon-main-color pointer" (click)="abreEdita(l.idTipoLink, agregarLink, l)"><i class="fas fa-edit"></i></span>
+                &nbsp;<span class="icon-main-color pointer" (click)="eliminaLink(l.idLink, 0)"><i class="fas fa-times"></i></span>
+			</label>
+        </div>
+    </div>
+</div>
+
+<ng-template #agregarLink let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-plus"></i> Agregar Link</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row text-center"> 
+                <div class="col-12 text-right">
+                <ng-template #infoCronograma>Da clic en el ícono <strong>Iniciar Sesión</strong> y acepta los permisos que Google Drive solicita.<br>
+                        Si ya tienes tu sesión iniciada, sólo <strong>busca</strong> un documento y asígnale un título. Al seleccionarlo, se agregará un enlace de Drive al formulario. Para desvincular el IEST Desk de Google Drive, da click al ícono <strong>Cerrar sesión.</strong> </ng-template> 
+                <img src="assets/images/elements/info.png" *ngIf="tipo == 3" class="info-icon pointer" [ngbTooltip]="infoCronograma" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+                </div>
+                <div class="col-12">
+                    <form [formGroup]="link">
+                        <div class="form-group row">
+                            <label for="titulo-tarea" class="col-sm-1 col-form-label text-strong">TÍTULO </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" #titulo formControlName="titulo">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="titulo-tarea" class="col-sm-1 col-form-label text-strong">LINK </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm" #enlace formControlName="enlace" id="enlace">
+                            </div>
+                            <div class="col-sm-1" *ngIf="tipo == 3">
+                                <button class="btn btn-primary btn-sm" (click)="verificarInicio()" *ngIf="salio" placement="top" ngbTooltip="Iniciar&nbsp;sesión"><i class="fas fa-sign-in-alt"></i></button>
+                                <button class="btn btn-primary btn-sm" (click)="inicializarDrive()" *ngIf="!salio" placement="top" ngbTooltip="Examinar..."><i class="fas fa-search"></i></button>
+                            </div>
+							<div class="col-sm-1" *ngIf="tipo == 3 && !salio">
+                                <button class="btn btn-primary btn-sm" (click)="signOut()" placement="top" ngbTooltip="Cerrar&nbsp;sesión"><i class="fas fa-sign-out-alt"></i></button>
+                            </div>
+                        </div>
+						<div class="form-group row hidden" id="alerta-datos">
+							<ng-container *ngIf="tipoRespuestaL == 2">
+								<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation-triangle"></i>&nbsp;{{ mensajeDialogoL }}</div>
+							</ng-container>
+							<ng-container *ngIf="tipoRespuestaL == 1">
+								<div class="alert alert-success" role="alert"><i class="fas fa-check"></i>&nbsp;{{ mensajeDialogoL }}</div>
+							</ng-container>
+						</div>
+                        <div class="form-group row">
+                            <div class="col-sm-12 text-center">
+                                <button class="btn btn-primary btn-sm" (click)="validaLink()"><i class="fas fa-save"></i> Guardar</button>
+                                &nbsp;&nbsp;
+                                <button class="btn btn-light btn-sm" (click)="cancelar()"><i class="fas fa-times"></i> Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-12 my-2 py-2 w-100 flex-row alert-info rounded-md" *ngIf="mostrarMensaje">
+                        <p class="ml-2 mb-2"><i class="fa fa-exclamation-triangle"></i>&nbsp; Sesión cerrada en Google Drive</p>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" hidden id="enlace1">
+					<input type="text" class="form-control form-control-sm" hidden id="enlace2" [value]="enlace2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<ngx-smart-modal [id]="ida" [identifier]="ida">
+		<div class="container-fluid">
+			<idesk-infoDialogo [mensaje]="mensajeDialogoL" [tipo]="tipoRespuestaL" (respuesta)="cierraDialogoInfo($event, ida)"></idesk-infoDialogo>
+		</div>
+	</ngx-smart-modal>
+	
+</ng-template>
+
+<ngx-smart-modal [id]="idb" *ngIf="_tipoAdjunto == 3" [identifier]="idb">
+	<div class="container-fluid">
+		<idesk-infoDialogo [mensaje]="mensajeDialogoL" [tipo]="tipoRespuestaL" (respuesta)="cierraDialogoInfo($event, idb)"></idesk-infoDialogo>
+	</div>
+</ngx-smart-modal>
+
+<ng-template #vistaLink let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-search"></i> Vista previa</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid">
+                <idesk-vistaArchivos [archivos]="arrArchivos" [personAlta]="'0'" nombreActividad="''" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>

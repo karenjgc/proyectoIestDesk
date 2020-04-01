@@ -1,0 +1,66 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="5"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>		
+            <a [routerLink]="['/apuntes']"><label class="path">Apuntes</label></a>		
+            <a [routerLink]="['/apuntes/vista']"><label class="current">{{ apunteNombre }}</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center border rounded-lg" *ngIf="apunte">
+        <div class="col-10 text-right" *ngIf="!modoTemario && rolActual == 1">
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoEditar()">
+                <i class="fas fa-pencil-alt"></i>
+                &nbsp;Editar
+            </button>
+        </div>
+
+        <div class="col-11" *ngIf="apunte">
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong col-form-label">TÍTULO </label><br>
+                    <label class="col-form-label">&nbsp;{{ apunte.titulo }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong col-form-label">TEMA </label><br>
+                    <label class="col-form-label">&nbsp;{{ apunte.tema }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong col-form-label">FECHA DE PUBLICACIÓN </label><br>
+                    <label class="col-form-label">&nbsp;{{ apunte.fechaPublicacion }}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="apunte.descripcion != ''">
+                <div class="col-12">
+                    <label class="text-strong col-form-label">DESCRIPCIÓN </label>
+                </div>
+                <div class="col-12 col-form-label" [innerHTML]="apunte.descripcion | safeHtml"></div>
+            </div>
+        </div>
+
+        <div class="col-11 mb-1">
+            <div class="row">
+                <div class="col-12">
+                    <label class="text-strong col-form-label">ARCHIVOS ADJUNTOS </label>
+                </div>
+                <!--div *ngIf="numeroLinks > 0" class="col-12">
+                    <div class="col-12" *ngFor="let l of arrLinks">
+                        <img [src]="l.rutaImg" width="20px">&nbsp;<a [href]="l.link" target="_blank">{{ l.nombre }}</a>
+                    </div>
+                </div-->
+            </div>
+        </div>
+
+		<div class="col-11" *ngIf="numeroArchivos > 0 || numeroLinks > 0" style="margin-right: 10px; margin-top: 5px;">
+			<idesk-vistaArchivos [archivos]="arrArchivos" [personAlta]="'0'" [nombreActividad]="apunte.titulo" [previsualizador]="false"></idesk-vistaArchivos>
+		</div>
+    </div>
+</div>

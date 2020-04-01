@@ -1,0 +1,38 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="19"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/muro']"><label class="current">Muro</label></a>		
+        </div>
+	</div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <form [formGroup]="muro">
+                <div class="form-group row">
+                    <label for="publicacion" class="col-sm-12 muro-intro">Comparte tus ideas: </label>
+                    <div class="col-sm-12">
+                        <textarea [froalaEditor]="options" formControlName="publicacion" class="froala" #publicacion></textarea>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" id="compartir-publicacion" class="btn btn-primary btn-sm">Compartir</button>
+                    </div>
+                    <div class="col-6 text-right">
+                        <img id="image" src="assets/images/elements/picture.png" class="pointer" width="32px">&nbsp;&nbsp;
+                        <img id="link" src="assets/images/elements/link.png" class="pointer" width="32px">&nbsp;&nbsp;
+                        <img id="poll" src="assets/images/elements/rate.png" class="pointer" width="32px">
+                    </div>
+                </div>
+            </form>
+
+            <div class="row muro">
+
+            </div>
+
+        </div>
+    </div>
+</div>

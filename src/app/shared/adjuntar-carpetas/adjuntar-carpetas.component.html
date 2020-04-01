@@ -1,0 +1,34 @@
+<div class="center">
+  <form class="rounded-lg draggable-form" method="post" enctype="multipart/form-data">
+      <label>
+          <img src="assets/images/editor/upload.png"><br>
+          Arrastra aquí o click para añadir carpeta
+      </label>
+      <input type="file" name="files[]" id="files" title=" " directory webkitdirectory (change)="creaRefCarpeta($event)"  draggable="true" [disabled]="cantidadCarpetas()" #file>
+  </form>
+  <cite>Archivos adjuntos: {{cantidadArchivos}}</cite>
+
+  <div class="container-wrap p-3" *ngIf="cantidadCarpetas()">
+      <ng-container *ngFor="let item of webKitPath; let i = index">
+          <div class="card" style="width: 16rem;" *ngIf="i == 0">
+              <div class="card-img text-center">
+                  <img class="img-md mt-2 card-img-top formatoArchivo" src="assets/images/editor/formato-archivos/file.png">
+              </div>
+              <div class="card-body text-dark" style="min-height:auto;">
+                  <p class="card-text text-center">
+                      {{ nombreCarpeta }}
+                  </p>
+              </div>
+              <div class="card-footer">
+                  <button type="button" class="btn btn-sm btn-primary file-cancel float-right" (click)="eliminaRefCarpeta()">
+                      <i class="fas fa-times"></i>&nbsp;Eliminar
+                  </button>
+              </div>
+          </div>
+      </ng-container>
+  </div>
+
+  <p *ngIf="progresoCarpeta > 0">
+      <ngb-progressbar type="info" [value]="progresoCarpeta"></ngb-progressbar>{{ progresoCarpeta | number }}%
+  </p>
+</div>

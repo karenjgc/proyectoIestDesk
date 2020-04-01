@@ -1,0 +1,52 @@
+$naranja2: #faaf3b;
+$cafe2: #C16300;
+$gris1: #f0f0f0;
+$g1: #EFEFEF;
+$gris2: #e5e5e5;
+$g2: #D3D3D3;
+
+.lista-alumnos {
+    width: 19rem !important;
+}
+
+.sticky-header{
+	position: -webkit-sticky;
+    position: sticky;
+	top: 8rem;
+}
+
+.header-calificacion {
+    background-color: $main !important;
+    color: $white;
+    height: 40px;
+}
+
+.calificaciones{
+	:nth-child(even).item-calificaciones {
+		background-color: $chamois; 
+	}
+	:nth-child(even).item-calificaciones:hover {
+		background-color: $desertSand;
+	}
+
+	:nth-child(odd).item-calificaciones {
+		background-color: $linen;
+	}
+	:nth-child(odd).item-calificaciones:hover {
+		background-color: $albescentWhite;
+	}
+}
+
+.act-x {
+    background-color: $cafe2;
+	width: 44.8px;
+}
+
+.act-y {
+    background-color: $main;
+	width: 44.8px;
+}
+
+.calificaciones-responsive {
+    overflow: auto;
+}

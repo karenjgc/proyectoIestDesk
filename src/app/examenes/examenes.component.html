@@ -1,0 +1,41 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="23"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <label class="current">Nuevo</label>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-actividades">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Fecha Publicación</th>
+                    <th>Fecha Cierre</th>
+                    <th *ngIf="rolActual != 1">Calificación</th>
+                    <th *ngIf="rolActual == 1">Contestados</th>
+                    <th *ngIf="rolActual == 1">Revisión</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let examen of examenes">
+                        <td class="datatable-options pointer">
+                            <span class="link-elemento">{{ examen.titulo }}</span>
+                        </td>
+                        <td>{{ examen.fechaPublicacion }}</td>
+                        <td>{{ examen.fechaCierre }}</td>
+                        <td *ngIf="rolActual != 1">{{ examen.calificacion }}</td>
+                        <td *ngIf="rolActual == 1">{{ examen.contestados }}</td>
+                        <td *ngIf="rolActual == 1">{{ act.idActividadClase }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

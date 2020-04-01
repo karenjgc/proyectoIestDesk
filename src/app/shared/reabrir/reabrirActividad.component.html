@@ -1,0 +1,39 @@
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <form [formGroup]="reabrir">
+                <div class="form-group row">
+                    <label for="nombreTema" class="col-sm-4 col-form-label text-strong">FECHA DE CIERRE ORIGINAL </label>
+                    <div class="col-sm-8">
+                        <label #fechaCierreOriginalLb class="col-form-label">{{ fechaCierreOriginal }}</label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="nombreTema" class="col-sm-4 col-form-label text-strong">NUEVA FECHA DE CIERRE </label>
+                    <div class="col-sm-7 mr-1">
+						<input type="text" class="form-control form-control-sm input3 calendar" #fechaCierreNueva formControlName="fechaCierreNueva" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" (click)="setStartAt()" readonly>
+						<owl-date-time stepMinute="10" [startAt]="startAt" pickerMode="dialog" #dt2></owl-date-time>
+                    </div>
+					<div class="col text-left icon-main-color" (click)="setStartAt()" [owlDateTimeTrigger]="dt2">
+						<i class="far fa-calendar-alt"></i>
+					</div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-sm" (click)="reabrirActividad()"><i class="fas fa-save"></i> Guardar</button>
+                        &nbsp;&nbsp;
+                        <button class="btn btn-light btn-sm" (click)="cerrar(0)"><i class="fas fa-times"></i> Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacionReabrir identifier="dialogoInformacionReabrir" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfoReabrir($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div class="d-flex flex-column p-3 px-5 my-3 border rounded-lg" *ngIf="imagen">
+        <label class="font-weight-bold">TÍTULO</label>
+        <label>{{ imagen.titulo }}</label> 
+
+        <label class="font-weight-bold" *ngIf="imagen.fechaPublicacion">FECHA DE PUBLICACIÓN</label>
+        <label>{{ imagen.fechaPublicacionS }}</label>
+
+        <label class="font-weight-bold">DESCRIPCIÓN</label>
+        <p [innerHTML]="imagen.descripcion | safeHtml"></p>
+
+        <label class="font-weight-bold">IMAGEN</label>
+        <div class="flex-fill text-center border rounded-lg p-2">
+            <img class="img-fluid" [src]="vistaAlumno ?  'https://sie.iest.edu.mx/iestdesk_archivos/MaestroArchivos/' + imagen.llave : 'https://sie.iest.edu.mx/iestdesk_archivos/MaestroArchivos/' + imagen.llave + '.' + imagen.extension" *ngIf="imagen.llave">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h4 class="modal-title"><i class="fas fa-book"></i> Bibliotecas Virtuales</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="container-fluid idesk-content">
+        <div class="row align-items-center">
+            <div class="col-2" *ngFor="let biblio of biliotecas">
+                <ng-template #nombre>{{ biblio.nombre }}</ng-template>
+                <a [href]="biblio.url" target="_blank">
+                    <img [src]="biblio.imagen" class="img-fluid pointer" [ngbTooltip]="nombre" placement="top">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

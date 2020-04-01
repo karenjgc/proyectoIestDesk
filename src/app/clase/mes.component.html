@@ -1,0 +1,56 @@
+<div class="row no-gutters">
+    <div class="col day-title">
+        <label class="day-name">LUN</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">MAR</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">MIE</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">JUE</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">VIE</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">SAB</label>
+    </div>
+    <div class="col day-title">
+        <label class="day-name">DOM</label>
+    </div>
+</div>
+<div class="row no-gutters" *ngFor="let d of calendar; let i = index;">
+    <div class="col {{ day[1] == actual ? 'cell-month' : 'not-main' }} {{ (((i + 1)+(j + 1))%2) == 0 ? 'day-even' : 'day-odd' }}" *ngFor="let day of d.days; let j = index;">
+        <div>
+            <label class="{{ day[1] == actual ? 'day-month' : 'day-sad' }}">{{ day[0] }} </label>
+            <br>&nbsp;
+        </div>
+        <div class="text-center pointer" width="100%">
+            <img src="assets/images/calendario/new.png" *ngIf="day[2] != ''" width="30px" (click)="verDia(day[2], vistaDia)">
+        </div>
+    </div>
+</div>
+
+<ng-template #vistaDia let-c="close" let-d="dismiss" class="modal-small">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fa fa-calendar"></i> Actividades</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-12" *ngFor="let a of actDia">
+                <div class="media">
+                    <img class="mr-3 pointer" (click)="irElemento( a )" [src]="a.icono">
+                    <div class="media-body">
+                        <h5 class="mt-0 pointer" (click)="irElemento( a )">{{ a.titulo }}</h5>
+                        Fecha de cierre: {{ a.fechaFormato }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

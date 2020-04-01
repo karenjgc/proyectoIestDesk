@@ -1,0 +1,188 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="6"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/actividades-clase']"><label class="path">Actividades de Clase</label></a>	
+            <a [routerLink]="['/actividades-clase/maestro-actividad']"><label class="current">{{ actividadClase.tipoActividad }}</label></a>		
+        </div>
+    </div>
+</div>
+<br>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-11">
+            <div class="d-flex flex-md-row flex-column">
+                <div class="mr-md-3" *ngIf="!actividadClase.confirmado">
+                    <div class="d-flex px-3 rounded-lg fondo-actividad">
+                        <img class="mt-4 mx-2" [src]="iconosActividades[actividadClase.idTipoActividad]" style="height:5rem;">
+                        <form>
+                            <div class="form-group">
+                                <label class="font-weight-bold">TEMA</label><br>
+                                <label >La Naturaleza</label>
+                            </div>
+                                <div class="form-group">
+                                <label class="font-weight-bold">MODALIDAD</label><br>
+                                <label>En Equipo</label>
+                            </div>
+                        </form>
+                    </div>
+                    <button class="btn btn-sm btn-primary w-100 my-2 py-2 rounded-lg font-weight-bold" (click)="confirmarEquipos()" *ngIf="!actividadClase.confirmado" >Confirmar equipos</button>
+                </div>
+                <div class="m-0 p-0 flex-fill border rounded-lg" *ngIf="actividad.equipos">
+                    <div [ngClass]="'d-flex p-0 text-center titulo-equipo '" [class]="mostrarEquipos ? 'rounded-lg' : 'rounded-t-lg'">
+                        <label class="flex-fill font-weight-bold font-white mt-1">EQUIPOS</label>
+                        <img class="img-xs mr-3 mt-2 float-right cursor-pointer" [src]="mostrarEquipos ? './assets/images/elements/down-arrow.png' : './assets/images/elements/up-arrow.png'"
+                        *ngIf="actividadClase.confirmado" (click)="muestraEquipos()">
+                        <img class="mt-1 mr-3 float-right cursor-pointer" style="height: 1.5rem;" src="./assets/images/actividades/agregar-equipo.png" *ngIf="!actividadClase.confirmado" (click)="agregarEquipo()">
+                    </div>    
+                    <div class="d-flex flex-wrap" *ngIf="!mostrarEquipos">
+                        <div class="flex-equipos" *ngFor="let equipo of objectKeys(actividad.equipos)" droppable [dropScope]="'participantes'" [dropEnabled]="!actividadClase.confirmado" (onDrop)="moverIntegranteEquipo($event,equipo)" draggable [dragScope]="'equipos'" [dragData]="{equipo:equipo,tipo:1}" 
+                        [dragClass]="'drag-element'" [dragOverClass]="'bg-'+ actividad.coloresEquipos[equipo] +'-filter'">
+                            <label [class]="actividad.coloresEquipos[equipo]" [ngClass]="'col-12 text-center font-weight-bold m-0 p-0 font-white'">{{ equipo }}</label>
+                            <table class="table">
+                                <tr *ngFor="let integrante of actividad.equipos[equipo]" draggable [dragScope]="'participantes'" [dragData]="{integrante:integrante,equipo:equipo,tipo:2}" [dragClass]="'drag-element'">
+                                    <th class="font-weight-normal">
+                                        <span [class]="actividad.integrantesConectados[equipo] && actividad.integrantesConectados[equipo].indexOf(integrante) != -1 ? 'dot-online mr-1' : 'dot-offline mr-1'"></span>
+                                        {{ integrante }}
+                                    </th>
+                                </tr>           
+                            </table>
+                        </div>
+                    </div>
+                    <div droppable [dropScope]="['participantes','equipos']" [dragOverClass]="'drag-over'" [dropEnabled]="!actividadClase.confirmado" (onDrop)="eliminarElemento($event)"  class="flex-fill m-2 border rounded-lg" [class.eliminar-equipo]="integrantesEliminados.length == 0" *ngIf="!actividadClase.confirmado">
+                        <label class="col-12 text-center font-weight-bold m-0 p-0 font-white rounded-t-lg titulo-inactivo" *ngIf="integrantesEliminados.length > 0">Integrantes Eliminados</label>
+                        <h3  class="text-center m-3 font-grey" *ngIf="integrantesEliminados.length == 0">
+                            <img class="img-sm mb-2" src="./assets/images/elements/trashcan-grey.png">
+                            Arrastrar para eliminar
+                        </h3>
+                        <table class="table" *ngIf="integrantesEliminados.length > 0">
+                            <tr *ngFor="let integrante of integrantesEliminados" draggable [dragScope]="'participantes'" [dragData]="{integrante:integrante,equipo:'integrante-eliminados',tipo:2}" [dragClass]="'drag-over'">
+                                <th class="font-weight-normal">
+                                    <span class="dot-disable"></span>
+                                    {{ integrante }}
+                                </th>
+                            </tr>           
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-md-row mt-2 flex-column" *ngIf="actividadClase.confirmado">
+                <div class="controls p-2 px-3 mr-md-3 border rounded-lg">
+                    <div class="w-100 text-center">
+                        <label class="font-weight-bold">DURACIÓN</label><br>
+                        <select class="form-control-sm p-0" name="tiempoMinutos" [disabled]="contador" [(ngModel)]="tiempoMinutos" (change)="cambiarMinutos()">
+                                <option name="tiempoMinutos" value="15">15</option>
+                                <option name="tiempoMinutos" value="20">20</option>
+                                <option name="tiempoMinutos" value="25">25</option>
+                                <option name="tiempoMinutos" value="30">30</option>
+                                <option name="tiempoMinutos" value="35">35</option>
+                                <option name="tiempoMinutos" value="40">40</option>
+                                <option name="tiempoMinutos" value="45">45</option>
+                                <option name="tiempoMinutos" value="50">50</option>
+                                <option name="tiempoMinutos" value="55">55</option>
+                                <option name="tiempoMinutos" value="60">60</option>
+                                <option name="tiempoMinutos" value="65">65</option>
+                                <option name="tiempoMinutos" value="70">70</option>
+                                <option name="tiempoMinutos" value="75">75</option>
+                                <option name="tiempoMinutos" value="80">80</option>
+                                <option name="tiempoMinutos" value="85">85</option>
+                                <option name="tiempoMinutos" value="90">90</option>
+                        </select> minutos
+                    </div>
+                    <div class="my-2 rounded border-black">
+                        <h3 class="p-0 m-0 text-center">
+                            {{ tiempoActivo }}
+                        </h3>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="mx-2">
+                            <img class="img-sm cursor-pointer" (click)="pausarContador()" src="./assets/images/actividades/pause.png">
+                        </div>
+                        <div class="mx-2">
+                            <img class="img-sm cursor-pointer" (click)="iniciarContador()" src="./assets/images/actividades/play.png">
+                        </div>
+                        <div class="mx-2">
+                            <img class="img-sm cursor-pointer" (click)="pararContador()" src="./assets/images/actividades/stop.png">
+                        </div>
+                    </div>
+                </div>
+
+                <!--Ruleta-->
+                <div class="w-100 p-2 px-3 border rounded-lg" *ngIf="actividadClase && actividadClase.idTipoActividad == 1 && actividad.equipos">
+                    <ng-container  *ngFor="let equipo of objectKeys(actividad.equipos)">
+                        <label class="m-0 font-weight-bold">{{ equipo }}</label>
+                        <label class="m-0 float-right">
+                             {{ actividad.obtienePorcentajeAciertos(equipo).numCorrectas + '/' +  actividad.obtienePorcentajeAciertos(equipo).numPreguntas}}
+                        </label>
+                        <div class="w-100 mb-2">
+                            <ngb-progressbar [type]="actividad.coloresEquipos[equipo]" [value]="actividad.obtienePorcentajeAciertos(equipo).porcentajeRespuestas"></ngb-progressbar>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <!--Jeopardo-->
+                <div class="w-100 rounded-lg mt-md-0 mt-sm-2" *ngIf="actividadClase && actividadClase.idTipoActividad == 2 && actividad.equipos">
+                    <div class="d-flex text-center">
+                        <div class="d-flex flex-fill text center tablero-jeopardy">
+                            <div class="flex-fill categoria" *ngFor="let categoria of objectKeys(actividad.categoriasPreguntasRespuestas);let i = index;">
+                                <h4 [class]="'p-1 font-white ' + actividad.coloresCategorias[i]">{{ (i+1) + ' - ' + categoria }}</h4>
+                                <ng-container *ngFor="let pregunta of objectKeys(actividad.categoriasPreguntasRespuestas[categoria]);let i = index;">
+                                    <h5 class="p-1 font-weight-bold" [class.pregunta-contestada]="actividad.categoriasPreguntasRespuestas[categoria][pregunta].contestado == 1">
+                                        {{ (i + 1) * 100 }}
+                                    </h5>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-100 d-flex flex-wrap puntaje-jeopardy" *ngIf="actividadClase.confirmado && actividadClase && actividadClase.idTipoActividad == 2 && actividad.equipos">
+                <div class="my-3 mx-2 flex-column text-center rounded-lg p-0 flex-puntaje" *ngFor="let equipo of objectKeys(actividad.equipos)" [class.equipo-actual]=" actividad.equipoActual && actividad.equipoActual == equipo">
+                    <div [class]="'flex-fill titulo-equipo border-bottom-0 rounded-t-lg pt-1 bg-' + actividad.coloresEquipos[equipo] + ' border-' + actividad.coloresEquipos[equipo]">
+                        <label class="font-weight-bold">{{ equipo }}</label>
+                    </div>
+                    <div [class]="'flex-fill border-top-0 rounded-b-lg pt-1 font-weight-bold border-xl border-' + actividad.coloresEquipos[equipo]">
+                        <label>{{ objectKeys(actividad.equiposPuntaje).length == 0 ? '0' : actividad.equiposPuntaje[equipo] }} pts.</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div *ngIf="terminaJuego()" [class]="modalAbierto ? 'd-none' : 'lightbox-div'">
+       <a class="pt-2 close-modal" (click)="cerrarModal()">CERRAR<img class="ml-1 img-xs" src="./assets/images/elements/cerrar-modal.png"></a>
+       <div class="image-holder">
+            <img class="background-image" src="./assets/images/actividades/podio.png">
+            <div class="responsive-overlay">
+                <table> 
+                    <tr>
+                        <td>
+                            <h3 *ngIf="actividad.posiciones.length > 1">{{ actividad.posiciones[1][1] }}</h3>
+                        </td>
+                        <td>
+                            <h3 class="posicion-ganador">{{ actividad.posiciones[0][1] }}</h3>
+                        </td>
+                        <td>
+                            <h3 *ngIf="actividad.posiciones.length > 2">{{ actividad.posiciones[2][1] }}</h3>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+       </div>
+  </div>
+
+<ngx-smart-modal #confirmacionDialog identifier="confirmacionDialog" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="1" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="accionDialog" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoActividad identifier="dialogoActividad" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensajeDialog" [tipo]="2" (respuesta)="cerrarDialog($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

@@ -1,0 +1,71 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="30"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/listado-alumnos']"><label class="current">{{ rolActual == 1 ? 'Mis alumnos' : 'Mis compañeros' }}</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center">
+        <div class="col-md-5 my-2">
+            <div class="card rounded-lg datos-maestro p-2">
+                <div class="flex-column" *ngIf="maestro">
+                    <div class="d-inline-flex">
+                        <img class="rounded-circle mx-3" src="assets/images/elements/teacher.png" style="width: 90px; height: 90px;">
+                        <div class="d-flex flex-column">
+                            <label class="nombre-maestro">{{ maestro.nombre }}</label>
+                            <label class="correo-listado pointer" (click)="enviaCorreo(maestro.correo)">{{ maestro.correo }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-12 text-right">
+            <button class="btn btn-primary btn-sm" (click)="checkAll()">
+                <i class="fas {{ tipoSeleccion == 1 ? 'fa-check-square' : 'fa-square' }}"></i>
+                &nbsp;{{ mensajeBoton }}
+            </button>&nbsp;&nbsp;
+            <button class="btn btn-primary btn-sm" (click)="enviaCorreos()"><i class="fas fa-envelope"></i> Enviar Correo</button>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <ng-container *ngFor="let alumno of objectKeys(alumnos); let i = index;">
+            <div class="col-6 my-2" *ngFor="let a of alumnos[alumno]">
+                <div class="card rounded-lg p-2 datos-alumno" (mouseenter)="enter(a.idPerson)" (mouseleave)="leave(a.idPerson)">
+                    <div class="flex-column">
+                        <!--{{ i + 1 }} -->
+                        <div class="w-100">
+                            <input type="checkbox" class="form-check-input" id="alumno-{{ i + 1 }}" [value]="a.correo" [(ngModel)]="correosSeleccionados[a.correo]">
+                            <label class="form-check-label" for="alumno-{{ i + 1 }}">&nbsp;&nbsp;{{ i + 1 }}</label>
+                        </div>
+                        <div class="d-inline-flex">
+                            <img class="rounded-circle mx-3" [src]="a.imgAlumno" onError="this.src='assets/images/elements/user.png';" style="width: 90px; height: 90px;" *ngIf="a.mostrarImagen">
+                            <img class="rounded-circle mx-3" src="assets/images/elements/student.png" style="width: 90px; height: 90px;" *ngIf="!a.mostrarImagen">
+                            <div class="d-flex flex-column">
+                                <label class="nombre-listado">{{ a.idPerson }} | {{ a.nombre }}</label>
+                                <label class="correo-listado pointer" (click)="enviaCorreo(a.correo)">{{ a.correo }}</label>
+                                <label class="carrera-listado">{{ a.carrera }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="row mt-1">
+        <div class="col-12 text-center">
+            <button class="btn btn-primary btn-sm" (click)="enviaCorreos()"><i class="fas fa-envelope"></i> Enviar Correo</button>
+        </div>
+    </div>
+</div>
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

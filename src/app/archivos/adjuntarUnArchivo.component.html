@@ -1,0 +1,93 @@
+<div class="container-fluid my-3 px-0">
+	<div class="w-100 d-flex flex-column">
+		<div class="d-flex w-100 flex-row">
+			<label id="dropbox1" class="well rounded-lg my-drop-zone flex-fill text-center" [ngClass]="{ 'another-file-over-class': hasBaseDropZoneOver }" (drop)="obtenerArchivos($event.dataTransfer.files)">
+				<img src="assets/images/elements/download_drop.png" width="40px"><br>
+				Arrastra aquí o da clic para añadir un archivo
+				<input type="file" #archivo (change)="obtenerArchivos($event.target.files)" style="display: none;"/>
+			</label>
+		</div>
+	</div>
+
+	<p class="progreso-subida">Archivos adjuntos: {{ cuantos }}</p>
+	<div #errorAlSubir1 class="col-12 my-2 py-2 w-100 flex-row bg-danger rounded-md text-white" *ngIf="mostrarAlertaCantidad || noSeSubieron.length > 0">
+		<p class="ml-2 mb-0">
+			<i class="fa fa-exclamation-triangle"></i>&nbsp;
+			<ng-container *ngIf="!mostrarAlertaCantidad && noSeSubieron.length > 0">Ocurrió un error al subir el siguiente archivo:</ng-container>
+			<ng-container class="text-strong" *ngIf="mostrarAlertaCantidad && noSeSubieron.length == 0">Sólo puede subir un archivo.</ng-container>
+		</p>
+		<ul class="mb-1 mt-2" *ngIf="!mostrarAlertaCantidad && noSeSubieron.length > 0">
+			<li *ngFor="let file of noSeSubieron">{{ file }}</li>
+		</ul>
+	</div>
+
+	<div #listadoArchivos1 class="col-12 mt-2 w-100 flex-row">
+		<div class="row">
+			<div class="col-2 text-center" *ngFor="let item of archivosEdicion">
+				<div class="file-preview">
+					<div class="image">
+						<img [src]="item.imgMini" width="120px">
+					</div>
+					<div class="details pointer" (click)="previsualizarArchivo(vistaArchivo1, item)">
+						<div class="size">
+							<span>{{ item.pesoFormato }} KB</span>
+						</div>
+						<div class="filename">
+							<span>{{ item.nombreArchivo }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="file-bottom">
+					<button type="button" class="btn btn-sm btn-primary file-cancel" (click)="eliminaArchivo(item.idArchivo, 1)">
+						<i class="fas fa-times"></i>&nbsp;Eliminar
+					</button>
+				</div>
+			</div>
+
+            <div class="col-2 text-center" *ngFor="let item of archivos">
+				<div class="file-preview">
+					<div class="image">
+						<img [src]="item.imgMini" width="120px">
+					</div>
+					<div class="details pointer" (click)="previsualizarArchivo(vistaArchivo1, item)">
+						<div class="size">
+							<span>{{ item.pesoFormato }} KB</span>
+						</div>
+						<div class="filename">
+							<span>{{ item.nombreArchivo }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="file-bottom">
+					<button type="button" class="btn btn-sm btn-primary file-cancel" (click)="eliminaArchivo(item.idArchivo, 0)">
+						<i class="fas fa-times"></i>&nbsp;Eliminar
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-12 progreso-subida" *ngIf="mostrarAvance">
+		<div>
+			<br>Progreso de carga:
+			<div class="progress" >
+				<div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': porcentaje + '%' }"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #vistaArchivo1 let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> &nbsp;{{ arrArchivo[0].nombreArchivo }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1" *ngIf="arrArchivo.length > 0">
+			<idesk-vistaArchivos [archivos]="arrArchivo" [personAlta]="'0'" [nombreActividad]=" " [previsualizador]="true"></idesk-vistaArchivos>
+        </div>
+	</div>
+</ng-template>

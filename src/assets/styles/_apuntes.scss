@@ -1,0 +1,34 @@
+.heading-archivos {
+    background-color: $brownBramble;
+    label {
+        color: $white !important;
+    }
+}
+
+.bloque-archivo {
+    float: left;
+    margin: auto 10px;
+    width: 115px;
+    background-color: transparent;
+    border: none;
+
+    img {
+        width: 38px; 
+        margin: 10px auto;
+    }
+    label {
+        font-size: 0.75rem; 
+        display: block;
+    }
+}
+
+.linea-archivos {
+    max-height: 95px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: inherit;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+}

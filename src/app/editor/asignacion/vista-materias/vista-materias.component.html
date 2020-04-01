@@ -1,0 +1,18 @@
+<div class="angular-datatable p-3 mt-4">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" cellspacing="0" class="table table-hover">
+        <thead>
+          <tr>
+            <th>Materia</th>
+            <th>Código</th>
+            <th>Grado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let materia of materiasMolde" class="cursor-pointer" (click)="listadoProfesores(materia)">
+            <td>{{ materia.materia + ' ' + materia.plan }}</td>
+            <td>{{ materia.ClaveAlfa }}</td>
+            <td>{{ materia.grado }}</td>
+          </tr>
+        </tbody>
+    </table>
+</div>

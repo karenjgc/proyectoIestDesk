@@ -1,0 +1,45 @@
+<div class="container-fluid no-gutters dark-nav" id="idesk-options">
+    <div class="row firstNav align-items-center">
+        <div class="firstHalf col-6">
+            <div id="idesk-logo-section" class="logo-section">
+                <button class="support pointer" (click)="gotoMain()"><img src="assets/images/logo.png" height="40px" class="navbar-brand nav-logo">	</button>
+            </div>
+        </div>
+        <div class="secondHalf col-6">
+            <div id="idesk-options-nav" *ngIf="tieneRol == 1">
+                <span class="float-md-right" *ngIf="variosRoles">	
+                    <div ngbDropdown class="d-inline-block" style="display: inline;">	
+                        <button id="user-dropdown" class="support" ngbDropdownToggle>
+                            <img src="assets/images/elements/alumno.png" class="menu-img pointer" *ngIf="actual == 2">
+                            <img src="assets/images/elements/profesor.png" class="menu-img pointer" *ngIf="actual != 2">
+                        </button>
+                        <div class="user-menu" ngbDropdownMenu aria-labelledby="user-dropdown"> 
+                            <div class="col-md-12 user-rol">Mi Rol</div>
+                            <button class="dropdown-item pointer" id="switch-profesor" style="margin-top: 5px;" (click)="cambiarRol(1)"  *ngIf="rol.rolMaestro == 1">Profesor &nbsp;&nbsp;<i class="fas fa-check-circle" id="profesor-activo" *ngIf="actual == 1"></i></button>
+                            <button class="dropdown-item pointer" id="switch-alumno" (click)="cambiarRol(2)" *ngIf="rol.rolAlumno == 1">Alumno &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="alumno-activo" *ngIf="actual == 2"></i></button>
+                            <button class="dropdown-item pointer" id="switch-editor" (click)="cambiarRol(3)" *ngIf="rol.rolEditor == 1">Editor &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="editor-activo" *ngIf="actual == 3"></i></button>
+                            <button class="dropdown-item pointer" id="switch-editor" (click)="cambiarRol(4)" *ngIf="rol.rolDisenador == 1">Diseñador &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="editor-activo" *ngIf="actual == 4"></i></button>
+                        </div>
+                    </div>
+                </span>
+                <!--span class="float-md-right">
+                    <button class="support" placement="bottom" ngbTooltip="Ayuda">
+                        <img src="assets/images/elements/help.png" class="menu-img"></button>
+                </span-->
+                <span class="float-md-right">
+                    <button class="support pointer" placement="bottom" ngbTooltip="Configuración" *ngIf="actual == 1 || actual == 2" (click)="abreConfiguraciones()">
+                        <img src="assets/images/elements/config.png" class="menu-img"></button>
+                </span>
+                <span class="float-md-right">
+                    <button class="support pointer" placement="bottom" ngbTooltip="Biblioteca Virtual" *ngIf="actual == 1 || actual == 2" (click)="abreBibliotecas()">
+                        <img src="assets/images/elements/biblioteca_virtual.png" class="menu-img"></button>
+                </span>
+            </div>
+        </div>
+        <div class="col-12 nombre-curso text-center" *ngIf="nombre_curso">
+            <div class="subject-name">
+                <label id="idesk-subject">{{ nombre_curso }}</label>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+			<div class="form-group row" *ngIf="idPlantillaEquipos > 0">
+				<div class="col-12 text-right">
+					<button class="btn btn-primary btn-sm" (click)="verArchivosEquipo(vistaArchivosEquipo)">Ver archivos del equipo</button>
+				</div>
+			</div>
+			
+            <form [formGroup]="entrega" *ngIf="cerrado == 0 || idEstatus == 1">
+                <div class="form-group row acordion-row">
+                    <div class="col-12" *ngIf="idEstatus != 1">
+                        <textarea [froalaEditor]="options" formControlName="entregaEscrita" class="froala" #entregaEscrita></textarea>
+                    </div>
+					<div class="col-12 acordion-info" [innerHTML]="entregaEscrita | safeHtml" *ngIf="idEstatus == 1 && entregaEscrita != ''"></div>
+                </div>
+
+                <div class="form-group row acordion-row" *ngIf="idEstatus != 1">
+                    <div class="col-12">
+                        <idesk-adjuntarArchivos [esEdicion]="editando" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)"></idesk-adjuntarArchivos>
+                    </div>
+                </div>
+				<div class="form-group row acordion-row" *ngIf="idEstatus == 1 && arrArchivos.length > 0">
+					<div class="col-12" >
+						<idesk-vistaArchivos [archivos]="arrArchivos" [personAlta]="'ID'+idPersonAlta" [nombreActividad]="titulo" [previsualizador]="false"></idesk-vistaArchivos>
+					</div>
+				</div>
+
+                <div class="form-group row acordion-row" stye="vertical-align: middle;" *ngIf="idEstatus != 1">
+					<label for="descripcion" class="col-12 text-strong"><br>&nbsp;ENTREGAR ARCHIVO DE GOOGLE DRIVE </label>
+					<div class="col-12">
+                        <idesk-docsLink [esEdicion]="editando" (linksAdjuntos)="links($event)" [tipoAdjunto]="2"></idesk-docsLink>
+						<!--idesk-links [esEdicion]="editando" (linksAdjuntos)="links($event)" [tipoAdjunto]="2"></idesk-links-->
+                    </div>
+                </div>
+				<div class="form-group row acordion-row" stye="vertical-align: middle;" *ngIf="idEstatus == 1 && linksActividad.length > 0">
+					<label for="descripcion" class="col-12 text-strong"><br>&nbsp;LINKS ENTREGADOS </label>
+					<div class="col-12 acordion-info my-1">
+						<div class="col-12" *ngFor="let l of linksActividad">
+							<img [src]="l.rutaImg" width="20px">&nbsp;<a [href]="l.link" target="_blank">{{ l.nombre }}</a>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row" *ngIf="idEstatus == 1">
+					<label class="col-12 col-form-label text-strong text-right">
+						<span class="text-danger">NOTA: </span>
+						<span *ngIf="idPlantillaEquipos > 0">Tu equipo ya entregó la actividad, por lo tanto no es posible modificarla.</span>
+						<span *ngIf="idPlantillaEquipos == 0">Ya entregaste la actividad, por lo tanto no es posible modificarla.</span>
+					</label>
+				</div>
+                <div class="form-group row" *ngIf="idEstatus != 1">
+                    <div class="col-12 text-center">
+						<button class="btn btn-primary btn-sm" (click)="verificaCierre(idActividadAlumno, true)"><i class="fas fa-save"></i> Entregar actividad</button>
+                    </div>
+                </div>
+            </form>
+
+			<div class="row justify-content-md-center px-4" *ngIf="cerrado == 1 && idEstatus != 1">
+				<div class="col-12 mx-5 px-4">
+					<div class="row acordion-row pl-3 pr-2">
+						<div class="col-12 p-2 text-center">
+							<label class="text-strong my-2">La actividad se encuentra cerrada</label>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" [mensajeOpcional]="mensajeOpcional" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #vistaArchivosEquipo let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos de mi equipo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1" *ngIf="arrArchivosEquipo.length > 0">
+			<idesk-vistaArchivos [archivos]="arrArchivosEquipo" [personAlta]="'0'" [nombreActividad]=" " [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+		<div class="container-fluid idesk-content" *ngIf="linksActividadEquipo.length > 0">
+			<div class="row acordion-row">
+				<div class="col-12 acordion-info m-x-10" *ngFor="let l of linksActividadEquipo">
+					<label>
+						<img [src]="l.rutaImg" width="20px">&nbsp;<a [href]="l.link" target="_blank">{{ l.nombre }}</a>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid idesk-content" *ngIf="arrArchivosEquipo.length == 0 && linksActividadEquipo.length == 0">
+			<label class="col-12">Tu compañeros de equipo no han subido material para esta actividad.</label>
+		</div>
+	</div>
+</ng-template>

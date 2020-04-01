@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-12 row no-gutters">
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">LUN</label>
+                <label class="day" id="lun">{{ semana[0] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">MAR</label>
+                <label class="day" id="mar">{{ semana[1] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">MIE</label>
+                <label class="day" id="mie">{{ semana[2] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">JUE</label>
+                <label class="day" id="jue">{{ semana[3] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">VIE</label>
+                <label class="day" id="vie">{{ semana[4] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">SAB</label>
+                <label class="day" id="sab">{{ semana[5] }}</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="day-title">
+                <label class="day-name">DOM</label>
+                <label class="day" id="dom">{{ semana[6] }}</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 row no-gutters">
+        <div class="col calendar-odd">
+            <div class="day-content text-center" id="lun-content" *ngIf="listadoLun.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let a of listadoLun" (click)="irElemento(a)">
+                    <img src="{{ a.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ a.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="col calendar-even">
+            <div class="day-content text-center" id="mar-content" *ngIf="listadoMar.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let b of listadoMar" (click)="irElemento(b)">
+                    <img src="{{ b.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ b.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        
+        <div class="col calendar-odd">
+            <div class="day-content text-center" id="mie-content" *ngIf="listadoMie.length > 0">
+                <!--span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let c of listadoMie" (click)="irElemento(c.idActividad, c.titulo, c.tipoActividad)"-->
+				<span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let c of listadoMie" (click)="irElemento(c)">
+                    <img src="{{ c.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ c.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="col calendar-even">
+            <div class="day-content text-center" id="jue-content" *ngIf="listadoJue.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let d of listadoJue" (click)="irElemento(d)">
+                    <img src="{{ d.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ d.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="col calendar-odd">
+            <div class="day-content text-center" id="vie-content" *ngIf="listadoVie.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let e of listadoVie" (click)="irElemento(e)">
+                    <img src="{{ e.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ e.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="col calendar-even">
+            <div class="day-content text-center" id="sab-content" *ngIf="listadoSab.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let f of listadoSab" (click)="irElemento(f)">
+                    <img src="{{ f.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ f.titulo }}</label>
+                </span>
+            </div>
+        </div>
+        <div class="col calendar-odd">
+            <div class="day-content text-center" id="dom-content" *ngIf="listadoDom.length > 0">
+                <span class="pointer" style="margin-top: 3px; margin-bottom:3px;" *ngFor="let g of listadoDom" (click)="irElemento(g)">
+                    <img src="{{ g.icono }}" class="calendar-icons">
+                    <label class="label-calendar-events">{{ g.titulo }}</label>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

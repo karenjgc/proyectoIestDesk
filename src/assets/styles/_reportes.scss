@@ -1,0 +1,83 @@
+.indice-reporte {
+    width: 30px;
+}
+
+.idIEST-reporte {
+    width: 65px;
+}
+
+.alumno-reporte {
+    width: 380px;
+}
+
+.avance-reporte {
+    width: 70px !important;
+}
+
+.avance-reporte-lg {
+    width: 90px !important;
+}
+
+.avance-reporte-xs {
+    width: 45px !important;
+}
+
+.header-reportes {
+    background-color: $main !important;
+    color: $white;
+    height: 50px;
+}
+
+.body-reportes{
+	:nth-child(even).item-reportes {
+		background-color: $chamois; 
+	}
+	:nth-child(even).item-reportes:hover {
+		background-color: $desertSand;
+	}
+
+	:nth-child(odd).item-reportes {
+		background-color: $linen;
+	}
+	:nth-child(odd).item-reportes:hover {
+		background-color: $albescentWhite;
+	}
+}
+
+.reportes-responsive {
+    overflow-x: auto;
+}
+
+/* tablas reporte - material */
+.tabla-reporte {
+	font-family: OpenSans;
+    font-size: 0.95rem !important;
+
+	th {
+		background-color: $main !important;
+		font-weight: bold;
+    	color: $white;
+	}
+
+	tbody {
+		:nth-child(even).mat-row {
+			background-color: $chamois;			
+		}
+		:nth-child(even).mat-row:hover {
+			background-color: $desertSand;
+		}
+
+		:nth-child(odd).mat-row {
+			background-color: $linen;
+		}
+		:nth-child(odd).mat-row:hover {
+			background-color: $albescentWhite;
+		}
+	}
+}
+
+@for $x from 1 through 100 {
+	.w-#{($x * 10)}px {
+		width: $x * 10px !important;
+	}
+}

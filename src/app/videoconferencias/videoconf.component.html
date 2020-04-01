@@ -1,0 +1,53 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="27"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/videoconferencias']"><label class="current">Videoconferencias</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-videoconferencias">
+                <thead>
+                <tr class="text-center">
+                    <th width="30%">Título</th>
+                    <th width="30%">Tema</th>
+                    <th>Fecha Publicación</th>
+                    <th>Fecha Transmisión</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let v of videoconferencias">
+                        <td class="datatable-options">
+                            <span class="link-elemento" (click)="gotoVideoconferencia(v.idVideoconferencia, v.titulo)">{{ v.titulo }}</span>
+                            <span class="options" *ngIf="rolActual == 1"><br><a (click)="gotoEditar(v.idVideoconferencia)">Editar</a> | <span class="pointer" (click)="confEliminar(v.idVideoconferencia, v.titulo)">Eliminar</span></span>
+                        </td>
+                        <td>{{ v.tema }}</td>
+                        <td class="text-center">{{ v.fechaPublicacion }}</td>
+                        <td class="text-center">{{ v.fechaTransmision }}</td>
+                    </tr>
+                    <tr *ngIf="!videoconferencias">
+                        <td colspan="4">Sin videoconferencias asignados a este curso</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

@@ -1,0 +1,65 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+	<idesk-segundoNav [componente]="18"></idesk-segundoNav>
+	<div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>		
+            <label class="current">{{ titulo }}</label>			
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center">
+        <div class="col-11 div-info-curso border">
+			<div class="info-curso-heading text-center py-1 pl-3">
+				<h5 class="pt-2">
+                    <img [src]="ruta_elemento" class="pb-1">&nbsp;
+					{{ titulo }}
+					<ng-container *ngIf="rolActual == 1">
+						<button class="support pointer float-right mr-2" (click)="editar()" *ngIf="tieneInformacion == true">
+							<img src="assets/images/elements/edit_black.png" width="20px" *ngIf="formVisible == false">
+							<img src="assets/images/elements/back-arrow.png" width="20px" *ngIf="formVisible == true">
+						</button>
+					</ng-container>
+				</h5>
+			</div>
+            <div class="col-11 info-curso-content" *ngIf="rolActual == 1 && formVisible == true">
+                <idesk-formInfoCurso (terminado)="respuestaForm($event)"></idesk-formInfoCurso>
+            </div>
+            <div class="col-11 info-curso-content" *ngIf="formVisible == false">
+                <div class="row">
+                    <div class="col-12">
+                        <div  [innerHTML]="des | safeHtml"></div>
+                    </div>
+
+                    <div class="col-12 text-center">
+                        <img src="assets/images/elements/banner.png" class="img-fluid" *ngIf="des && (idLink != '' && idLink != 0 || idArchivo != 0)">
+                    </div>
+                    <div class="col-12" *ngIf="idLink != '' && idLink != 0">
+						<div class="embed-responsive embed-responsive-21by9">
+							<iframe class="embed-responsive-item" [src]="urlVideo | safeUrl" allowfullscreen></iframe>
+						</div>
+					</div>
+
+                    <div class="col-12 text-center">
+                        <img src="assets/images/elements/banner.png" class="img-fluid" *ngIf="idArchivo != 0 && idLink != '' && idLink != 0">
+                    </div>
+                    <div class="col-12" *ngIf="idArchivo != 0" style="margin-top: 10px;">
+						<idesk-vistaArchivos [archivos]="arrArchivos" [personAlta]="'0'" [nombreActividad]="titulo+'_'+nombreCursoActual" [previsualizador]="false"></idesk-vistaArchivos>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <idesk-infoCursoNav></idesk-infoCursoNav>
+        </div>
+    </div>
+</div>
+
+

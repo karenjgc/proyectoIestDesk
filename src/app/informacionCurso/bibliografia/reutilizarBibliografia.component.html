@@ -1,0 +1,73 @@
+<div class="container-fluid idesk-content">
+    <div class="row" style="margin-bottom: 10px; margin-top: -10px;">
+        <div class="col-5">
+            <div *ngIf="reutilizar">
+                <img src="assets/images/elements/return.png" class="reutilizar-icon pointer" (click)="regresarAlta()">&nbsp;
+                <label class="rem9 pointer" (click)="regresarAlta()">Regresar&nbsp;</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <select class="form-control form-control-sm" (change)="revisa($event)">
+                <option value="0">Todas las materias</option>
+                <option *ngFor="let curso of cursos" [value]="curso.idCodigo">{{ curso.materia }}</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="row box-reutilizar">
+        <div class="col-4 listado">
+            <div class="row">
+                <div class="col-12 elemento" *ngFor="let r of reutilizables | searchfilter:'titulo':busquedaTitulo" (click)="vistaPrevia(r)">
+                    {{ r.titulo }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8 vista-previa">
+            <div *ngIf="mostrar">
+                <div class="row justify-content-md-center">
+                    <div class="col-10">
+                        <div class="row">
+                            <label class="text-strong col-form-label col-sm-12">TITULO </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.titulo }}</label>
+                        </div>
+                        <div class="row">
+                            <label class="text-strong col-form-label col-sm-12">AUTOR </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.autorComa }}</label>
+                        </div>
+                        <div class="row" *ngIf="bibliografia.editorial">
+                            <label class="text-strong col-form-label col-sm-12">EDITORIAL </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.editorial }}</label>
+                        </div>
+                        <div class="row" *ngIf="bibliografia.edicion">
+                            <label class="text-strong col-form-label col-sm-12">EDICIÓN </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.edicion }}</label>
+                        </div>
+                        <div class="row" *ngIf="bibliografia.anio">
+                            <label class="text-strong col-form-label col-sm-12">AÑO </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.anio }}</label>
+                        </div>
+                        <div class="row" *ngIf="bibliografia.lugar">
+                            <label class="text-strong col-form-label col-sm-12">LUGAR </label>
+                            <label class="col-form-label col-sm-12">{{ bibliografia.lugar }}</label>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-sm" style="margin-right: 10px; margin-top: 5px;" (click)="reutilizar(bibliografia)">
+                            <i class="fas fa-sync"></i>
+                            &nbsp;Reutilizar Bibliografía
+                        </button><br>&nbsp;
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

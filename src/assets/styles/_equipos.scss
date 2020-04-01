@@ -1,0 +1,33 @@
+// Equipos
+.equipos-vista {
+    min-height: 300px;
+    margin-top: 10px;
+}
+
+.integrante {
+    font-size: 0.8rem;
+    padding: 5px;
+}
+
+.nuevo-equipo {
+	height: 26px;
+}
+
+.nuevo-equipo-header{
+	background-color: $brown1;
+	color: $white;
+}
+
+.equipo-header:hover .edita{
+	display: inline;
+}
+
+.edita{
+	display: none;
+	margin-left: 5px;
+	margin-top: 12px;
+}
+
+div.lista-integrantes > div:nth-of-type(odd) {
+    background-color: $lightGray;
+}

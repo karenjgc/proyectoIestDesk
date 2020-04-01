@@ -1,0 +1,34 @@
+<div class="orden-temas">
+    <div class="d-flex flex-fill border rounded-lg my-3 p-2 px-4">
+        <span class="rounded-circle text-center font-weight-bold font-white numero-tema bg-cafe-nuez mx-1 my-auto"></span>
+        <label class="mr-2 my-auto"> Tema Institucional</label>
+
+        <span class="rounded-circle text-center font-weight-bold font-white numero-tema bg-verde-mar mx-1 my-auto"></span>
+        <label class="mr-2 my-auto">Tema Personalizado</label>
+
+        <span class="rounded-circle text-center font-weight-bold font-white numero-tema bg-azul-cobalto mx-1 my-auto"></span>
+        <label class="mr-2 my-auto">Actividad</label>
+    </div>
+</div>
+<ngb-alert type="warning" (close)="cerrarWarning(alert)" class="rounded-lg warning" *ngIf="mostrarWarning">
+    <strong>
+        <i class="fas fa-info-circle font-size-md mr-1"></i> 
+        <p class="d-inline">Para cambiar el orden de un tema, arrástralo hasta la nueva posición.</p>
+    </strong>
+</ngb-alert>
+<div cdkDropList class="d-flex flex-column example-list border rounded-lg w-100 mb-5" (cdkDropListDropped)="drop($event)">
+    <div class="example-box orden-temas p-2 px-4" *ngFor="let tema of temas; let i = index" cdkDrag [cdkDragDisabled]="enMovimiento">
+        <span class="rounded-circle text-center font-weight-bold font-white numero-tema mr-2" [ngClass]="{'bg-cafe-nuez': tema.tema.personalizado == 0, 'bg-verde-mar': tema.tema.personalizado == 1 && tema.tema.idElemento == 0, 'bg-azul-cobalto': tema.tema.idElemento != 0 }">{{ i + 1 }}</span>
+        <div class="flex-fill">
+            {{ tema.tema.tema }}
+        </div>
+        <div>
+            <img class="editar-elemento p-1 cursor-pointer rounded-circle mr-1" src="./assets/images/temario/editar.png" (click)="editaTema(tema.tema)" placement="bottom" ngbTooltip="Editar Tema" *ngIf="tema.tema.personalizado == 1 && tema.tema.idElemento == 0">
+            <img class="eliminar-elemento p-1 cursor-pointer rounded-circle" src="./assets/images/temario/cerrar.png" (click)="eliminaTema(tema.tema)" placement="bottom" ngbTooltip="Eliminar Tema" *ngIf="tema.tema.personalizado == 1 && tema.tema.idElemento == 0">
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmacionDialogOrden identifier="confirmacionDialogOrden" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="1" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="0" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

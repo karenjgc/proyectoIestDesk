@@ -1,0 +1,223 @@
+<div class="sticky-top" *ngIf="!_vistaAlumno && !modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="3"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/tareas']"><label class="path">Tareas</label></a>	
+            <a><label class="current">{{ tarea_nombre }}</label></a>	
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid idesk-content">
+	<div class="row justify-content-center" [ngClass]="{ 'border rounded-lg p-2' : modoTemario }" *ngIf="tarea">
+        <div class="col-12 text-right" *ngIf="rolActual == 1 && !_vistaAlumno">
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoEditar()">
+                <i class="fas fa-pencil-alt"></i>
+                &nbsp;Editar
+            </button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoRevisar()">
+                <i class="fas fa-check"></i>
+                &nbsp;Revisar
+            </button>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong">TÍTULO </label>
+                </div>
+                <div class="col-auto">
+                    {{ tarea.titulo }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong">TEMA </label>
+                </div>
+                <div class="col-auto">
+                    {{ tarea.tema }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label class="text-strong">FECHA DE PUBLICACIÓN </label>
+                </div>
+                <div class="col-3">
+                    {{ tarea.fechaPublicacion }}
+                </div>
+                <div class="col-auto">
+                    <label class="text-strong">FECHA DE CIERRE </label>
+                </div>
+                <div class="col-3">
+                    {{ tarea.abierta }}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 acordion mis-clases-cards">
+            <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" [destroyOnHide]="false">
+                <ngb-panel title="Instrucciones">
+                    <ng-template ngbPanelContent>
+                        <div class="acordion-content">
+                            <div class="row acordion-row" *ngIf="tarea.objetivo">
+                                <div class="col-12">
+                                    <label class="text-strong">OBJETIVO </label>
+                                </div>
+                                <div class="col-12 acordion-info" [innerHTML]="tarea.objetivo | safeHtml"></div>
+                            </div>
+                            <div class="row acordion-row" *ngIf="tarea.descripcion">
+                                <div class="col-12">
+                                    <label class="text-strong">DESCRIPCIÓN </label>
+                                </div>
+                                <div class="col-12 acordion-info" [innerHTML]="tarea.descripcion | safeHtml"></div>
+                            </div>
+                            <div class="row acordion-row">
+                                <div class="col-12">
+                                    <label class="text-strong">MODALIDAD DE ENTREGA </label>
+                                </div>
+                                <div class="col-12 acordion-info">{{ tarea.modalidadEntrega }}</div>
+                            </div>
+                            <div class="row acordion-row">
+                                <div class="col-12">
+                                    <label class="text-strong">MODALIDAD DE TRABAJO </label>
+                                </div>
+                                <div class="col-12 acordion-info">{{ tarea.modalidadTrabajo }}
+									<label>
+										<img src="assets/images/elements/individual.png" class="img-table" *ngIf="tarea.idModTrabajo == 1">
+										<img src="assets/images/elements/grupal.png" class="img-table pointer" *ngIf="tarea.idModTrabajo != 1" (click)="verEquipos(tarea.idPlantillaEquipos, muestraEquipos)">
+									</label>
+								</div>
+                            </div> 
+                            <div class="row acordion-row" *ngIf="arrArchivos.length > 0 || linksTareas.length > 0">
+								<div class="col-12">
+									<label class="text-strong">ARCHIVOS ADJUNTOS </label>&nbsp;
+									<button type="button" class="btn btn-primary btn-sm" *ngIf="arrArchivos.length > 0" (click)="verArchivos(vistaArchivos, 1)">Ver</button>
+								</div>
+
+								<!--div *ngIf="linksTareas.length > 0" class="col-12 acordion-info my-1">
+									<div class="col-12" *ngFor="let l of linksTareas">
+										<img [src]="l.rutaImg" width="20px">&nbsp;<a [href]="l.link" target="_blank">{{ l.nombre }}</a>
+									</div>
+								</div-->
+
+                            </div>
+                            <div class="row acordion-row" *ngIf="tarea.aspectosEvaluacion">
+                                <div class="col-12">
+                                    <label class="text-strong">ASPECTOS DE EVALUACIÓN </label>
+                                </div>
+                                <div class="col-12 acordion-info" [innerHTML]="tarea.aspectosEvaluacion | safeHtml"></div>
+                            </div>
+							<div class="form-group row forum-item-description" *ngIf="tarea.idRubrica != 0">
+								<label class="col-12 col-form-label">
+									<label class="text-strong">RÚBRICA IEST </label>&nbsp;
+									<button type="button" class="btn btn-primary btn-sm" (click)="verRubrica(vistaRubrica, tarea.idRubrica)">Ver</button>
+								</label>
+							</div>
+							<div class="row acordion-row" *ngIf="tarea.idRubricaExterna != 0 || tarea.idRubricaExternaLink != 0">
+								<div class="col-12">
+									<label class="text-strong">RÚBRICA EXTERNA </label>&nbsp;
+									<button type="button" *ngIf="(rubricaExterna && rubricaExterna.length > 0) || (tarea.idRubricaExterna != 0)" class="btn btn-primary btn-sm" (click)="verRubricaExt(vistaRubricaExt, tarea.idRubricaExterna)">Ver</button>
+								</div>
+								<!--div *ngIf="tarea.idRubricaExternaLink != 0" class="col-12 acordion-info my-1">
+									<div class="col-12" *ngFor="let r of rubricaExternaLink">
+										<img [src]="r.rutaImg" width="20px">&nbsp;<a [href]="r.link" target="_blank">{{ r.nombre }}</a>
+									</div>
+								</div-->
+
+							</div>
+
+                        </div>   
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel *ngIf="verEntrega" title="Entrega">
+                    <ng-template ngbPanelContent>
+                        <div class="acordion-content">
+                            <idesk-entregaTarea [oportunidades]="tarea.oportunidades" [idPlantillaEquipos]="tarea.idPlantillaEquipos"></idesk-entregaTarea>
+							<!--(respuesta)="cierraDialogoInfo($event)"-->
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel *ngIf="rolActual == 2" title="Revisión">
+                    <ng-template ngbPanelContent>
+					
+						<div class="acordion-content">
+							<div class="row" *ngIf="mostrarCalif">
+								<label class="col-12 col-form-label">
+									<label class="text-strong">CALIFICACIÓN: </label>
+									{{ infoRevision.calificacion }}
+								</label>
+								<label class="col-12 col-form-label text-strong" *ngIf="infoRevision.comentariosMaestro">COMENTARIOS</label>
+								<div class="col-12" [innerHTML]="infoRevision.comentariosMaestro | safeHtml" *ngIf="infoRevision.comentariosMaestro"></div>
+							</div>
+							<div class="row" *ngIf="!mostrarCalif">
+								<label class="col-12 col-form-label"><label class="text-strong">Tarea pendiente de revisión </label></label>
+							</div>
+							<div class="row" *ngIf="mostrarArchivos">
+								<div class="col-12">
+									<label class="col-form-label text-strong">ARCHIVOS ADJUNTOS </label>&nbsp;
+									<button type="button" class="btn btn-primary btn-sm" (click)="verArchivos(vistaArchivos, 2)">Ver</button>
+								</div>
+							</div>
+						</div>
+					</ng-template>
+					
+                </ngb-panel>
+            </ngb-accordion>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #vistaArchivos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="modal == 1 ? arrArchivos : archivosRevision" [personAlta]="'0'" [nombreActividad]="modal == 1 ? titulo : ' '" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #vistaRubricaExt let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Rúbrica Externa</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="rubricaExterna" [personAlta]="'0'" [nombreActividad]="'Rubrica-'+tarea_nombre" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #vistaRubrica let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-table"></i> Rúbrica IEST</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-vistaRubrica [vistaAlumno]="true"></idesk-vistaRubrica>
+    </div>
+</ng-template>
+
+<ng-template #muestraEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+		<h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada"></idesk-vistaEquipos>
+    </div>
+</ng-template>

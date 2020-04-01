@@ -1,0 +1,202 @@
+<div class='container-fluid'>
+  <div class="row">
+
+      <!--Formulario Según Parametros-->
+      <ng-container *ngIf="esCaptura">
+            <!--Video-->
+            <div  class="col-sm-12 p-0 m-0" *ngIf="parametros == 1">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Alta Video</h5>
+                    <button class="close" aria-label="Close" type="button" (click)="closeModal()">
+                        <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="px-4 pt-2">
+                    <div class="form-group">
+                        <label class="font-weight-bold">T&iacute;tulo:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese t&iacute;tulo" [(ngModel)]="formMultimedia.titulo">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Descripci&oacute;n:</label>
+                        <textarea [froalaEditor]="options" class="froala" [(ngModel)]="formMultimedia.descripcion"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Link: </label>
+                        <input type="text" class="form-control" (change)="verificarLinkVideo()" [(ngModel)]="formMultimedia.url">
+                        <p *ngIf="change && !videoValido">
+                            <ngb-alert [dismissible]="false" type="danger">
+                                <strong>Aviso: </strong> {{ mensajeAlerta }}
+                            </ngb-alert>
+                        </p>
+                        <div class="embed-responsive embed-responsive-16by9  mx-auto mt-3" style="width: 35%" *ngIf="formMultimedia.url != '' && llave">
+                                <iframe class="embed-responsive-item" [src]="llave | safeUrl" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="tags.length > 0">
+                        <label class="font-weight-bold">Tags:</label>
+                        <idesk-tag-input [elementosTags]="tags"></idesk-tag-input>               
+                    </div>
+                </div>
+            </div>
+            
+            <!--Podcast-->
+            <div  class="col-sm-12 p-0 m-0" *ngIf="parametros == 2">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Alta Podcast</h5>
+                    <button class="close" aria-label="Close" type="button" (click)="closeModal()">
+                        <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="px-4 pt-2">
+                    <div class="form-group">
+                        <label class="font-weight-bold">T&iacute;tulo:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese t&iacute;tulo" [(ngModel)]="formMultimedia.titulo">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Descripci&oacute;n:</label>
+                        <textarea [froalaEditor]="options" class="froala" [(ngModel)]="formMultimedia.descripcion"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" >Frame:</label>
+                        <input type="text" placeholder="Soundcloud..." class="form-control form-control-sm input1 input-color-1 mb-3" (change)="validaLinkPodcast()" [(ngModel)]="formMultimedia.url">
+                        <p *ngIf="change && !validandoPodcast && !podcastValido">
+                            <ngb-alert [dismissible]="false" type="danger">
+                                <strong>Aviso: </strong> {{ mensajeAlerta }}
+                            </ngb-alert>
+                        </p>
+                        <div class="text-center" *ngIf="validandoPodcast">
+                            <img class="img-md" src="assets/images/elements/spin.gif" /> Validando...
+                        </div>
+                        <div *ngIf="llave && !validandoPodcast && podcastValido">
+                            <iframe width="100%" height="140" scrolling="no" frameborder="no" [src]="llave | safeUrl"></iframe>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="tags.length > 0">
+                        <label class="font-weight-bold">Tags:</label>
+                        <idesk-tag-input [elementosTags]="tags"></idesk-tag-input>               
+                    </div>
+                </div>
+            </div>
+            
+            <!--Oda-->
+            <div class="col-sm-12 p-0 m-0" *ngIf="parametros == 3">
+                <div class="modal-header mb-2">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Alta Oda</h5>
+                    <button class="close" aria-label="Close" type="button" (click)="closeModal()">
+                        <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <ngb-tabset (tabChange)="ocultarBotones($event)">
+                    <ngb-tab title="Captura" id="capturaOda">
+                        <ng-template ngbTabContent>
+                            <div class="px-4 pt-2">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Título: </label>
+                                    <input type="text" [(ngModel)]="formMultimedia.titulo" class="form-control form-control-sm input1 input-color-1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Descripción: </label>
+                                    <textarea [froalaEditor]="options" class="froala" [(ngModel)]="formMultimedia.descripcion"></textarea>        
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Archivo Principal: </label>
+                                    <input type="text" [(ngModel)]="formMultimedia.url" class="form-control form-control-sm input1 input-color-1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Archivos Adjuntos: </label>
+                                    <app-adjuntar-carpetas></app-adjuntar-carpetas>
+                                </div>
+                                <div class="form-group" *ngIf="tags.length > 0">
+                                    <label class="font-weight-bold">Tags:</label>
+                                    <idesk-tag-input [elementosTags]="tags"></idesk-tag-input>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab title="Objeto de Aprendizaje" *ngIf="formMultimedia.ruta != ''" id="muestraOda">
+                        <ng-template ngbTabContent>
+                            <div class="containerFrame rounded-lg">
+                                <iframe class="frame m-3" [src]="'https://sie.iest.edu.mx/iestdesk_archivos/ODA/' + rutaOda | safeUrl" frameborder="0"></iframe>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+            
+            <!--Apuntes-->
+            <div class="col-sm-12 p-0 m-0" *ngIf="parametros == 4">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Alta Apunte</h5>
+                    <button class="close" aria-label="Close" type="button" (click)="closeModal()">
+                        <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="px-4 pt-2">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Título: </label>
+                        <input type="text" class="form-control form-control-sm input1 input-color-1" [(ngModel)]="formMultimedia.titulo">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Descripción: </label>
+                        <textarea [froalaEditor]="options" class="froala" [(ngModel)]="formMultimedia.descripcion"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Archivos Adjuntos: </label>
+                        <div class="col-12">
+                            <idesk-adjuntarArchivos [esEdicion]="editando" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)"></idesk-adjuntarArchivos>
+                            <label *ngIf="mensajeArchivo" class="text-danger font-weight-bold">{{ this.mensajeArchivo }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="tags.length > 0">
+                        <label class="font-weight-bold">Tags:</label>
+                        <idesk-tag-input [elementosTags]="tags"></idesk-tag-input>               
+                    </div>
+                </div>
+            </div>
+            
+            <!--Botones-->
+            <div class="col-sm-12 px-4 pb-3" *ngIf="mostrarBotones">
+                <button type="button" class="btn btn-primary float-right btn-light" (click)="closeModal()" style="margin-left: 10px;">
+                    <i class="fas fa-times"></i>&nbsp;Cancelar
+                </button>   
+                <button type="submit" class="btn btn-primary float-right" (click)="validaElemento()">
+                    <i class="fas fa-save"></i>&nbsp;Guardar
+                </button>
+            </div>
+      </ng-container>
+
+      <!--Mensajes Usuario-->
+      <ng-container *ngIf="!esCaptura">
+            <div class="col-sm-12 py-3" *ngIf="progresoCarga">
+                <h3>
+                    <img src="assets/images/editor/spinner-big.gif">
+                    Guardando Información...
+                </h3>
+            </div>
+            <div class="col-sm-12 py-3 mensajeGuardado" *ngIf="!progresoCarga">
+                <h3 *ngIf="guardadoExitoso == 1">
+                    <img src="assets/images/editor/finalizado.png">
+                     Se ha completado la carga de información correctamente.   
+                </h3>
+                <h3 *ngIf="guardadoExitoso == 2">
+                    <img src="assets/images/editor/alerta.png">
+                    Los siguientes archivos no se han cargado debido a que contienen una extensión no valida.
+                    <ul>
+                        <li *ngFor="let item of archivosError">
+                           {{ item }}
+                        </li>
+                    </ul>
+                </h3>
+                <h3 *ngIf="guardadoExitoso == 3">
+                    <img src="assets/images/editor/error.png">
+                    Ha ocurrido un error al realizar la carga de información, por favor intenta de nuevo más tarde.   
+                </h3>
+                <button type="button" class="btn btn-primary btn-light float-right" (click)="closeModal()"><i class="fas fa-times"></i>&nbsp;Cerrar</button>
+            </div>
+      </ng-container>
+   </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="imagenDialog" [accion]="1" (respuesta)="cierraDialogoInfo($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

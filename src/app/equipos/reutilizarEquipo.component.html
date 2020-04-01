@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-4">
+        <!--div *ngIf="reutilizar"-->
+		<div>
+            <img src="assets/images/elements/return.png" class="reutilizar-icon pointer" (click)="regresarAlta(0)">&nbsp;
+            <label class="rem9 pointer" (click)="regresarAlta(0)">Regresar&nbsp;</label>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="row">
+            <div class="col-4">
+                <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+            </div>
+        </div>
+    </div>
+</div><br>
+<div class="row box-reutilizar">
+    <div class="col-4 listado">
+        <div class="row">
+            <div class="col-12 elemento" *ngFor="let r of reutilizables | searchfilter:'nombrePlantilla':busquedaTitulo" (click)="vistaPrevia(r)">
+                {{ r.nombrePlantilla }}
+            </div>
+        </div>
+    </div>
+    <div class="col-8 vista-previa align-items-center">
+        <div class="reutilizar-container row align-items-center">
+
+			<div class="row col-sm-12" *ngIf="idPlantillaSolicitada"> 
+				<label for="nombreTema" class="col-sm-4 col-form-label text-strong">NOMBRE DE LA PLANTILLA </label>
+				<div class="col-sm-8">
+					<label class="col-form-label">{{ nombrePlantilla }}</label>
+				</div>
+			</div>
+
+			<div *ngIf="idPlantillaSolicitada != 0" class="mb-4 text-center align-items-center">
+				<idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada" [vistaReutilizar]="true"></idesk-vistaEquipos>
+			</div>
+            <div class="col-12 text-center">
+                <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="regresarAlta(1)">
+                    <i class="fas fa-sync"></i>
+                    &nbsp;Reutilizar equipos
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

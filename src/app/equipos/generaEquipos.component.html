@@ -1,0 +1,92 @@
+<div class="container-fluid idesk-content">
+    <div class="row align-items-center bloque-reutilizar">
+        <div class="col-4 mb-2   ">
+        </div>
+        <div class="col-6"></div>	
+        <div class="col-2 text-right">
+			<ng-template #asig>Se forman los equipos en 2 modalidades:<br>* Número de equipos a formar.<br>* Número de alumnos por equipo.<br>1. Para generar los equipos, da clic en "Generar".<br>2. Para guardar los equipos, da clic en Confirmar Equipos".<br>Tus alumnos verán a qué equipo fueron asignados cuando consulten la actividad.</ng-template>
+			<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="asig" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+		</div>
+    </div>
+
+	<!--div *ngIf="!mostrarReutilizar"-->
+	<form [formGroup]="equipo">
+		<div class="form-group row">
+			<label for="nombrePlantilla" class="col-sm-2 col-form-label text-strong">NOMBRE DE LA PLANTILLA </label>
+			<div class="col-sm-10">
+				<input type="text" #nombrePlantilla formControlName="nombrePlantilla" class="form-control" [value]="tituloPlantilla">
+			</div>
+		</div>
+	</form>
+
+	<form [formGroup]="opciones">
+		<div class="row" >
+			<div class="col-4">
+				<div class="form-check">
+					<label class="form-check-label col-form-label">
+						<input class="form-check-input" type="radio" value="1" formControlName="modoCalculo" id="numEquipos">
+						Por número de equipos
+					</label>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label col-form-label">
+						<input class="form-check-input" type="radio" value="2" formControlName="modoCalculo" id="numAlumnos">
+						Por número de alumnos
+					</label>
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="form-group row">
+					<label for="cantidad-grupos" class="col-sm-3 col-form-label text-strong text-right">CANTIDAD </label>
+					<div class="col-sm-2">
+						<input type="text" OnlyNumber="true" maxlength="2" class="form-control form-control-sm input1 input-color-1" #cantidad formControlName="cantidad">
+					</div>
+				</div>
+			</div>
+			<div class="col-3" >
+				<div class="btn btn-primary col-sm-3 d-inline pointer" style="font-size: 0.875rem" id="generar-aleatorio" (click)="generar()">
+					<span><img src="assets/images/elements/genera_equipo_white.png" width="13px"> Generar</span>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="row equipos-vista" *ngIf="alumnos">
+		<div class="col-4 my-1" *ngFor="let alumno of alumnos">
+			<div class="col-12">
+				<div class="table-header-orange text-center equipo-header">
+					<label class="text-center">
+						<span *ngIf="editando != alumno.numEquipo" class="d-inline-block mt-2 mb-1">{{ alumno.equipo }}</span>
+						<input type="text" class="mt-1 rounded" *ngIf="editando == alumno.numEquipo" [value]="alumno.equipo" [id]="'nuevoNombre'+alumno.numEquipo">
+
+						<img class="support pointer float-right mr-2 edita" width="16px" src="assets/images/elements/edit.png" *ngIf="editando != alumno.numEquipo" (click)="muestraInputNombre(alumno.numEquipo)">
+						<img class="support pointer float-right mr-2 edita" width="16px" src="assets/images/elements/save-white.png" *ngIf="editando == alumno.numEquipo" (click)="actualizaNombreEquipo(alumno.numEquipo, 'nuevoNombre'+alumno.numEquipo)">
+						
+					</label>
+				</div>
+				<div class="lista-integrantes" droppable (onDrop)="onItemDrop($event, alumno.numEquipo, alumno.equipo)" [id]="alumno.numEquipo" [dropScope]="'team'">
+					<div class="integrante" [draggable] [dragScope]="'team'" [dragData]="a.idPerson" *ngFor="let a of alumno.alumnos">
+						{{ a.nombre }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-12 text-center">
+			<button class="btn btn-primary btn-sm" (click)="acomodaValores()"><i class="fas fa-save"></i> Guardar</button>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<button class="btn btn-light btn-sm" (click)="cerrar()"><i class="fas fa-times"></i> Cancelar</button>
+		</div>
+	</div>
+
+
+</div>
+
+<ngx-smart-modal #dialogoInformacionG identifier="dialogoInformacionG">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

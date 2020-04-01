@@ -1,0 +1,41 @@
+.head-rubrica {
+    background-color: transparent !important;
+    color: $white;
+    border-collapse: separate;
+    border-color: transparent;
+    th {
+        background-color: $brownBramble;
+        vertical-align: middle !important;
+        border-bottom: none !important;
+    }
+    td {
+        border-top: 0;
+    }
+}
+
+.top-table {
+    th {
+        border-top: none !important;
+    }
+}
+
+.categorias {
+    background-color: $indochine;
+    color: $white;
+}
+
+.tabla-rubrica{
+    :nth-child(even).niveles{
+        background-color: $chamois; 
+    }
+    :nth-child(odd).niveles {
+        background-color: $linen;
+    }
+}
+
+.table-rounded-lg .top-table th:first-child {
+    border-top-left-radius: 1rem !important;
+}
+.table-rounded-lg .top-table th:last-child {
+    border-top-right-radius: 1rem !important;
+}

@@ -1,0 +1,38 @@
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-6">
+            <select class="form-control form-control-sm" (change)="revisa($event)">
+                <option value="0">Todas las rúbricas</option>
+                <option value="1">Institucionales</option>
+                <option value="2">Personales</option>
+                <option value="3">Compartidas</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="row box-reutilizar">
+        <div class="col-4 listado">
+            <div class="row">
+                <div class="col-12 elemento" *ngFor="let r of rubricas | searchfilter:'nombre':busquedaTitulo" (click)="vistaPrevia(r.idRubrica)">
+                    {{ r.nombre }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8 vista-previa" *ngIf="ver">
+            <idesk-vistaRubrica [vistaAlumno]="true" [cambio]="idRubrica"></idesk-vistaRubrica>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <br>
+                    <button class="btn btn-primary btn-sm" (click)="enviaRubrica()"><i class="fas fa-check"></i> Usar rúbrica</button>
+                    <br>&nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

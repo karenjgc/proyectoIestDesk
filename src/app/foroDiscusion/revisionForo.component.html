@@ -1,0 +1,222 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="4"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/foro-discusion']"><label class="path">Foro de Discusión</label></a>	
+            <a><label class="current">Revisión: {{ titulo }}</label></a>	
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-12">
+            <table class="table table-striped table-rounded table-hover tabla-revision tabla-inner-border" cellspacing="0" *ngIf="listado && mostrarListado">
+						  
+                <thead>
+                    <tr>
+                        <th class="table-header-orange">&nbsp;</th>
+                        <th class="table-header-orange text-center">ID IEST</th>
+                        <th class="table-header-orange">Alumno</th>
+                        <th class="table-header-orange text-center">Aportaciones</th>
+                        <th class="table-header-orange text-center">Retroalimentaciones</th>
+                        <th class="table-header-orange text-center">Votos</th>
+                        <th class="table-header-orange text-center">Calificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let l of listado; let i = index">
+                        <td class="text-center">{{ l.id }}</td>
+                        <td class="text-center">{{ l.idPerson }}</td>
+                        <td class="{{ l.id != '' ? 'pointer link-elemento' : '' }}" (click)="infoRevisa(l)">{{ l.nombre }}</td>
+                        <td class="text-center">{{ l.comentarios }}</td>
+                        <td class="text-center">{{ l.retro }}</td>
+                        <td class="text-center">{{ l.likes }}</td>
+                        <td class="text-center">{{ l.calificacion }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-12" *ngIf="!mostrarListado">
+            <div class="row row-eq-height" style="margin-bottom: 10px;">                
+                <table class="table table-striped table-rounded table-hover tabla-revision-individual tabla-inner-border" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th class="bg-indochine">ID IEST</th>
+                            <th class="bg-indochine">Alumno</th>
+							<th class="bg-indochine text-center">Aportaciones</th>
+                            <th class="bg-indochine text-center">Retroalimentaciones</th>
+                            <th class="bg-indochine text-center">Votos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">{{ alumnoRevision.idPerson }}</td>
+                            <td>{{ alumnoRevision.nombre }} </td>
+                            <td class="text-center">{{ alumnoRevision.comentarios }}</td>
+                            <td class="text-center">{{ alumnoRevision.retro }}</td>
+                            <td class="text-center">{{ alumnoRevision.likes }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 rounded-lg datos-revision">
+                    <div class="row m-2" *ngIf="listado.length > 1">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-primary btn-sm mx-1" (click)="infoRevisa(alumnoAnterior)" placement="right" *ngIf="alumnoAnterior.idPerson"><i class="fa fa-caret-left mr-1"></i>&nbsp;Anterior</button>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button type="button" class="btn btn-primary btn-sm mx-1" (click)="infoRevisa(alumnoSiguiente)" placement="right" *ngIf="alumnoSiguiente.idPerson > 0">Siguiente&nbsp;<i class="fa fa-caret-right mr-1"></i></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 forum-area-revision" #forumArea>
+                            <div class="row" *ngIf="comentarios">
+                                <div class="col-12" *ngFor="let comentario of comentarios">
+                                    <div class="{{ comentario.nivel == 0 ? 'forum-first-level' : comentario.nivel == 1 ? 'forum-second-level' : 'forum-third-level' }}">
+                                        <div class="picture">
+                                            <img src="assets/images/elements/chat.png" width="40px">
+                                        </div>
+                                        <div class="{{ comentario.nivel == 0 ? (comentario.idPerson == idAlumno ? 'comentario-en-revision-first bubble-first' : 'comentario-sin-revision-first bubble-first') : comentario.nivel == 1 ? (comentario.idPerson == idAlumno ? 'comentario-en-revision-second bubble-second' : 'comentario-sin-revision-second bubble-second') : (comentario.idPerson == idAlumno ? 'comentario-en-revision-third bubble-third' : 'comentario-sin-revision-third bubble-third') }}">
+                                            <div class="bubble-first-header">
+                                                <label class="name">{{ comentario.nombre }}</label>&nbsp;<label class="fecha-hora">{{ comentario.fecha }}</label>
+                                            </div>
+                                            <div class="{{ comentario.nivel == 0 ? 'bubble-first-body' : comentario.nivel == 1 ? 'bubble-second-body' : 'bubble-third-body' }}">
+                                                <label class="body-message" [innerHTML]="comentario.respuesta | safeHtml"></label>
+                                            </div>
+                                            <div class="{{ comentario.nivel == 0 ? 'bubble-first-footer' : comentario.nivel == 1 ? 'bubble-second-footer' : 'bubble-third-footer' }} row">
+                                                <div class="col-6">
+                                                    <button type="button" class="btn btn-sm support" (click)="verArchivos(comentario.idForoDiscRespuesta, vistaArchivos)">
+                                                        <label class="col-form-label text-strong pointer" *ngIf="comentario.tieneArchivos == 1">
+                                                            <i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.
+                                                        </label>
+                                                    </button>
+                                                </div>	
+                                                <div class="col-6 text-right">
+                                                    <label class="likes">{{ comentario.votos }}</label>
+                                                    <img src="assets/images/elements/like.png" width="26px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                        </div>
+                        <div class="col-6" style="max-height: 750px">
+                            <div class="row">
+                                <form [formGroup]="formRevision">    
+                                    <div class="d-flex mt-2">
+										<div class="mr-auto p-2">
+											<ng-template #revisaGral>De acuerdo a como hayas dado de alta la actividad:<br>- Consulta los aspectos a evaluar y asigna calificación.
+												<br>- Consulta la Rúbrica Externa y asigna calificación o revisa por medio de la Rúbrica IEST.
+												<br>- Puedes retroalimentar al alumno por medio de texto o archivo adjunto.<br>- Guarda la calificación.
+												<br>- Si la fecha de entrega ha llegado a su fin, da clic en "Reabrir" para asignar una nueva fecha de cierre.
+											</ng-template>
+											&nbsp;<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="revisaGral" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+										</div>
+										<div class="p-2">
+											<button class="btn btn-primary btn-sm" placement="right" (click)="regresaListado()"><i class="fa fa-undo"></i> Regresar al listado</button><br>&nbsp;
+										</div>
+									</div>               
+                                    <div class="col-12 mb-3" *ngIf="idRubrica != 0 && idRubricaArchivo == 0 && idRubricaLink == 0">
+                                        <button type="button" class="btn btn-sm btn-primary" (click)="revisarRubrica(revisionRubrica)">REVISIÓN POR RÚBRICA</button>
+                                    </div>
+									<div class="col-12 mb-3" *ngIf="idRubrica == 0 && idRubricaArchivo != 0 && idRubricaLink == 0">
+										<span class="pointer" (click)="revisarRubrica(vistaArchivoRubrica)"><i class="fas fa-paperclip"></i> Ver rúbrica externa</span>
+                                    </div>
+									<div class="col-12 mb-3" *ngIf="idRubrica == 0 && idRubricaArchivo == 0 && idRubricaLink != 0">
+										<div class="row acordion-row">
+											<div class="col-12 acordion-info m-x-10" *ngFor="let l of rubricaExternaLink">
+												<label><b>Rúbrica externa: </b>&nbsp;<img [src]="l.rutaImg" width="20px">&nbsp;<a [href]="l.link" target="_blank">{{ l.nombre }}</a></label>
+											</div>											
+										</div>
+                                    </div>
+                                    <div class="col-12 my-1">
+                                        <label for="objetivo" class="text-strong col-form-label">
+                                            CALIFICACIÓN 
+                                        </label>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <input type="text" OnlyNumber="true" maxlength="2" class="form-control form-control-sm input1 input-color-1" #calificacion formControlName="calificacion" [readonly]="idRubrica != 0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 row my-1">
+                                        <label for="objetivo" class="col-sm-12 col-form-label text-strong">
+                                            COMENTARIOS 
+                                        </label>
+                                        <div class="col-sm-12">
+                                            <textarea [froalaEditor]="options" class="froala" #comentariosMaestro formControlName="comentariosMaestro"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12 row my-1">
+                                        <label for="objetivo" class="col-sm-12 col-form-label text-strong">
+                                            ARCHIVOS ADJUNTOS 
+                                        </label>
+                                        <div class="col-sm-12">
+                                            <idesk-adjuntarArchivos [esEdicion]="editando" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2, 'dialogoInformacionForo')"></idesk-adjuntarArchivos>
+                                        </div>
+                                    </div>                   
+                                    <div class="col-12 text-center">
+                                        <button type="button" class="btn btn-sm btn-primary" (click)="altaRevision()"><i class="fas fa-save"></i> Guardar</button>
+                                    </div>  
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+
+    </div>
+</div>
+<ng-template #revisionRubrica let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-check"></i> Revisión por rúbrica</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content">
+			<idesk-revisionRubrica [idAlumno]="idAlumno" [idRubrica]=idRubrica [tipo]="tipo" [idElemento]="idElemento" (calificacion)="obtieneCalif($event)"></idesk-revisionRubrica>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #vistaArchivoRubrica let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Rúbrica Externa (Archivo)</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="rubricaExternaArchivo" [personAlta]="'0'" [nombreActividad]="'Rubrica_'+titulo" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #vistaArchivos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="arcComentarios" [personAlta]="'ID'+idAlumno" [nombreActividad]=" " [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ngx-smart-modal #dialogoInformacionForo identifier="dialogoInformacionForo" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event, 'dialogoInformacionForo')"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

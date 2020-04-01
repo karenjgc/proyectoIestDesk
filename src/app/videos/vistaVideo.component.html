@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="d-flex flex-column p-3 px-5 my-3 border rounded-lg" *ngIf="video">
+        <label class="font-weight-bold">TÍTULO</label>
+        <label>{{ video.titulo }}</label> 
+        
+        <ng-container *ngIf="!vistaAlumno">
+            <label class="font-weight-bold">FECHA DE PUBLICACIÓN</label>
+            <label>{{ video.fechaPublicacionS }}</label>
+        </ng-container>
+
+        <label class="font-weight-bold">DESCRIPCIÓN</label>
+        <p [innerHTML]="video.descripcion | safeHtml"></p>
+
+        <label class="font-weight-bold">VIDEO</label>
+        
+        <div class="flex-fill p-2" *ngIf="video.url != ''">
+            <div class="embed-responsive embed-responsive-16by9  mx-auto" style="width: 60%" >
+                <iframe class="embed-responsive-item" [src]="video.url | safeUrl" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>

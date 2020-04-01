@@ -1,0 +1,81 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="4"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/foro-discusion']"><label class="path">Foro de Discusión</label></a>	
+            <label class="current">{{ foroDiscusion }}</label>
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12 text-right p-2" *ngIf="rolActual == 1">
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoEditar()">
+                <i class="fas fa-pencil-alt"></i>
+                &nbsp;Editar
+            </button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoRevisar()">
+                <i class="fas fa-check"></i>
+                &nbsp;Revisar
+            </button>
+        </div>
+        <div class="col-5 info-foro-descripcion" id="informacion-foro" style="margin-bottom: 10px; margin-right: 5px;">
+            <div id="botoncitos">
+                <button (click)="ocultarInfo()" *ngIf="!mostrar" class="btn btn-sm btn-primary"><i class="fas fa-ban"></i>&nbsp;Ocultar</button>
+                <button (click)="mostrarInfo()" *ngIf="mostrar" class="btn btn-sm btn-primary"><i class="fas fa-check"></i>&nbsp;Mostrar</button>
+            </div>
+            <div id="info" class="mis-clases-cards">
+                <ngb-accordion #acc="ngbAccordion" activeIds="infoForo">
+                    <ngb-panel id="infoForo" title="Instrucciones">
+                        <ng-template ngbPanelContent>
+                            <div class="acordion-content">
+                                <idesk-infoForoDisc (datos)="getNombreForo($event)"></idesk-infoForoDisc>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                    <ngb-panel *ngIf="rolActual == 2" title="Revisión">
+                        <ng-template ngbPanelContent>
+                            <div class="acordion-content">
+                                <div class="row" *ngIf="mostrarCalif">
+                                    <label class="col-12 col-form-label"><label class="text-strong">CALIFICACIÓN: </label>
+            {{ infoRevision.calificacion }}</label>
+                                    <label class="col-12 col-form-label text-strong" *ngIf="infoRevision.comentariosMaestro">COMENTARIOS</label>
+                                    <div class="col-12" [innerHTML]="infoRevision.comentariosMaestro | safeHtml" *ngIf="infoRevision.comentariosMaestro"></div>
+                                </div>
+                                <div class="row" *ngIf="!mostrarCalif">
+                                    <label class="col-12 col-form-label"><label class="text-strong">Foro pendiente de revisión </label></label>
+                                </div>
+                                <div class="row" *ngIf="mostrarArch">
+                                    <span class="pointer" (click)="verArchivos(vistaArchivosRevision)"><i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+        </div>
+
+        <div class="col">
+            <idesk-comentariosForoDisc [permiteArchivos]="permiteArchivos" [cerrado]="cerrado" [idPlantillaEquipos]="idPlantillaEquipos" [revision]="0" [alumno]="0"></idesk-comentariosForoDisc>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #vistaArchivosRevision let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="archivosRevision" [personAlta]="'0'" [nombreActividad]=" " [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>

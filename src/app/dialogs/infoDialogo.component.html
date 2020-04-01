@@ -1,0 +1,17 @@
+<div class="row justify-content-md-center">
+    <div class="col-3">
+        <img src="assets/images/elements/checked.png" width="90%" *ngIf="tipo == 1">
+        <img src="assets/images/elements/warning.png" width="90%" *ngIf="tipo == 2">
+        <img src="assets/images/elements/cancel.png" width="90%" *ngIf="tipo == 3">
+        <img src="assets/images/elements/spin.gif"  width="100%" *ngIf="tipo == 4">
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <label class="text-strong col-sm-12 text-center text-info-dialog my-3">{{ mensaje }}</label>
+    <br>&nbsp;
+    <div class="col-6 text-center" *ngIf="tipo != 4">
+        <button class="btn btn-primary btn-sm mb-2" (click)="confirmacion(1)">
+            <i class="fas fa-times"></i>&nbsp;Cerrar
+        </button>
+    </div>
+</div>

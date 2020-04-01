@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <ng-container *ngIf="tipo == 1">
+        <div class="row justify-content-md-center">
+            <div class="col-3" *ngIf="imagen">
+                <img [src]="tipoImagen[imagen]" width="100%">
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <label class="text-strong col-form-label col-sm-12 text-center text-info-dialog" *ngIf="mensajePrincipal != ''">{{ mensajePrincipal }}</label>
+            <label class="text-strong col-form-label col-sm-12 text-center text-info-dialog" *ngIf="mensajeOpcional != ''">{{ mensajeOpcional }}</label>
+            <div class="col-10 text-center mb-2">
+                <button class="btn btn-primary btn-sm pb-0 mr-2" (click)="confirmacion(1, accion)">
+                    <i class="fas fa-check"></i>
+                    <label>&nbsp;Aceptar</label>
+                </button>
+                <button class="btn btn-light btn-sm pb-0" (click)="confirmacion(0, accion)">
+                    <i class="fas fa-times"></i>
+                    <label>&nbsp;Cancelar</label>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="tipo == 2">
+        <div class="row justify-content-md-center">
+            <div class="col-3">
+                <img [src]="tipoImagen[imagen]" width="100%">
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <label class="text-strong col-form-label col-sm-12 text-center text-info-dialog" *ngIf="mensajePrincipal != ''">{{ mensajePrincipal }}</label>
+            <label class="text-strong col-form-label col-sm-12 text-center text-info-dialog" *ngIf="mensajeOpcional != ''">{{ mensajeOpcional }}</label>
+            <div class="col-10 text-center mb-2">
+                <button class="btn btn-primary btn-sm pb-0 mr-2" (click)="confirmacion(1, accion)">
+                    <i class="fas fa-check"></i>
+                    <label>&nbsp;Aceptar</label>
+                </button>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+

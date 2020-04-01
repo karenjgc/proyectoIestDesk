@@ -1,0 +1,61 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="6"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/actividades-clase']" (click)="_iestdesk.registraAcceso(4, 0)"><label class="current">Actividades de Clase</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-actividades">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Fecha Publicación</th>
+                    <th>Fecha Cierre</th>
+                    <th *ngIf="rolActual == 1">Participación</th>
+                    <th *ngIf="rolActual != 1">Calificación</th>
+                    <th *ngIf="rolActual == 1">Revisar</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let act of actClase">
+                        <td class="datatable-options pointer">
+                            <div class="w-100 link-elemento pointer" (click)="mostrarActividad(act, rolActual)">{{ act.titulo }}</div>
+                            <span class="options" *ngIf="rolActual == 1"><br><a (click)="gotoEditar(act.idActividadClase, act.idTipoActividad)">Editar</a> | <span class="pointer" (click)="confEliminar(act.idActividadClase, act.idTipoActividad, act.titulo)">Eliminar</span></span>
+                        </td>
+                        <td>{{ act.tipoActividad }}</td>
+                        <td class="text-center">{{ act.fechaPublicacion }}</td>
+						<td class="text-center">{{ act.fechaCierre }} <span *ngIf="act.reabierta == 1" ngbTooltip="Reabierta" class="text-danger">&nbsp;*&nbsp;</span></td>
+                        <td class="text-center" *ngIf="rolActual == 1">{{ act.participacion }}</td>
+                        <td class="text-center" *ngIf="rolActual != 1">{{ act.calificacion }}</td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            <ng-container *ngIf="act.revision == 'NA'"> {{ act.revision }} </ng-container>
+                            <ng-container *ngIf="act.revision != 'NA'"> 
+                                <img src="assets/images/elements/sin_revisar.png" class="img-table pointer" (click)="revisarActividad(act.idActividadClase, act.idTipoActividad)"> 
+                            </ng-container>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

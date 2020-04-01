@@ -1,0 +1,16 @@
+<div class="row justify-content-md-center">
+	<div [ngClass]="{ 'col-4': !vistaReutilizar, 'col-6': vistaReutilizar }" class="mb-4" *ngFor="let alumno of alumnos">
+		<div class="col-12">
+			<div class="table-header-orange text-center equipo-header">
+				<label class="text-center">
+					<span class="d-inline-block mt-2 mb-1">{{ alumno.equipo }}</span>
+				</label>
+			</div>	
+			<div class="lista-integrantes">
+				<div class="integrante {{ a.idPerson == persona ? 'text-strong' : undefined }}" *ngFor="let a of alumno.alumnos">
+					{{ a.nombre }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

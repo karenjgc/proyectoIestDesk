@@ -1,0 +1,29 @@
+<div id="buttonset" class="row align-items-center row-eq-height">
+    <div class="col-12">
+        <button class="btn btn-sm support" [disabled]="isRecording" (click)="record()">
+            <img src="assets/images/elements/microphone.png" class="audio-controls" />
+        </button>
+        &nbsp;&nbsp;
+        <img src="assets/images/elements/audiowave.gif" width="60px" *ngIf="isRecording">
+        <button class="btn btn-sm support" [disabled]="!isRecording" (click)="stop()">
+            <img src="assets/images/elements/stop.png" class="audio-controls" />
+        </button>
+        &nbsp;&nbsp;
+        <!--button class="btn support" [disabled]="!isFinished" (click)="play()">
+            <img src="assets/images/elements/play.png" class="audio-controls"/>
+        </button-->
+		<audio id="audio-element" [src]="sanitizeString(audioSource)" controls="controls" preload="none" *ngIf="isFinished && !isRecording"></audio>
+        &nbsp;&nbsp;
+        <button class="btn btn-sm support" id="guardar-audio" [disabled]="!isFinished " *ngIf="isFinished && !isRecording" (click)="confirmarAudio()">
+            <img src="assets/images/elements/save.png" class="audio-controls"/>
+        </button>
+        &nbsp;&nbsp;
+        <label class="text-strong rem9" *ngIf="saved">Audio guardado</label>
+    </div>
+</div>
+<div class="alert alert-warning hidden" role="alert" id="alerta-microfono">
+    <i class="fas fa-exclamation-triangle"></i>&nbsp;No cuenta con micrófono para poder grabar un mensaje de audio.
+</div>
+<div class="alert alert-warning hidden" role="alert" id="alerta-guardado">
+    <i class="fas fa-exclamation-triangle"></i>&nbsp;{{ mensaje }}
+</div>

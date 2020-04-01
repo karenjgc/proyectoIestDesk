@@ -1,0 +1,85 @@
+<div class="d-flex flex-column">
+    <ng-container *ngIf="tipo == 1">
+        <div class="form-group">
+            <label class="font-weight-bold">Reactivo</label>
+            <div class="input-group">
+                <input type="text" class="form-control form-control-sm" [name]="'pregunta' + i + j" [(ngModel)]="reactivoSeleccionado" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" placeholder="Buscar reactivo...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary btn-sm text-underline" (click)="alternarTipo()">Agregar reactivo</button>
+                </div>
+            </div>
+            <ng-template #rt let-r="result" let-t="term">
+                <div class="cursor">
+                    <div>
+                        <label [innerHTML]="r.reactivo | safeHtml"></label>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <div class="form-group py-2" *ngIf="opciones && opciones[reactivoSeleccionado.reactivo]">
+            <label class="font-weight-bold">Respuestas</label>
+            <div class="d-flex">
+                <label class="flex-fill font-weight-bold text-center font-white rounded m-0 mr-2 py-1" [ngClass]="{'bg-verde' : opciones[reactivoSeleccionado.reactivo][0].respuestaCorrecta == 1, 'bg-rojo': opciones[reactivoSeleccionado.reactivo][0].respuestaCorrecta == 0}">
+                    {{  opciones[reactivoSeleccionado.reactivo][0].respuesta }}
+                </label>
+                <label class="flex-fill font-weight-bold text-center font-white rounded m-0 mr-2 py-1" [ngClass]="{'bg-verde' : opciones[reactivoSeleccionado.reactivo][1].respuestaCorrecta == 1, 'bg-rojo': opciones[reactivoSeleccionado.reactivo][1].respuestaCorrecta == 0}">
+                    {{  opciones[reactivoSeleccionado.reactivo][1].respuesta }}
+                </label>
+                <label class="flex-fill font-weight-bold text-center font-white rounded m-0 mr-2 py-1" [ngClass]="{'bg-verde' : opciones[reactivoSeleccionado.reactivo][2].respuestaCorrecta == 1, 'bg-rojo': opciones[reactivoSeleccionado.reactivo][2].respuestaCorrecta == 0}">
+                    {{  opciones[reactivoSeleccionado.reactivo][2].respuesta }}
+                </label>
+                <label class="flex-fill font-weight-bold text-center font-white rounded m-0 mr-2 py-1" [ngClass]="{'bg-verde' : opciones[reactivoSeleccionado.reactivo][3].respuestaCorrecta == 1, 'bg-rojo': opciones[reactivoSeleccionado.reactivo][3].respuestaCorrecta == 0}">
+                    {{  opciones[reactivoSeleccionado.reactivo][3].respuesta }}
+                </label>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="tipo == 2">
+        <div class="form-group">
+            <label class="font-weight-bold">Reactivo</label>
+            <textarea class="form-control" [(ngModel)]="pregunta"></textarea>
+        </div>
+        <div class="form-group m-0">
+            <label class="font-weight-bold mr-2">Respuestas</label>
+        </div>
+        <div class="form-check-inline py-2">
+            <input type="text" [(ngModel)]="respuestas[0]" class=" form-control form-control-sm mr-2">
+            <input name="respuesta" type="radio" (change)="cambiarRespuesta(0)" value="1">
+        </div>
+        <div class="form-check-inline py-2">
+            <input type="text" [(ngModel)]="respuestas[1]"  class=" form-control form-control-sm mr-2">
+            <input name="respuesta" type="radio" (change)="cambiarRespuesta(1)" value="2">
+        </div>
+        <div class="form-check-inline py-2">
+            <input type="text" [(ngModel)]="respuestas[2]" class=" form-control form-control-sm mr-2">
+            <input name="respuesta" type="radio" (change)="cambiarRespuesta(2)" value="3">
+        </div>
+        <div class="form-check-inline py-2">
+            <input type="text" [(ngModel)]="respuestas[3]" class=" form-control form-control-sm mr-2">
+            <input name="respuesta" type="radio" (change)="cambiarRespuesta(3)" value="4">
+        </div>
+
+        <div class="d-flex">
+            <div class="form-group flex-fill mr-3">
+                <label class="font-weight-bold">Retroalimentación Acierto</label>
+                <textarea [froalaEditor]="options" class="froala'" [(ngModel)]="retroPositiva"></textarea>
+            </div>
+            <div class="form-group flex-fill">
+                <label class="font-weight-bold">Retroalimentación Error</label>
+                <textarea [froalaEditor]="options" class="froala'" [(ngModel)]="retroNegativa"></textarea>
+            </div>  
+        </div>
+    </ng-container>
+</div>
+<div class="py-3 pr-4 text-center">
+    <button class="btn btn-primary btn-sm mr-2" (click)="validarFormulario()">
+        <i class="fas fa-save mr-2"></i>Guardar
+    </button>
+    <button class="btn btn-tertiary btn-sm" (click)="cerrarModal()">
+        <i class="fas fa-times mr-2"></i>Cerrar
+    </button>
+</div>
+
+<ngx-smart-modal #confirmacionDialogBanco identifier="confirmacionDialogBanco" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="1" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

@@ -1,0 +1,23 @@
+<div class="row justify-content-md-center">
+    <div class="col-3">
+        <img src="assets/images/elements/question.png" width="100%">
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <br>&nbsp;
+    <label class="text-strong col-form-label col-sm-12 text-center text-info-dialog text-wrap" *ngIf="queEs != ''">¿Desea eliminar {{ queEs }}?</label>
+	<label class="text-strong col-form-label col-sm-12 text-center text-info-dialog" *ngIf="queEs == '' && mensajeOpcional != ''">{{ mensajeOpcional }}</label>
+    <div class="col-10 text-center">
+        <br>&nbsp;
+        <button class="btn btn-primary btn-sm" (click)="confirmacion(1)">
+            <i class="fas fa-check"></i>
+			<label *ngIf="queEs != ''" class="m-0">&nbsp;Aceptar</label>
+			<label *ngIf="queEs == ''">&nbsp;Guardar y entregar</label>
+        </button>&nbsp;&nbsp;
+        <button class="btn btn-light btn-sm" (click)="confirmacion(0)">
+            <i class="fas fa-times"></i>
+			<label *ngIf="queEs != ''" class="m-0">&nbsp;Cancelar</label>
+			<label *ngIf="queEs == ''">&nbsp;Guardar y no entregar</label>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<!-- Listado de Materias en Línea-->
+<div class="container-fluid" *ngIf="editorService.mostrarListado && !editorService.mostrarClones">
+    <app-vista-materias></app-vista-materias>
+</div>
+
+<!-- Listado cursos clonados -->
+<ng-container *ngIf="!editorService.mostrarListado && editorService.mostrarClones">
+    <!--Botones-->
+    <div class="container-fluid mb-3 mt-4 px-5">
+		<div class="d-flex rounded-md bg-vino text-strong text-white my-3 p-2">
+			<div class="px-2 my-auto" *ngIf="iestdeskService.rolActual == 3">
+				<img src="assets/images/elements/back-arrow-white.png" class="img-md pointer" (click)="regresarListado()" ngbTooltip="Regresar Listado">
+            </div>
+			<div class="flex-grow-1 text-center px-2 my-auto">{{ editorService.materia.materia }} - {{ editorService.materia.ClaveAlfa }}</div>
+			<div class="px-2">
+				<img src="assets/images/editor/asignacion/sin-contenido.png" class="img-md pointer" (click)="editorService.abrirTemario(editorService.materia)" ngbTooltip="Sin Contenido">
+			</div>
+		</div>
+    </div>
+
+    <editor-clones></editor-clones>
+</ng-container>
+
+<!-- Temario Editor -->
+<ng-container *ngIf="!editorService.mostrarListado && !editorService.mostrarClones">
+    <idesk-temario [modoEditor]="true" (regresaEditor)="regresarAsignacion($event)"></idesk-temario>
+</ng-container>
+

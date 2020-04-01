@@ -1,0 +1,130 @@
+$colores: (
+    //Actividades Clase
+    'naranja': #FF8200,
+    'aqua': #00AB9E,
+    'rosa-claro': #FF6DCC,
+    'verde-limon': #ADD400,
+    'morado': #9045E2,
+    'rosa-mexicano': #DD2D8A,
+    'azul': #0071BE,
+    'verde': #3EBC32,
+    'verde-mexicano': #2ea94f,
+    'verde-pasto': #779C00,
+    'rojo': #DE2229,
+    'amarillo': #f89800,
+    'lila': #9045E0,
+    'verde-botella': #006B4A,
+    'amarillo-claro': #FFAF00,
+    'morado-claro': #B182C8,
+    'azul-marino': #160C66,
+    'azul-cielo': #75DCF6,
+    'azul-cielo-claro': #e7e7e7,
+    'menta': #6CBEB7,
+    'violeta': #810074,
+    'cafe':#B88165,
+    'cafe-claro': #C05E00,
+    'chocolate': #8C5938,
+    'azul-mezclilla': #4256B9,
+    'vino': #930200,
+     
+    //Temario
+    'cafe-nuez' : #80380a,
+    'cafe-con-leche': #bd8164,
+    'azul-petroleo' : #004e74,
+    'azul-petroleo-claro': #7797ad,
+    'rojo-rosado' : #c22e2e,
+    'rojo-rosado-claro' : #e08586,
+    'gris-claro': #f2f2f2,
+    'azul-cobalto': #004e74,
+    'verde-mar': #006b62,
+    'cafe-editor': #FCE9D9,
+
+    //Otros
+    'sinbad': #AAD5D5,
+	'chamois': #F1D8BF,
+	'gris': #D3D3D3,
+    'gris-muy-claro': #F9FAFA,
+    'gris-rata' : #818181,
+    'gris-hierro': #666464,
+    'gris-darks': #4D4D4D,
+    'gris-bootstrap': #EEEEEE
+);
+
+@each $color in $colores {
+    .bg-#{nth($color,1)}, .#{nth($color,1)}{
+        background-color: nth($color,2) !important;
+    }
+
+    .bg-#{nth($color,1)}-filter{
+        background-color: nth($color,2) !important;
+        -webkit-filter: opacity(.2);
+        filter: opacity(.2);
+    }
+
+    .border-#{nth($color,1)}{
+        border-color: nth($color,2) !important;
+    }
+
+	.c-#{nth($color,1)}{
+        color: nth($color,2) !important;
+    }
+}
+
+.c-transparent {
+	color: transparent;
+}
+
+$coloresCronograma: ( //alias el unicornio
+    'lochmara': #0072c0,
+    'easternBlue': #2495b8,
+    'middleBlue': #76c7df,
+    'electricBlue': #70e8fa,
+    'aquamarine': #71f1fd,
+    //'turquoiseBlue': #57efde,
+    'turquoise': #39ddc6,
+    'spray': #87f1d2,
+    'springGreen': #36f490,
+    'magicMint': #87efac,
+    //'sulu': #b7f295,
+    'boogerBuster': #d1ef73,
+    'texas': #f9efa3,
+    'grandis': #ffd886,
+    'goldenTainoi': #ffce65,
+    'melon': #ffbcb3,
+    'vividTangerine': #ff9c85,
+    'bittersweet': #ff706c,
+    'hotPink': #ff5fbf,
+    'carnationPink': #ff9acf,
+    'lavenderMagenta': #e689e6,
+    'fuchsiaPink': #be5dbe,
+    'fuchsiaBlue': #955ebb,
+    // nuevos
+    'blueStone': #006367,
+    'keppel': #429EA2,
+    'robin': #00D4BF,
+    'turquoiseBlue': #6BE6D9,
+    'powderBlue': #ADE5DF
+);
+
+@each $color in $coloresCronograma {
+    .fs-#{nth($color,1)}, .#{nth($color,1)}{
+        background-color: nth($color,2)
+    }
+}
+
+$coloresTemario: (
+     'cafe-1' : #732906,
+     'cafe-2' : #88370C,
+     'cafe-3' : #9A4613,
+     'cafe-4' : #AE5419,
+     'cafe-5' : #C06321,
+     'cafe-6' : #C06321,
+     'cafe-7' : #D37028,
+     'cafe-8' : #E57F2E
+);
+
+@each $color in $coloresTemario {
+    .bg-#{nth($color,1)}{
+        background-color: nth($color,2)
+    }
+}

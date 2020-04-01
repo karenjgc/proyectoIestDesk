@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover" *ngIf="tablaRubrica">
+                <thead>
+                    <tr class="text-center">
+                        <th rowspan="2">Categorías</th>
+                        <th [attr.colspan]="niveles">Niveles</th>
+                    </tr>
+                    <tr class="text-center">
+                        <th *ngFor="let n of niv; let i = index">{{ n.nombreValor }}<br>{{ n.valor }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let r of tablaRubrica">
+                        <td style="background-color: #fef8f4 !important;" [innerHTML]="r.titulo | safeHtml"></td>
+                        <td *ngFor="let n of r.niveles" [innerHTML]="n.descripcion | safeHtml" (click)="evalua(n.idRubricaDescripcion, n.idRubricaCategoria, n.valor)" class="{{ n.clase }} pointer"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <label class="col-form-label"><span class="text-strong">Calificación: </span>{{ calificacionTmp }}</label>
+    </div>
+    <div class="col-12 text-center">
+        <button type="button" class="btn btn-sm btn-primary" (click)="guardaRevision()"><i class="fas fa-save"></i>&nbsp;Guardar</button>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacionRevRubrica identifier="dialogoInformacionRevRubrica" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

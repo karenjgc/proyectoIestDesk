@@ -1,0 +1,114 @@
+<div class="row align-items-center" style="margin-top: 10px;">
+    <div class="col-12">
+		<div class="row">
+			<div class="col text-right">
+				<ng-template #infoCursoI>
+					<ng-container *ngIf="this.idTipo != 5">En esta sección puedes añadir una descripción, un link de video o adjuntar un archivo para enriquecer la información del curso que impartes.</ng-container>
+					<ng-container *ngIf="this.idTipo == 5">En esta sección puedes añadir texto y deberás adjuntar el archivo de Plan de Clase.</ng-container>
+				</ng-template>
+				<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="infoCursoI" placement="down" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;
+			</div>
+		</div>
+    </div>
+    <div class="col-12">
+        <hr>
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6 text-right">
+                <button class="btn btn-primary btn-sm" (click)="vistaPrevia(vistaAlumno)" style="margin-right: 10px; margin-top: 5px;"><i class="fa fa-eye"></i> Vista Alumno</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <form [formGroup]="infoCurso">
+            <div class="form-group row">
+                <label for="descripcion" class="col-sm-12 col-form-label text-strong">DESCRIPCIÓN </label>
+                <div class="col-sm-12" style="margin-bottom: 25px;">
+                    <textarea [froalaEditor]="options" formControlName="descripcion" class="froala" #descripcion></textarea>
+                </div>              
+                <div class="col-sm-12" style="margin-bottom: 25px;" *ngIf="this.idTipo != 5">
+                    <idesk-videoLink #childLink [tituloL]="tituloLink" (linksAdjuntos)="link($event)" [editando]="idLink"></idesk-videoLink>
+                </div>
+				<div class="col-sm-12">
+                    <idesk-adjuntarArchivos [esEdicion]="editando" [idArchivosObtenido]="idArchivos" (archivosAdjuntados)="archivos($event)" (respuesta)="obtenRespuesta($event, 2)"></idesk-adjuntarArchivos>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="form-group col-12 d-flex flex-column border-top-0 border rounded-lg my-2 p-0">
+        <div class="w-100 flex-fill text-center ">
+            <label class="text-strong rounded-t-lg opciones-pub-heading">PUBLICAR</label>
+        </div>
+        <div class="col-12 row no-gutters row-eq-height">
+            <div class="col-12 font-weight-bold font-size-xs border-bottom mr-2 text-center">GRUPO</div>
+        </div>
+        <div class="col-12" *ngFor="let curso of pubCursos">
+            <div class="row no-grutters align-items-center row-eq-height" *ngIf="des == ''">
+                <div class="col-12">
+                    <div *ngIf="curso.idCurso == cursoActual">
+                        <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> <label class="col-form-label">{{ curso.materia }} - {{ curso.clave }}</label>
+                    </div>
+                    <div *ngIf="curso.idCurso != cursoActual">
+                        <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [disabled]="curso.tieneInfo == 1" (change)="revisa($event)"> <label class="col-form-label">{{ curso.materia }} - {{ curso.clave }}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row no-grutters align-items-center row-eq-height" *ngIf="des != '' && curso.idCurso == cursoActual">
+                <div class="col-7">
+                    <div>
+                        <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> <label class="col-form-label">{{ curso.materia }} - {{ curso.clave }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <button class="btn btn-primary btn-sm" (click)="valida()"><i class="fas fa-save"></i> Guardar</button><br>&nbsp;
+    </div>
+</div>
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensajeDialogo" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)" dismissable="false"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #vistaAlumno let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-eye"></i> Vista Alumno</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid idesk-content">
+            <div class="row">
+				<div class="col-12" *ngIf="info.descripcion == '' && idLink == 0 && arrArchivos.length == 0">
+					No hay información dada de alta.
+				</div>
+
+                <div class="col-12" *ngIf="info.descripcion != ''">
+                    <div [innerHTML]="info.descripcion | safeHtml"></div>
+                </div>
+
+				<div class="col-12 text-center">
+					<img src="assets/images/elements/banner.png" class="img-fluid" *ngIf="info.descripcion && (idLink > 0 || arrArchivos.length > 0)">
+				</div>
+                <div class="col-12" *ngIf="idLink > 0">
+                    <div class="embed-responsive embed-responsive-16by9 ">
+                        <iframe class="embed-responsive-item" [src]="urlVideo | safeUrl" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+				<div class="col-12 text-center">
+					<img src="assets/images/elements/banner.png" class="img-fluid" *ngIf="arrArchivos.length > 0 && idLink > 0">
+				</div>
+				<div class="col-12" *ngIf="arrArchivos.length > 0" style="margin-top: 10px;">
+					<idesk-vistaArchivos [archivos]="arrArchivos" [personAlta]="'0'" [nombreActividad]="titulo+'_'+nombreCursoActual" [previsualizador]="false"></idesk-vistaArchivos>
+				</div>
+
+            </div>
+        </div>
+    </div>
+</ng-template>

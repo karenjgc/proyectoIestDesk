@@ -1,0 +1,57 @@
+<div class="row bottom-menu d-flex justify-content-around align-items-stretch text-center" *ngIf="inf && inf.length > 0">
+    <div class="flex-fill" *ngIf="inf[0]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Presentación" (click)="irInfoClase(1)">
+            <img id="img-presentacion" class="icon-info-menu" src='assets/images/navs/presentacion.png' *ngIf="infoCurso != 1">
+            <img id="img-presentacion" class="icon-info-menu" src='assets/images/navs/presentacion_active.png' *ngIf="infoCurso == 1">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="inf[1]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Fundamentación" (click)="irInfoClase(2)">
+            <img id="img-fundamentacion" class="icon-info-menu" src='assets/images/navs/fundamentacion.png' *ngIf="infoCurso != 6">
+            <img id="img-fundamentacion" class="icon-info-menu" src='assets/images/navs/fundamentacion_active.png' *ngIf="infoCurso == 6">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="inf[2]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Introducción" (click)="irInfoClase(3)">
+            <img id="img-introduccion" class="icon-info-menu" src='assets/images/navs/introduccion.png' *ngIf="infoCurso != 2">
+            <img id="img-introduccion" class="icon-info-menu" src='assets/images/navs/introduccion_active.png' *ngIf="infoCurso == 2">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="(idTipoCursoActual == 1 && idGrado != 1) || idTipoCursoActual == 9 ">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Objetivos y Competencias" (click)="irInfoClase(4)">
+            <img id="img-objetivos" class="icon-info-menu" src='assets/images/navs/objetivos.png' *ngIf="infoCurso != 3">
+            <img id="img-objetivos" class="icon-info-menu" src='assets/images/navs/objetivos_active.png' *ngIf="infoCurso == 3">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="inf[3]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Metodología" (click)="irInfoClase(5)">
+            <img id="img-metodologia" class="icon-info-menu" src='assets/images/navs/metodologia.png' *ngIf="infoCurso != 7">
+            <img id="img-metodologia" class="icon-info-menu" src='assets/images/navs/metodologia_active.png' *ngIf="infoCurso == 7">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="inf[4]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Políticas" (click)="irInfoClase(6)">
+            <img id="img-politicas" class="icon-info-menu" src='assets/images/navs/politicas.png' *ngIf="infoCurso != 4">
+            <img id="img-politicas" class="icon-info-menu" src='assets/images/navs/politicas_active.png' *ngIf="infoCurso == 4">
+        </button>
+    </div>
+    <div class="flex-fill">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Bibliografía" (click)="irInfoClase(9)">
+            <img id="img-bibliografia" class="icon-info-menu" src='assets/images/navs/bibliografia.png' *ngIf="infoCurso != 10">
+            <img id="img-bibliografia" class="icon-info-menu" src='assets/images/navs/bibliografia_active.png' *ngIf="infoCurso == 10">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="(idTipoCursoActual == 1 && idGrado != 1) || idTipoCursoActual == 9">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Carta Descriptiva" (click)="irInfoClase(10)">
+            <img id="img-carta" class="icon-info-menu" src='assets/images/navs/carta.png' *ngIf="infoCurso != 11">
+            <img id="img-carta" class="icon-info-menu" src='assets/images/navs/carta_active.png' *ngIf="infoCurso == 11">
+        </button>
+    </div>
+    <div class="flex-fill" *ngIf="inf[5]">
+        <button class="support pointer notification-badge" placement="top" ngbTooltip="Plan de Clase" (click)="irInfoClase(11)">
+            <img id="img-plan" class="icon-info-menu" src='assets/images/navs/plan.png' *ngIf="infoCurso != 5">
+            <img id="img-plan" class="icon-info-menu" src='assets/images/navs/plan_active.png' *ngIf="infoCurso == 5">
+        </button>
+    </div>
+
+</div>

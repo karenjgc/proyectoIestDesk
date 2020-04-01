@@ -1,0 +1,179 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="22"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/vinculos']"><label class="current">Vínculos</label></a>	
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    
+    <!-- Listado de Vinculos -->
+    <ng-container *ngIf="!altaVinculo">
+        <div class="row" *ngIf="rolActual == 1">
+                <div class="col-12">
+                    <div class="row no-gutters">
+                        <div class="col-5" id="nuevo-vinculo">
+                            <img src="assets/images/elements/nuevo.png" class="reutilizar-icon pointer" (click)="irAltaVinculo(0)">&nbsp;
+                            <label class="rem9 pointer" (click)="irAltaVinculo(0)" >Agregar Vínculo&nbsp;</label>
+                        </div>
+                        <div class="col-3 text-center align-middle">
+                            <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                        </div>
+                        <div class="col-4 text-right">
+                            <button class="btn btn-primary btn-sm vista-alumno" (click)="dialogoAlumno(vistaAlumno)">
+                                <i class="fa fa-eye"></i>
+                                &nbsp;Vista Alumno
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row" *ngIf="vinculos.length > 0">
+                <div class="col-6 acordion mis-clases-cards vinculos" *ngFor="let vinculo of vinculos | searchfilter:'titulo,descripcion,tema':busquedaTitulo">
+                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel [title]="vinculo.titulo">
+                            <ng-template ngbPanelContent>
+                                <div class="acordion-content">
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <div class="row acordion-row">
+                                                <div class="col-auto">
+                                                    <label class="text-strong">TEMA </label>
+                                                </div>
+                                                <div class="col">{{ vinculo.tema }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="row acordion-row">
+                                                <div class="col-auto">
+                                                    <label class="text-strong">LINK </label>
+                                                </div>
+                                                <div class="col"><a [href]="vinculo.vinculo" (click)="registrarAcceso(vinculo.idVinculo)" (contextmenu)="registrarAcceso(vinculo.idVinculo)" target="_blank">{{ vinculo.titulo }}</a></div>
+                                            </div>
+                                            <div class="row acordion-row">
+                                                <div class="col-auto">
+                                                    <label class="text-strong">FECHA DE PUBLICACIÓN </label>
+                                                </div>
+                                                <div class="col">{{ vinculo.fechaPublicacion }}</div>
+                                            </div>
+                                            <div class="row acordion-row" *ngIf="vinculo.descripcion">
+                                                <div class="col-12">
+                                                    <label class="text-strong">DESCRIPCIÓN </label>
+                                                </div>
+                                                <div class="col-12" [innerHTML]="vinculo.descripcion | safeHtml"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <a [href]="vinculo.vinculo"  (click)="registrarAcceso(vinculo.idVinculo)" (contextmenu)="registrarAcceso(vinculo.idVinculo)" target="_blank"><img [src]="vinculo.urlImagen" style="width: 100%;"></a>
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="rolActual == 1">
+                                        <div class="col-12 text-center">
+                                            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="irAltaVinculo(vinculo.idVinculo)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                &nbsp;Editar
+                                            </button>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <button class="btn btn-danger btn-sm" id="eliminar" style="margin-right: 10px; margin-top: 5px;" (click)="confirmaEliminaVinculo(vinculo.idVinculo, vinculo.titulo)">
+                                                <i class="fas fa-minus-circle"></i>
+                                                &nbsp;Eliminar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
+            </div>
+        
+            <div class="row" *ngIf="vinculos.length == 0">
+                <div class="col-12">
+                    <p class="text-center">No se encontraron vínculos publicados en este curso.</p>
+                </div>
+            </div>
+    </ng-container>
+    
+    <!-- Alta de Vinculo -->
+    <ng-container *ngIf="altaVinculo">
+        <div class="mr-2">
+            <img class="img-md cursor-pointer rounded-circle" (click)="regresarListado()" src="./assets/images/elements/return.png" placement="right" ngbTooltip="Regresar Listado Vínculos">
+        </div>
+        <idesk-altaVinculo (estaCerrado)="altaCerrada($event)" (regresaVinculos)="regresarListadoActualizado()"></idesk-altaVinculo>
+    </ng-container>
+
+</div>
+
+<ng-template #vistaAlumno let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-eye"></i> Vista Alumno</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body vista-alumno-body">
+        <div class="row pb-4" *ngIf="vinculos.length > 0">
+            <div class="col-6 acordion mis-clases-cards vinculos" *ngFor="let vinculo of vistaAlum">
+                <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                    <ngb-panel>
+                        <ng-template ngbPanelTitle>
+                            <div class="col-12 text-center"><span class="text-center">{{ vinculo.titulo }}</span></div>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                            <div class="acordion-content">
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <div class="row acordion-row">
+                                            <div class="col-auto">
+                                                <label class="text-strong">Tema: </label>
+                                            </div>
+                                            <div class="col">{{ vinculo.tema }}</div>
+                                        </div>
+                                        <div class="row acordion-row">
+                                            <div class="col-auto">
+                                                <label class="text-strong">Link: </label>
+                                            </div>
+                                            <div class="col"><a [href]="vinculo.vinculo" target="_blank">{{ vinculo.titulo }}</a></div>
+                                        </div>
+                                        <div class="row acordion-row">
+                                            <div class="col-auto">
+                                                <label class="text-strong">Fecha de publicación: </label>
+                                            </div>
+                                            <div class="col">{{ vinculo.fechaPublicacion }}</div>
+                                        </div>
+                                        <div class="row acordion-row" *ngIf="vinculo.descripcion">
+                                            <div class="col-auto">
+                                                <label class="text-strong">Descripción: </label>
+                                            </div>
+                                            <div class="col" [innerHTML]="vinculo.descripcion | safeHtml"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <a [href]="vinculo.vinculo" target="_blank"><img [src]="vinculo.urlImagen" style="width: 100%;"></a>
+                                    </div>
+                                </div>
+                            </div>   
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

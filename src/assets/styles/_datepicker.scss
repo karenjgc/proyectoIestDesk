@@ -1,0 +1,52 @@
+.owl-dt-inline-container .owl-dt-calendar, .owl-dt-popup-container .owl-dt-calendar {
+    height: auto !important;
+}
+
+.cdk-overlay-container {
+    position: fixed !important;
+    z-index: 1090 !important;
+}
+
+.owl-dt-weekday {
+    background-color: transparent !important;
+    color: #000000;
+}
+
+th.owl-dt-calendar-table-divider {
+    background-color: transparent !important;
+}
+
+.owl-dt-calendar-cell-content {
+    font-size: 0.8rem !important;
+    width: 65% !important;
+    height: 65% !important;
+}
+
+.owl-dt-calendar-cell {
+    padding: auto !important;
+}
+
+.owl-dt-timer-input {
+    font-size: 0.8rem !important;
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+    background-color: $main;
+}
+
+.owl-dt-container-buttons {
+    color: $main;
+}
+
+.owl-dialog-container {
+    overflow: hidden !important;
+}
+
+.owl-dt-dialog {
+    max-width: 50vw !important;
+}
+
+.owl-dt-dialog-container {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}

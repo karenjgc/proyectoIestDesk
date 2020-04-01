@@ -1,0 +1,34 @@
+<div class="container-fluid p-0">
+  <div class="d-flex bg-gris-darks">
+      <nav class="flex-fill navbar navbar-fixed-top navbar-expand-lg navbar-light navHeader">
+           <a class="navbar-brand">
+               <img src="assets/images/editor/logo.png">
+           </a>
+           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a routerLink='/editor/multimedia' routerLinkActive="activeEditorNav" class="nav-item nav-link text-white" >Multimedia</a>
+                  <a routerLink='/editor/asignacion' routerLinkActive="activeEditorNav" class="nav-item nav-link text-white">Asignaci&oacute;n</a>
+                  <!--a routerLink='/editor/edicion' routerLinkActive="activeEditorNav" class="nav-item nav-link text-white">Edici&oacute;n</a-->
+                </div>
+           </div>
+      </nav>
+      <div class="p-3">
+          <div ngbDropdown class="d-inline-block" style="display: inline;">	
+            <button id="user-dropdown" class="support" ngbDropdownToggle>
+                <img src="assets/images/elements/alumno.png" class="menu-img pointer" *ngIf="actual == 2">
+                <img src="assets/images/elements/profesor.png" class="menu-img pointer" *ngIf="actual != 2">
+            </button>
+            <div class="user-menu" ngbDropdownMenu aria-labelledby="user-dropdown"> 
+                <div class="col-md-12 user-rol">Mi Rol</div>
+                <button class="dropdown-item pointer" id="switch-profesor" style="margin-top: 5px;" (click)="cambiarRol(1)"  *ngIf="rol.rolMaestro == 1">Profesor &nbsp;&nbsp;<i class="fas fa-check-circle" id="profesor-activo" *ngIf="actual == 1"></i></button>
+                <button class="dropdown-item pointer" id="switch-alumno" (click)="cambiarRol(2)" *ngIf="rol.rolAlumno == 1">Alumno &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="alumno-activo" *ngIf="actual == 2"></i></button>
+                <button class="dropdown-item pointer" id="switch-editor" (click)="cambiarRol(3)" *ngIf="rol.rolEditor == 1">Editor &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="editor-activo" *ngIf="actual == 3"></i></button>
+                <button class="dropdown-item pointer" id="switch-editor" (click)="cambiarRol(4)" *ngIf="rol.rolDisenador == 1">Diseñador &nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle" id="editor-activo" *ngIf="actual == 4"></i></button>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
+

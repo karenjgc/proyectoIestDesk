@@ -1,0 +1,46 @@
+<div class="container-fluid idesk-content">
+    <div class="sticky-table mat-elevation-z8 mx-auto mb-5" *ngIf="!mostrarDetalle">
+        <table mat-table [dataSource]="objectKeys(reporte)" class="tabla-reporte">
+            <ng-container [matColumnDef]="tema" *ngFor="let tema of temasTabla; let i = index" [sticky]=" i == 0 || i == 1 || i == 2" >
+                <th mat-header-cell *matHeaderCellDef> <span [ngbTooltip]="i > 2 ? temas[(i-3)+'-'+tema].tema : ''" placement="bottom">{{  i == 0 ? '' : ( i == 1 ? 'ID IEST' : (i == 2 ? 'NOMBRE' : 'Tema ' + (i - 2) ))}} </span></th>
+                <td mat-cell *matCellDef="let temax;let j = index" [style.left.px]="i== 1 ? '56' : ( i == 2 ? '127' : '')" (click)="detalleAlumno(reporte[temax].datos.idPerson, tema)"> <label class="w-100 mb-0 {{ i > 2 ? 'pointer text-center' : '' }}">{{ tema == 'posicion' ? (j + 1) : reporte[temax].datos[tema] }}</label></td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="temasTabla; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: temasTabla;"></tr>
+        </table>
+    </div>
+    <!-- <table class="table table-striped">
+        <thead>
+            <tr class="text-strong">
+                <th>&nbsp;</th>
+                <th>ID IEST</th>
+                <th>NOMBRE</th>
+                <ng-container *ngFor="let tema of objectKeys(temas); let i = index;">
+                    <th><span [ngbTooltip]="temas[tema].tema" placement="top"> {{ i + 1 }} </span></th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of objectKeys(reporte); let i = index;">
+                <td>{{ i + 1 }}</td>
+                <td>{{ reporte[item].datos.idPerson }}</td>
+                <td>{{ reporte[item].datos.nombre }}</td>
+                <ng-container *ngFor="let dato of objectKeys(temas)">
+                    <td class="pointer" (click)="detalleAlumno(reporte[item].datos.idPerson, temas[dato].idTema)">{{ reporte[item].datos[temas[dato].idTema] }} %</td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table> -->
+
+</div>
+
+<div *ngIf="mostrarDetalle">
+    <div class="container-fluid idesk-content">
+        <div class="row">
+            <div class="col-12 text-right">
+                <button class="btn btn-primary btn-sm font-white" (click)="regresar()"><i class="fas fa-undo mr-1"></i>Regresar</button>
+            </div>
+        </div>
+    </div>
+    <idesk-reportes-avancextema_detalle [idpersonidesk]="idpersonidesk" [idTema]="idTema"></idesk-reportes-avancextema_detalle>
+</div>

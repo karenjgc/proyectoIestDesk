@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="d-flex flex-column p-3 px-5 my-3 border rounded-lg" *ngIf="podcast">
+        <label class="font-weight-bold">TÍTULO</label>
+        <label>{{ podcast.titulo }}</label> 
+
+        <label class="font-weight-bold" *ngIf="!vistaAlumno">FECHA DE PUBLICACIÓN</label>
+        <label>{{ podcast.fechaPublicacion }}</label>
+
+        <label class="font-weight-bold">DESCRIPCIÓN</label>
+        <p [innerHTML]="podcast.descripcion | safeHtml"></p>
+
+        <label class="font-weight-bold">AUDIO</label>
+        
+        <div id="buttonset" class="row align-items-center row-eq-height" *ngIf="podcast.tipoAudio == 1 && podcast.url != ''">
+            <div class="col-12">
+                <audio id="audio" controls="controls" preload="none" [src]="podcast.url"></audio>
+            </div>
+        </div>
+
+        <div class="flex-fill" *ngIf="podcast.tipoAudio == 2">
+            <iframe *ngIf="podcast.url != ''" width="100%" height="140" scrolling="no" frameborder="no" [src]="podcast.url | safeUrl"></iframe>
+        </div>
+    </div>
+</div>

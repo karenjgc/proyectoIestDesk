@@ -1,0 +1,45 @@
+<div class="container-fluid idesk-content" *ngIf="reporteCompleto">
+    <div class="w-100 mb-2">
+        <h5>Desempeño Maestro - Interacción con elementos</h5>
+    </div>
+    <div class="w-100 my-1">
+        <h6>{{ disenador.semanaSeleccionada }}</h6>
+    </div>
+    <div class="col-sm-12 py-3 mt-4" *ngIf="procesoCarga">
+        <h3>
+            <img src="assets/images/editor/spinner-big.gif">
+            Cargando Información...
+        </h3>
+    </div>
+    <div class="sticky-table mat-elevation-z8 mx-auto mb-5" *ngIf="!procesoCarga && _idCurso != ''">
+        <table mat-table [dataSource]="ObjectKeys(reporte)" class="tabla-reporte">
+            <ng-container [matColumnDef]="titulo" *ngFor="let titulo of titulos; let i = index" [sticky]=" i == 0 || i == 1 || i == 2">
+                <th mat-header-cell *matHeaderCellDef [style.left.px]="i== 1 ? '46' : ( i == 2 ? '310' : '')"> 
+                    <label class="w-100 mb-0 {{ i > 2 ? 'text-truncate' : '' }} {{ i == 0 ? 'w-20px' : ( i== 1 ? 'w-250px' : ( i == 2 ? 'w-250px' : 'w-60px') ) }}" [ngbTooltip]="i > 2 ? headers[titulo] : ''" placement="bottom">{{ titulo == 'idCurso' ? '' : headers[titulo] }}</label>
+                </th>
+                <td mat-cell *matCellDef="let curso; let j = index" [style.left.px]="i== 1 ? '46' : ( i == 2 ? '310' : '')"> 
+                    <label class="w-100 mb-0 {{ i > 2 ? 'text-center' : '' }} {{ i == 0 ? 'w-20px' : ( i== 1 ? 'w-250px' : ( i == 2 ? 'w-250px' : 'w-60px') ) }}">{{ titulo == 'idCurso' ? ( j + 1 ) : reporte[curso][titulo] }}</label>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="titulos; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: titulos;"></tr>
+        </table>
+    </div>
+</div>
+
+<table #tablainteraccionMaestro style="display:none;" cellspacing="0" *ngIf="!procesoCarga && _idCurso != ''">
+    <thead>
+        <tr>
+            <th *ngFor="let titulo of titulos; let i = index">
+                {{ titulo == 'idCurso' ? '' : headers[titulo] }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let curso of ObjectKeys(reporte); let i = index;">
+            <ng-container *ngFor="let titulo of titulos; let j = index;">
+                <td>{{ titulo == 'idCurso' ? ( i + 1 ) : reporte[curso][titulo] }}</td>
+            </ng-container>
+        </tr>
+    </tbody>
+</table> 

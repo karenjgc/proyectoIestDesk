@@ -1,0 +1,24 @@
+<div class="modal-header" *ngIf="parametros">
+    <h4 class="modal-title" *ngIf="parametros.tipoAlta == 1">{{ 'Categoría: ' + coloresCategorias[parametros.categoria] + ' - ' + (parametros.pregunta + 1) * 100 + ' pts.' }}</h4>
+    <h4 class="modal-title" *ngIf="parametros.tipoAlta == 2">{{ 'Reactivo No. ' + (parametros.pregunta + 1) }}</h4>
+    <button class="close" aria-label="Close" type="button" (click)="cerrarModal()">
+       <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="mx-4 pt-2 pb-4 cursor-pointer" *ngIf="tipo == 2" (click)="tipo = 1">
+            <img class="img-sm" src="assets/images/elements/return.png">
+            Regresar
+        </div>
+        <div class="col-12 d-flex flex-column px-4 pt-2">
+            <div class="form-group">
+                <label class="font-weight-bold">Tema</label>
+                <select class="text-center font-weight-bold form-control form-control-sm" [(ngModel)]="temaSeleccionado" (change)="iestdesk.establecerTemaActual(temaSeleccionado)">
+                    <option *ngFor="let tema of temasCursos[cursoActual]" [value]="tema.idTema">{{ tema.tema }}</option>
+                </select>
+            </div>
+            <opcion-multiple [tema]="temaSeleccionado" [tipo]="tipo" [parametros]="parametros" (cambioTipo)="cambio($event)"></opcion-multiple>
+        </div>
+    </div>
+</div>

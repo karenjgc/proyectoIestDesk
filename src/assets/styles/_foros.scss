@@ -1,0 +1,268 @@
+.info-forum-description {
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 10px 5px 10px;
+	width: 99%;
+	background-color: $lightGray;
+	border-radius: 10px 10px 10px 10px;
+}
+
+.forum-item-description {
+	margin-bottom: -0.5rem;
+}
+
+.note-forum {
+	font-size: 0.75rem;
+}
+
+.inactive {
+	background-color: #D2D7BB !important;
+}
+
+/* creates the smaller  triangle */
+.forum-first-level .inactive:before {
+	content: "";
+    width: 0;
+    height: 0;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-right: 18px solid #D2D7BB;
+    left: -18px;
+    position: absolute;
+    top: 10px;
+}
+
+.forum-second-level .inactive:before {
+	content: "";
+    width: 0;
+    height: 0;
+	border-right: 18px solid transparent;
+	border-left: 18px solid transparent;
+	border-bottom: 18px solid #D2D7BB;
+    top: -18px;
+    position: absolute;
+    left: 15px;
+}
+
+.forum-third-level .inactive:before {
+	content: "";
+    width: 0;
+    height: 0;
+	border-right: 18px solid transparent;
+	border-left: 18px solid transparent;
+	border-bottom: 18px solid #D2D7BB;
+    top: -18px;
+    position: absolute;
+    left: 35px;
+}
+
+.sorting-forum {
+	margin-top: 15px;
+	background-color: $f7f8;
+}
+
+.forum-area, .questions-area{ 
+	min-height: 250px;
+	max-height: 550px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background-color: $lightGray; 
+	padding: 10px !important; 
+	border-style: solid;
+	border-width: thin;
+	border-color: #E6E5E4;
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.name {
+	font-family: OpenSansBold;
+	font-size: 0.7rem;
+}
+
+.fecha-hora {
+	font-family: OpenSansItalic;
+	font-size: 0.65rem;
+}
+
+.body-message {
+	font-size: 0.85rem;
+}
+
+.forum-first-level .picture, .bubble-first, .bubble-third {
+	float: left;
+}
+
+
+.bubble-first {
+	width: 75%;
+	background-color: $primerNivel;
+	padding: 10px;
+	position:relative;
+	margin-left: 18px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+}
+
+.bubble-second {
+	width: 75%;
+	background-color: $segundoNivel;
+	padding: 10px;
+	position:relative;
+	margin-top: 18px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	
+}
+
+.bubble-third {
+	width: 68%;
+	background-color: $tercerNivel;
+	padding: 10px;
+	position:relative;
+	margin-top: 18px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	
+}
+
+.bubble-second, .forum-second-level .picture, .bubble-third, .forum-third-level .picture  {
+	float: right;
+}
+
+.forum-second-level .picture, .forum-third-level .picture {
+	margin-top: 20px;
+	margin-left: 5px;
+	
+}
+
+
+/* creates the smaller  triangle */
+.bubble-first:before {
+	content: "";
+    width: 0;
+    height: 0;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-right: 18px solid $primerNivel;
+    left: -18px;
+    position: absolute;
+    top: 10px;
+}
+
+.bubble-second:before {
+	content: "";
+    width: 0;
+    height: 0;
+	border-right: 18px solid transparent;
+	border-left: 18px solid transparent;
+	border-bottom: 18px solid $segundoNivel;
+    top: -18px;
+    position: absolute;
+    left: 15px;
+}
+
+.bubble-third:before {
+	content: "";
+    width: 0;
+    height: 0;
+	border-right: 18px solid transparent;
+	border-left: 18px solid transparent;
+	border-bottom: 18px solid $tercerNivel;
+    top: -18px;
+    position: absolute;
+    left: 35px;
+}
+
+
+
+/** FORO DUDAS **/
+.info-dudas {
+	font-size: 0.9rem;	
+}
+
+.dudas-temas{
+    font-size: 1rem;
+    color: $main;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    white-space: normal !important;	
+}
+
+.foro-activo {
+    background-color: $main;
+    border-color: $main;
+    color: $white;
+}
+
+.comentarios-nuevos[data-badge]:after {
+	font-family: OpenSansBold;
+	content: attr(data-badge);
+	position: absolute;
+	top: -2px;
+	right: 2px;
+	font-size: 0.9em;
+	background: $redNotification;
+	color: $white;
+	font-weight: 900;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	line-height: 1.85rem;
+	border-radius: 50%;
+	border-color: $white;
+	box-shadow: 0 0 6px $white;
+	z-index: 10;
+}
+
+.info-foro-descripcion {
+	word-wrap: break-word;
+}
+
+#info {
+	max-height: 650px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.pregunta {
+	background-color: #fff;
+	margin: 2px -20px 10px 20px !important;
+	width: 95%;
+	border-left: 15px solid $main;
+}
+
+.pregunta-nombre {
+	font-size: 0.75rem;
+	margin-bottom: 0;
+}
+
+.pregunta-fecha {
+	font-size: 0.65rem;
+}
+
+.pregunta-img {
+	width: 25px;
+}
+
+.info-pregunta {
+	margin-bottom: 2px;
+	margin-top: 2px;
+	display: inline-block;
+}
+
+.pregunta-container {
+	margin-left: 15px;
+}
+
+.pregunta-foro {
+	background-color: #fff;
+	margin: 2px -20px 10px 20px !important;
+	border-left: 15px solid $main;
+	padding: 15px !important;
+}
+
+.sin-dudas {
+	padding-left: 20px;
+}

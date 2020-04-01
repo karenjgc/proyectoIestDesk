@@ -1,0 +1,268 @@
+/*Lightbox para podio y ganadores*/
+.lightbox-div{
+	position: fixed;
+	z-index: 1100;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	top: 0;
+	bottom: 0;
+    background: rgba(0,0,0,0.8);
+
+    .image-holder{
+        position: relative;
+        overflow: hidden;
+        
+        table{
+            margin: 0 auto;
+            padding-top:  25rem;
+        }
+    
+        h3{
+            width: 9rem;
+            padding-top: 25rem;
+            color: #ffffff;
+        }
+        
+        .posicion-ganador{
+           width: 21rem;
+           padding-left: 7rem;
+           padding-right: 7rem;
+           padding-bottom: 15rem;
+        }
+        
+        .centro-ruleta{
+            height: 10rem;
+            margin-top: 16rem;
+        }
+
+        .background-image{
+             height: 47rem;
+             width: 47rem;
+             display: block;
+             margin: 0 auto;
+        }
+    
+        .responsive-overlay {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    } 
+    
+    .close-modal{
+        text-decoration: underline !important;
+        color: #ffffff !important;
+        padding-right: 10px;
+        cursor: pointer;
+        float: right;
+    }
+}
+
+.flex-equipos{
+    -webkit-flex-grow: 2; /* Safari 6.1+ */
+    -webkit-flex-shrink: 0; /* Safari 6.1+ */
+    -webkit-flex-basis: 200px; /* Safari 6.1+ */
+    flex-grow: 2;
+    flex-shrink: 0;
+    flex-basis: 200px;
+}
+
+.flex-puntaje{
+    -webkit-flex-grow: 2; /* Safari 6.1+ */
+    -webkit-flex-shrink: 0; /* Safari 6.1+ */
+    -webkit-flex-basis: 200px; /* Safari 6.1+ */
+    flex-grow: 2;
+    flex-shrink: 0;
+    flex-basis: 120px;
+}
+
+.nombre-equipo{
+    background-color: #0072C0;
+    color: #ffffff;
+}
+
+.fondo-actividad{
+    background-color: #FED06E;
+}
+
+.titulo-equipo{
+   background-color: #666666;
+   color: #ffffff;
+}
+
+.titulo-inactivo{
+  background-color: #a9a9a9;
+  color: #ffffff;
+}
+
+.titulo-pregunta{
+    background-color: #FF8200;
+    color: #ffffff;
+}
+
+.fondo-pregunta{
+    background-color: #001C3F;
+    color: #ffffff;
+    border: none;
+    cursor: pointer !important;
+}
+
+.respuestaCorrecta{
+   background-color: #00B63E !important;
+   cursor: not-allowed !important;
+}
+
+.respuestaIncorrecta{
+   background-color: #CE003A !important;
+   cursor: not-allowed !important;
+}
+
+.botonInactivo{
+    background-color: #8F8F8F;
+    cursor: not-allowed !important;
+}
+
+.actividad-clase-integrante{
+    background-color: #0072C0;
+    color: #ffffff;
+}
+
+.actividad-clase-integrante-actual{
+    background-color: #56BB49 !important;
+    color: #ffffff;
+}
+
+.actividad-clase-integrante-final{
+    border-bottom-left-radius: 1rem !important;
+    border-bottom-right-radius: 1rem !important;
+}
+
+.ruleta-deshabilitada{
+   opacity: 0.7;
+   cursor: not-allowed !important;
+}
+
+.ruleta-xl{
+    height: 20rem;
+}
+
+.ruleta-md{
+    height: 10rem;
+}
+
+.contenedor-ruleta{
+    position: relative;
+    overflow: hidden;
+    
+    .centro-ruleta{
+        height: 10rem;
+        margin-top: 16rem;
+    }
+
+    .girar-ruleta{
+         -webkit-animation:giraRuleta 1s linear 0s 1;
+         -moz-animation:giraRuleta 1s linear 0s 1;
+         animation:giraRuleta 1s linear 0s 1;
+    }
+
+    .responsive-overlay {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+}
+
+.eliminar-equipo{
+    border: 2px dashed #818181 !important;
+}
+
+.drag-over{
+    background-color: #D9534F;
+    -webkit-filter: opacity(.2);
+    filter: opacity(.2);
+}
+
+.drag-element{
+    background-color: #0275D8;
+    -webkit-filter: opacity(.2);
+    filter: opacity(.2);
+}
+
+.tablero-jeopardy{
+    .categoria{
+       border-width: 2px 1px 2px 1px;
+       border-color: #666666;
+       border-style: solid;
+    }
+
+    div:first-child{
+        border-left: 2px solid #666666;
+        border-top-left-radius: 1.25rem;
+        border-bottom-left-radius: 1.25rem;
+
+        h4:first-child{
+            border-top-left-radius: 1.15rem;
+        }
+
+        h5:last-child{
+            border-bottom-left-radius: 1.15rem;
+        }
+    }
+
+    div:last-child{
+        border-right: 2px solid #666666;
+        border-top-right-radius: 1.25rem;
+        border-bottom-right-radius: 1.25rem;
+
+        h4:first-child{
+            border-top-right-radius: 1.15rem;
+        }
+
+        h5:last-child{
+            border-bottom-right-radius: 1.15rem;
+        }
+    }
+
+    h5, h4{
+        border-bottom: 2px solid #666666 !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    h5:last-child{
+        border-bottom: none !important;
+    }
+
+}
+
+.pregunta-contestada{
+    background-color: #818181 !important;
+    color: #CDD3D3 !important;
+}
+
+.reactivo-seleccionado{
+    background-color: #b1b1b1 !important;
+    color: #818181 !important;
+}
+
+.numero-reactivo{
+    height: 1.50rem;
+    width: 1.50rem;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: bottom;
+}
+.equipo-actual{
+    -webkit-box-shadow: 0px 0px 55px 8px rgba(2,197,76,0.83);
+    -moz-box-shadow: 0px 0px 55px 8px rgba(2,197,76,0.83);
+    box-shadow: 0px 0px 55px 8px rgba(2,197,76,0.83);
+}
+
+
+@-moz-keyframes giraRuleta { 100% { -moz-transform: rotate(1800deg); } }
+@-webkit-keyframes giraRuleta { 100% { -webkit-transform: rotate(1800deg); } }
+@keyframes giraRuleta { 100% { -webkit-transform: rotate(360deg); transform:rotate(1800deg); } }

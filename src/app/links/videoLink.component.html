@@ -1,0 +1,26 @@
+<div class="row text-center"> 
+    <div class="col-12">
+        <br>&nbsp;
+        <form [formGroup]="link">
+            <div class="form-group row">
+                <label for="titulo-tarea" class="col-sm-3 col-form-label text-strong">LINK DEL VIDEO </label>
+                <div class="col-sm-7">
+                    <input type="text" (change)="validaLink()" class="form-control form-control-sm" #enlace formControlName="enlace">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary btn-sm" (click)="elimina()"><i class="fas fa-trash"></i> Eliminar</button>
+                </div>
+            </div><br>
+            <div class="alert alert-danger" role="alert" *ngIf="error">
+                <i class="fas fa-exclamation-triangle"></i> Ingrese una URL de Youtube o Vimeo
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="error1">
+                <i class="fas fa-exclamation-triangle"></i> El link ingresado no contiene un formato válido
+            </div>
+        </form>
+        <div class="embed-responsive embed-responsive-16by9 " *ngIf="tipoLink != 0">
+            <iframe *ngIf="tipoLink == 1" class="embed-responsive-item" [src]="urlVideo | safeUrl" allowfullscreen></iframe>
+            <iframe *ngIf="tipoLink == 2" class="embed-responsive-item" [src]="urlVideo | safeUrl"></iframe>
+        </div>
+    </div>
+</div>

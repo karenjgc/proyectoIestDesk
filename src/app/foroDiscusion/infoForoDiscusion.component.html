@@ -1,0 +1,144 @@
+<div class="row">
+    <div class="col-12" *ngIf="infoForo">
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">TÍTULO </label><br>
+            {{ infoForo.titulo }}</label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">TEMA </label><br>
+            {{ infoForo.tema }}</label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">FECHA DE PUBLICACIÓN </label><br>
+            {{ infoForo.fechaPublicacion }}</label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">FECHA DE CIERRE </label><br>
+            {{ infoForo.fechaCierre }}</label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <hr>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.objetivo">
+            <label class="col-12 col-form-label text-strong">OBJETIVO </label>
+            <div class="col-12" [innerHTML]="infoForo.objetivo | safeHtml"></div>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.descripcion">
+            <label class="col-12 col-form-label text-strong">DESCRIPCIÓN </label>
+            <div class="col-12" [innerHTML]="infoForo.descripcion | safeHtml"></div>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.actividadesAntes">
+            <label class="col-12 col-form-label text-strong">ACTIVIDADES A REALIZAR ANTES DE PARTICIPAR  </label>
+            <div class="col-12" [innerHTML]="infoForo.actividadesAntes | safeHtml"></div>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">APORTACIÓN MÍNIMA  </label>
+            {{ infoForo.aportacionMinima }}</label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label"><label class="text-strong">RETROALIMENTACIÓN MÍNIMA </label>
+            {{ infoForo.retroalimentacionMinima }}</label>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="archivosForo.length > 0 || linksForo.length > 0">
+            <label *ngIf="archivosForo.length > 0" class="col-12 col-form-label">
+				<label class="text-strong">ARCHIVOS ADJUNTOS  </label>
+				<button type="button" *ngIf="archivosForo.length > 0" class="btn btn-primary btn-sm mx-1" (click)="verArchivos(vistaArchivos)">Ver</button>
+			</label>
+            <!--div *ngIf="linksForo.length > 0" class="mx-2" style="margin-bottom: 10px; margin-top: -10px;">
+                <div class="col-12" *ngFor="let f of linksForo">
+                    <img [src]="f.rutaImg" width="20px">&nbsp;<a [href]="f.link" target="_blank">{{ f.nombre }}</a>
+                </div>
+            </div-->
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.aspectosEvaluacion">
+            <label class="col-12 col-form-label text-strong">ASPECTOS DE EVALUACIÓN </label>
+            <div class="col-12" [innerHTML]="infoForo.aspectosEvaluacion | safeHtml"></div>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.idRubrica != 0">
+            <label class="col-12 col-form-label">
+                <label class="text-strong">RÚBRICA IEST </label>&nbsp;
+                <button type="button" class="btn btn-primary btn-sm" (click)="verRubrica(vistaRubrica, infoForo.idRubrica)">Ver</button>
+            </label>
+        </div>
+        <div class="form-group row forum-item-description" *ngIf="infoForo.idRubricaExterna != 0 || infoForo.idRubricaExternaLink != 0">
+            <label class="col-12 col-form-label">
+                <label class="text-strong">RÚBRICA EXTERNA </label>&nbsp;
+                <button type="button" *ngIf="(rubricaExternaArchivo && rubricaExternaArchivo.length > 0) || infoForo.idRubricaExterna != 0" class="btn btn-primary btn-sm" (click)="verRubricaExt(vistaRubricaExt, infoForo.idRubricaExterna)">Ver</button>
+                <!--div *ngIf="infoForo.idRubricaExternaLink != 0" style="margin-bottom: 10px; margin-top: -10px;">
+                    <div class="col-12" *ngFor="let f of rubricaExterna">
+                        <img [src]="f.rutaImg" width="20px">&nbsp;<a [href]="f.link" target="_blank">{{ f.nombre }}</a>
+                    </div>
+                </div-->
+            </label>
+        </div>
+        <div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label">
+                <label class="text-strong">MODALIDAD DE TRABAJO </label>&nbsp;
+                <img src="assets/images/elements/individual.png" class="img-table" *ngIf="infoForo.idModTrabajo == 1">
+                <img src="assets/images/elements/grupal.png" class="img-table pointer" *ngIf="infoForo.idModTrabajo != 1" (click)="verEquipos(infoForo.idPlantillaEquipos, muestraEquipos)">
+            </label>
+        </div>
+		<div class="form-group row forum-item-description">
+            <hr>
+        </div>
+		<div class="form-group row forum-item-description">
+            <label class="col-12 col-form-label">
+                <label class="text-strong">
+					<ng-container *ngIf="infoForo.permiteArchivos == true">SÍ </ng-container>
+					<ng-container *ngIf="infoForo.permiteArchivos == false">NO </ng-container>
+					PERMITE ADJUNTAR ARCHIVOS A COMENTARIOS</label>&nbsp;
+            </label>
+        </div>
+    </div>
+</div>
+
+<ng-template #vistaRubrica let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-table"></i> Rúbrica IEST</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-vistaRubrica [vistaAlumno]="true"></idesk-vistaRubrica>
+    </div>
+</ng-template>
+
+<ng-template #vistaRubricaExt let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Rúbrica Externa</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="rubricaExternaArchivo" [personAlta]="'0'" [nombreActividad]="'Rubrica-'+infoForo.titulo" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #muestraEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada"></idesk-vistaEquipos>
+    </div>
+</ng-template>
+<ng-template #vistaArchivos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<idesk-vistaArchivos [archivos]="archivosForo" [personAlta]="'0'" [nombreActividad]="infoForo.titulo" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>

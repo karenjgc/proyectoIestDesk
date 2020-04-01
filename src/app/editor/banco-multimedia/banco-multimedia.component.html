@@ -1,0 +1,48 @@
+<div class="modal-header" *ngIf="elementos">
+    <h5 class="modal-title">{{ nombreElemento }}</h5>
+    <button class="close" aria-label="Close" type="button" (click)="cerrarModal()">
+       <span class="ng-tns-c1-1" aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="container-fluid">
+    <div class="row m-2 p-2">
+      <div class="col-12 d-flex flex-column px-4 pt-2">
+        <div class="d-flex flex-fill" *ngIf="opcionesElementos">
+            <div class="input-group mb-3">
+                <select class="custom-select form-control-sm" [(ngModel)]="filtroSeleccionado">
+                    <option value="0">Todas las etiquetas</option>
+                    <option *ngFor="let opcion of opcionesElementos" [value]="opcion.idCurso">{{ opcion.materia + " "+ opcion.plan }}</option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" (click)="obtenerElementos()">Buscar</button>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="opciones && mostrarBuscador">
+            <div class="d-flex flex-fill">
+                <label class="font-weight-bold mr-3">Título:</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="reactivoSeleccionado" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" [placeholder]="'Buscar ' + nombreElemento">
+                <ng-template #rt let-r="result" let-t="term">
+                    <div class="cursor">
+                        <div>
+                            <label [innerHTML]="r.titulo | safeHtml"></label>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="py-3 pr-4 text-center">
+                <button class="btn btn-primary btn-sm mr-2" (click)="validarFormulario()">
+                    <i class="fas fa-save mr-2"></i>Cargar
+                </button>
+                <button class="btn btn-tertiary btn-sm" (click)="cerrarModal()">
+                    <i class="fas fa-times mr-2"></i>Cerrar
+                </button>
+            </div>
+        </ng-container>
+      </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmacionDialogBanco identifier="confirmacionDialogBancoMultimedia" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="1" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

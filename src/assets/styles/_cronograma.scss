@@ -1,0 +1,102 @@
+$cafeCronograma: #ae9064;
+$naranjaCronograma: #faaf3b;
+$otrocafe: #c59b6d;
+$gris1: #f0f0f0;
+$g1: #EFEFEF;
+$gris2: #e5e5e5;
+$g2: #D3D3D3;
+
+.tema {
+    width: 20rem !important;
+}
+
+.fecha {
+    width: 2.8rem !important;
+    position: relative;
+}
+
+.header-cronograma {
+    background-color: #D85700 !important;//$main !important; //$brownBramble !important;
+    color: $white;
+    height: 57px;
+}
+
+.cronograma{
+    :nth-child(even).tema-cronograma{
+        background-color: $gris1; //$chamois; 
+    }
+    :nth-child(even).tema-cronograma:hover {
+        background-color: $g1;//$desertSand;
+    }
+
+    :nth-child(odd).tema-cronograma{
+        background-color: $gris2; //$linen;
+    }
+    :nth-child(odd).tema-cronograma:hover {
+        background-color: $g2;//$albescentWhite;
+    }
+}
+
+.festivo {
+    background-color: #0093C2 !important;//#a3c02f !important;
+}
+
+.examen {
+    background-color: #FF5A1C !important;//$indochine !important;
+}
+
+.hoy {
+    background-color: #FFC25B !important;//$indochine !important;
+}
+
+.mes-x {
+    background-color: #8F3700;//$cafeCronograma;
+    /*.semana-y {
+        background-color: $cafeCronograma;
+    }
+    .semana-x {
+        background-color: $otrocafe;
+    }*/
+}
+
+.mes-y {
+    background-color: #531C00;//$main;
+    /*.semana-y {
+        background-color: $naranjaCronograma;
+    }
+    .semana-x {
+        background-color: $main;
+    }*/
+}
+
+
+.semana-x {
+    background-color: #E55D00;//$otrocafe;//$yellowOrange;
+}
+.semana-y {
+    background-color: #FF9400;//$naranjaCronograma;//$hotCinnamon;
+}
+
+
+.cronograma-responsive {
+    overflow-x: auto;
+}
+
+.div-parentOverlap{
+   position: relative;
+}
+
+.div-overlaping{
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    opacity: 0.7;
+    text-align: center;
+    padding-top: 6px;
+}
+
+.opacidad{
+    opacity: 0.7;
+}

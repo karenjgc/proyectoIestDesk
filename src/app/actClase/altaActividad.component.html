@@ -1,0 +1,47 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="6"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/actividades-clase']"><label class="path">Actividades de Clase</label></a>	
+            <a [routerLink]="['/actividades-clase/nueva']"><label class="current">Agregar</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content" *ngIf="!mostrarActividad">
+    <div class="row">
+        <div class="d-flex flex-wrap">
+            <!--div class="card rounded-lg mr-5 cursor-pointer" (click)="altaActividad(2)"-->
+            <div class="flex-equipos rounded-lg border mr-3 mb-2 p-3" (click)="altaActividad(2)">
+                <img src="./assets/images/actividades/ruleta_prox.png">
+                <h5 class="card-title text-dark font-weight-bold">Ruleta</h5>
+                <p class="card-text text-dark">En esta actividad los alumnos interaccionan usando sus teléfonos, tabletas o computadoras personales para contestar preguntas aleatorias y competir entre ellos. Promueve las clases dinámicas con un enfoque cooperativo.</p>
+            </div>
+            <!--div class="card rounded-lg mr-5 cursor-pointer" (click)="altaActividad(3)"-->
+            <div class="flex-equipos rounded-lg border mr-3 mb-2 p-3">
+                <img src="./assets/images/actividades/jeopardy_prox.png">
+                <h5 class="card-title text-dark font-weight-bold">Jeopardy</h5>
+                <p class="card-text text-dark">En esta actividad tus alumnos podrán jugar el famoso juego de Jeopardy en tu clase. Asigna preguntas por categorías para que tus alumnos las respondan por equipos o de manera individual, usando sus teléfonos, tabletas y computadoras personales. Promueve las clases dinámicas con una integración grupal.</p>
+            </div>
+            <div class="flex-equipos rounded-lg border mr-3 mb-2 p-3 cursor-pointer" (click)="altaActividad(0)">
+                <img src="assets/images/actividades/act_libre_sf.png">
+                <h5 class="card-title text-dark font-weight-bold">Libre</h5>
+                <p class="card-text text-dark">Esta opción te permite asignar cualquier actividad a tus alumnos para realizarse durante la clase. Ellos podrán entregarla mediante un documento o texto.</p>
+            </div>
+            <div class="flex-equipos rounded-lg border mb-2 p-3 cursor-pointer" (click)="altaActividad(1)">
+                <img src="assets/images/actividades/act_externa_sf.png">
+                <h5 class="card-title text-dark font-weight-bold">Externa</h5>
+                <p class="card-text text-dark">Esta opción te permite insertar actividades como minijuegos, memoramas, crucigramas así como  visualizar videos educativos o presentaciones. Estas actividades deben ser creadas en plataformas externas y se pueden dar de alta en el IEST Desk utilizando el enlace correspondiente.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vista Alumno -->
+<ng-container *ngIf="mostrarActividad">
+    <idesk-altaActividadLibre [modoTemario]="true" *ngIf="tipoActividad == 0 || tipoActividad == 1"></idesk-altaActividadLibre>
+    <alta-ruleta [modoTemario]="true" (regresaTemario)="regresarTemario()" *ngIf="tipoActividad == 2"></alta-ruleta>
+    <alta-jeopardy [modoTemario]="true" (regresaTemario)="regresarTemario()" *ngIf="tipoActividad == 3"></alta-jeopardy>
+</ng-container>

@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div class="row">
+      <nav class="col-sm-12 navbar navbar-fixed-bottom nav-footer ">
+         <div [routerLink]="['./video']" routerLinkActive="active-multimedia-nav" class="col-sm-3 text-center multimedia-nav-item">
+              <img src="assets/images/temario/videoexterno_sf.png">
+              <a  class="nav-item nav-link py-0 pb-2">Video</a>
+         </div>
+         <div [routerLink]="['./podcast']" routerLinkActive="active-multimedia-nav" class="col-sm-3 text-center multimedia-nav-item">
+              <img src="assets/images/temario/podcast_sf.png">
+              <a  class="nav-item nav-link py-0 pb-2">Podcast</a>
+         </div>
+         <div  [routerLink]="['./oda']" routerLinkActive="active-multimedia-nav" class="col-sm-3 text-center multimedia-nav-item">
+              <img src="assets/images/temario/objetoaprendizaje_sf.png">
+              <a class="nav-item nav-link py-0 pb-2">ODA</a>
+          </div>
+          <div [routerLink]="['./apuntes']" routerLinkActive="active-multimedia-nav" class="col-sm-3 text-center multimedia-nav-item">
+              <img src="assets/images/temario/apuntes_sf.png">
+              <a class="nav-item nav-link py-0 pb-2">Apuntes</a>
+          </div>
+      </nav>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

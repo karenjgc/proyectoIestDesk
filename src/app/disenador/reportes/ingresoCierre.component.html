@@ -1,0 +1,88 @@
+<div class="container-fluid idesk-content">
+    <div class="w-100 mb-2">
+        <h5><strong>Ingreso al cierre</strong></h5>
+    </div>
+
+    <div class="col-sm-12 py-3 mt-4" *ngIf="procesoCarga">
+        <h3>
+            <img src="assets/images/editor/spinner-big.gif">
+            Cargando Información...
+        </h3>
+    </div>
+
+    <div class="w-100 d-flex my-2" *ngIf="!procesoCarga && resumen1.length > 0">
+        <div class="w-50">
+            <div class="sticky-table mat-elevation-z8 w-90 mx-auto mb-5 mt-2">
+                <table mat-table [dataSource]="resumen1" class="w-100 tabla-reporte">
+                    <ng-container matColumnDef="elemento">
+                        <th mat-header-cell *matHeaderCellDef class="chamois text-strong"> <label class="mb-0 text-center text-strong">Elemento</label> </th>
+                        <td mat-cell *matCellDef="let element; let i = index"> <label class="mb-0">{{ element.elemento }}</label></td>
+                    </ng-container>
+                    <ng-container matColumnDef="total">
+                        <th mat-header-cell *matHeaderCellDef class="chamois text-strong"> <label class="mb-0 text-center text-strong">Total</label> </th>
+                        <td mat-cell *matCellDef="let element; let i = index"> <label class="mb-0 text-center">{{ element.total }}</label></td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnasResumen"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnasResumen;"></tr>
+                </table>
+            </div>
+        </div>
+        <div class="w-50">
+            <div class="sticky-table mat-elevation-z8 w-90 mx-auto mb-5 mt-2">
+                <table mat-table [dataSource]="resumen2" class="w-100 tabla-reporte">
+                    <ng-container matColumnDef="elemento">
+                        <th mat-header-cell *matHeaderCellDef class="chamois text-strong"> <label class="mb-0 text-center text-strong">Elemento</label> </th>
+                        <td mat-cell *matCellDef="let element; let i = index"> <label class="mb-0">{{ element.elemento }}</label></td>
+                    </ng-container>
+                    <ng-container matColumnDef="total">
+                        <th mat-header-cell *matHeaderCellDef class="chamois text-strong"> <label class="mb-0 text-center text-strong">Total</label> </th>
+                        <td mat-cell *matCellDef="let element; let i = index"> <label class="mb-0 text-center">{{ element.total }}</label></td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnasResumen"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnasResumen;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-100 my-2" *ngIf="!procesoCarga && reporte">
+        <div class="sticky-table mat-elevation-z8 mx-auto mb-5 mt-2">
+            <table mat-table [dataSource]="reporte" class="tabla-reporte">
+                <ng-container matColumnDef="posicion" sticky>
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-20px mb-0">{{ i + 1 }}</label></td>
+                </ng-container>
+
+                <ng-container matColumnDef="materia" sticky>
+                    <th mat-header-cell *matHeaderCellDef> Materia </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-200px mb-0">{{ element.materia }}</label></td>
+                </ng-container>
+
+                <ng-container matColumnDef="idPersonMaestro">
+                    <th mat-header-cell *matHeaderCellDef> ID IEST Maestro </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-100 mb-0 text-center">{{ element.idPersonMaestro }}</label></td>
+                </ng-container>
+
+                <ng-container matColumnDef="tema">
+                    <th mat-header-cell *matHeaderCellDef> Tema(s) </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-250px mb-0" [innerHtml]="element.tema ? element.tema : 'En curso'"></label></td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalalumnos">
+                    <th mat-header-cell *matHeaderCellDef> Total de alumnos </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-100 mb-0 text-center">{{ element.totalAlumnos }}</label></td>
+                </ng-container>
+
+                <ng-container matColumnDef="totalingreso">
+                    <th mat-header-cell *matHeaderCellDef> Total de ingreso de alumnos al cierre del tema </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> <label class="w-100 mb-0 text-center" [innerHtml]="element.totalIngresos ? element.totalIngresos : 'En curso'"></label></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnas; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+            </table>
+        </div>
+    </div>
+</div>

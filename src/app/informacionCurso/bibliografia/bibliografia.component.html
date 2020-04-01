@@ -1,0 +1,188 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="18"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <label class="current">Bibliografía</label>			
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center">
+        <div class="col-11 div-info-curso border" style="overflow-x: hidden;">
+            <div class="info-curso-heading text-center py-1">
+                <h5 class="pt-2">
+                    <img src="assets/images/elements/bibliografia.png" class="pb-1">
+                    Bibliografía
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-12" *ngIf="rolActual == 1" style="margin-top: 10px;">
+                    &nbsp;&nbsp;
+					<ng-template #agregarBib>Añade bibliografía complementaria.</ng-template>
+                    <img src="assets/images/elements/nuevo.png" class="reutilizar-icon pointer" (click)="biblografiaNueva(nuevaBibliografia)">&nbsp;
+                    <label class="rem9 pointer" (click)="biblografiaNueva(nuevaBibliografia)">Agregar Bibliografía Complementaria&nbsp;</label>   
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="agregarBib" placement="right" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;   
+                </div>
+
+                <div class="col-12 acordion mis-clases-cards" style="margin-top: 10px;">
+                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" *ngIf="(idTipoCursoActual == 1 && idGrado != 1) || idTipoCursoActual == 9">
+                        <ngb-panel>
+                            <ng-template ngbPanelTitle>
+                                <div class="col-12 text-center"><span class="text-center">Básica</span></div>
+                            </ng-template>
+                            <ng-template ngbPanelContent>
+                                <div class="acordion-content">
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <table class="table table-striped rem9 table-rounded tabla-no-border" cellspacing="0">
+                                                <thead >
+                                                    <th class="w-60 table-header-orange">
+                                                        Libro
+                                                    </th>
+                                                    <th class="table-header-orange">
+                                                        Autor
+                                                    </th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let b of basicas">
+                                                        <td>{{ b.titulo }}</td>
+                                                        <td>{{ b.autorComa }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel>
+                            <ng-template ngbPanelTitle>
+                                <div class="col-12 text-center"><span class="text-center">Complementaria</span></div>
+                            </ng-template>
+                            <ng-template ngbPanelContent>
+                                <div class="acordion-content">
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <table class="table table-striped rem9 table-rounded tabla-no-border" cellspacing="0">
+                                                <thead>
+                                                    <th class="w-60 table-header-orange">
+                                                        Libro
+                                                    </th>
+                                                    <th class="table-header-orange">
+                                                        Autor
+                                                    </th>
+                                                    <th class="w-5 table-header-orange">
+                                                        &nbsp;
+                                                    </th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let c of complementarias" class="bibliografia-complementaria">
+                                                        <td>
+                                                            {{ c.titulo }}
+                                                            <span class="options" *ngIf="rolActual == 1 && c.idBibliografia != 0"><br><span class="pointer" (click)="abrirDialogo(nuevaBibliografia, c)">Editar</span> | <span class="pointer" (click)="confEliminar(c.idBibliografia, c.titulo)">Eliminar</span></span>
+                                                        </td>
+                                                        <td>
+                                                            {{ c.autorComa }}
+                                                        </td>
+                                                        <td>
+                                                            <img src="assets/images/elements/arrow-right.png" width="25px" class="pointer" (click)="verBiblio(c, infoBibliografia)" *ngIf="c.idBibliografia != 0">&nbsp;
+                                                        </td>
+                                                    </tr>
+                                                    <tr *ngIf="complementarias.length == 0">
+                                                        <td colspan="3">
+                                                            Sin bibliografías capturadas
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>   
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <idesk-infoCursoNav></idesk-infoCursoNav>
+        </div>
+    </div>
+</div>
+
+<ng-template #nuevaBibliografia let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-edit"></i> Agregar Bibliografía Complementaria</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-altaBibliografia (estaCerrado)="altaCerrada($event)"></idesk-altaBibliografia>
+    </div>
+</ng-template>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #infoBibliografia let-c="close" let-d="dismiss">
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="container-fluid idesk-content">
+                <div class="row">
+                    <label class="text-strong col-form-label col-sm-12">TÍTULO </label>
+                    <label class="col-form-label col-sm-12">{{ bib.titulo }}</label>
+                </div>
+                <div class="row">
+                    <label class="text-strong col-form-label col-sm-12">AUTOR </label>
+                    <label class="col-form-label col-sm-12">{{ bib.autorComa }}</label>
+                </div>
+                <div class="row" *ngIf="bib.editorial">
+                    <label class="text-strong col-form-label col-sm-12">EDITORIAL </label>
+                    <label class="col-form-label col-sm-12">{{ bib.editorial }}</label>
+                </div>
+                <div class="row" *ngIf="bib.edicion">
+                    <label class="text-strong col-form-label col-sm-12">EDICIÓN </label>
+                    <label class="col-form-label col-sm-12">{{ bib.edicion }}</label>
+                </div>
+                <div class="row" *ngIf="bib.anio">
+                    <label class="text-strong col-form-label col-sm-12">AÑO </label>
+                    <label class="col-form-label col-sm-12">{{ bib.anio }}</label>
+                </div>
+                <div class="row" *ngIf="bib.lugar">
+                    <label class="text-strong col-form-label col-sm-12">LUGAR </label>
+                    <label class="col-form-label col-sm-12">{{ bib.lugar }}</label>
+                </div>
+                <div class="row" *ngIf="bib.comentarios">
+                    <label class="text-strong col-form-label col-sm-12">COMENTARIOS </label>
+                    <label class="col-form-label col-sm-12" [innerHTML]="bib.comentarios | safeHtml"></label>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-sm" (click)="cerrarInfo()">
+                            <i class="fas fa-times"></i>&nbsp;Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

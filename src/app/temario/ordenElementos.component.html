@@ -1,0 +1,13 @@
+<div class="orden-temas my-3">
+    <div cdkDropList class="d-flex flex-column example-list border rounded-lg w-100 mb-5" (cdkDropListDropped)="drop($event)" *ngIf="elementosObj && elementosObj.length > 0">
+        <div class="example-box orden-temas p-2 px-4" *ngFor="let elemento of elementosObj; let i = index" cdkDrag [cdkDragDisabled]="enMovimiento">
+            <span class="rounded-circle text-center font-weight-bold font-white numero-tema bg-cafe-nuez mr-2">{{ i + 1 }}</span>
+            <div class="flex-fill">
+                {{ elemento.elemento.titulo + ' - ' + elemento.elemento.tipoElemento}}            
+            </div>
+        </div>
+    </div>
+    <div class="text-center" *ngIf="elementosObj && elementosObj.length == 0">
+        <label class="text-strong">SIN ELEMENTOS POR ORGANIZAR</label>
+    </div>
+</div>

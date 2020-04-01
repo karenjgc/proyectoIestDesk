@@ -1,0 +1,42 @@
+@import 'colors';
+
+// nav
+.di-nav-element{
+	text-align: center;
+	cursor: pointer;
+	color: #FFFFFF;
+
+    &:hover{
+        background-color: $darkMain;
+    }
+}
+
+.selected-element {
+	background-color: $darkMain; //$darkGray;
+}
+
+.active-nav{
+    font-weight:bold;
+}
+
+.rangoFechas {
+	max-width:75%;
+	border:1px solid #ced4da;
+}
+
+.item-x{
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: $olivo;
+}
+
+.item-y{
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background-color: $gris;
+}
+
+.height-reportes {
+	height: 750px !important;
+	overflow-y: auto;
+}

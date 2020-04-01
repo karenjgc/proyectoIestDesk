@@ -1,0 +1,133 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="1"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/clase']"><label class="current">Inicio</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="calendar-subject row no-gutters">
+        <div class="col-2 heading-left avisos-heading text-center" [@slideInOut]="animationState">
+            <!-- TODO: Ocultar para alumno la opcion de alta de aviso :( -->
+            <span class="heading-avisos pointer" style="margin-left: 10px;" (click)="abrirDialogo(nuevoAviso, 0)" *ngIf="rolActual == 1">
+                <img src="assets/images/elements/nuevo-blanco.png" width="20px">
+                &nbsp;Avisos
+            </span>
+            <span class="heading-avisos" style="margin-left: 10px;" *ngIf="rolActual == 2">
+                <img src="assets/images/elements/bell.png" width="20px">
+                &nbsp;Avisos
+            </span>
+        </div>
+        <div class="heading-right heading text-center col">
+            <div class="row calendar-header">
+                <div class="col-1 align-self-center">
+                    <img src="assets/images/elements/double-arrow.png" width="30px" id="hide-avisos" class="pointer controls-avisos" (click)="toggleShowDiv('divA')" [hidden]="collapse=='closed'">
+                    <img src="assets/images/elements/double-arrow-right.png" width="30px" id="show-avisos" class="pointer controls-avisos" (click)="toggleShowDiv('divA')" [hidden]="collapse=='open'">
+                </div>
+                <div class="col-3 align-self-center" (click)="irHoy()">
+                    <img [src]="hoy"  id="today" class="link pointer">
+				</div>
+                <div class="col-1 align-self-center" >
+                    <img src="assets/images/elements/left-arrow.png" (click)="cambiaSemana('ant')" width="30px" id="subWeek" class="link pointer">
+                </div>
+                <div class="col-3 align-self-center">
+                    <label class="heading-avisos" id="month">{{ mes }}</label>
+                </div>
+                <div class="col-1 align-self-center">
+                    <img src="assets/images/elements/right-arrow.png" (click)="cambiaSemana('desp')" width="30px" id="addWeek" class="link pointer">
+                </div>
+                <div class="col-3 align-self-center" (click)="cambiarVista()">
+                    <img src="assets/images/calendario/month.png" id="month-view" class="link pointer" *ngIf="!verMes">
+                    <img src="assets/images/calendario/week.png" id="month-view" class="link pointer" *ngIf="verMes">
+				</div>
+            </div>
+        </div>
+    </div>
+    <div class="calendar-subject row no-gutters">
+        <div class="col-2" id="avisos-container" [@slideInOut]="animationState">
+            <div class="info-avisos row no-gutters">
+                <div class="col-12 pointer {{ (aviso.consecutivo % 2) == 0 ? 'aviso-odd' : 'aviso-even' }} aviso text-center" *ngFor="let aviso of avisos">
+                    <div class="support avisos-content pointer" placement="right" (click)="abrirAviso(aviso.idAviso)">
+                        <label class="title-aviso">{{ aviso.titulo }}</label>
+                        <div class="body-aviso text-truncate" [innerHTML]="aviso.mensaje | safeHtml"></div>
+                        <hr class="separador-avisos">
+                    </div>
+                </div>
+                <div class="col-12 text-center" *ngIf="noTieneAviso">
+                    <label class="sin-avisos">Sin avisos publicados para este curso</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="calendar-container" class="col row no-gutters">
+            <div class="col-12 contenedor-vista-calendario" *ngIf="verMes == false">
+                <idesk-semana #childSemana (mesAct)="setMes($event)"></idesk-semana>
+            </div>
+            <div class="col-12 contenedor-vista-calendario" *ngIf="verMes">
+                <idesk-mes #childMes (mesAct)="setMes($event)"></idesk-mes>
+            </div>
+        </div>
+    </div>
+    <br>&nbsp;
+</div>
+
+<ng-template #nuevoAviso let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Nuevo Aviso</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-altaAvisos (estaCerrado)="avisoCerrado($event)"></idesk-altaAvisos>
+    </div>
+</ng-template>
+
+<ngx-smart-modal #verAviso identifier="verAviso" [escapable]="false" [dismissable]="false" (onClose)="pausaAudio()">
+    <div *ngIf="!muestraElimina">
+        <div class="row" *ngFor="let a of avisoInd">
+            <div class="col-12">
+                <label class="titulo-aviso">{{ a.titulo }}</label>
+            </div>
+            <div class="col-12">
+                <label class="col-form-label text-strong">Fecha de publicación: </label>
+                <label class="col-form-label">&nbsp;{{ a.fechaPublicacion }}</label>
+            </div>
+            <div class="col-12" [innerHTML]="a.mensaje | safeHtml"></div>
+            <div class="col-12" *ngIf="a.idAudio != 0">
+                <img src="assets/images/elements/music.png" width="25px">
+                &nbsp;&nbsp;
+                <audio id="audio-element" controls="controls" preload="none"></audio>
+            </div>
+            <div class="col-12 text-center" *ngIf="rolActual == 1">
+                <br>
+                <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="abrirDialogo(nuevoAviso, a.idAviso)">
+                    <i class="fas fa-pencil-alt"></i>
+                    &nbsp;Editar
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-danger btn-sm" id="eliminar" style="margin-right: 10px; margin-top: 5px;" (click)="confEliminar(a.idAviso, a.titulo)">
+                    <i class="fas fa-minus-circle"></i>
+                    &nbsp;Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <idesk-confirmaElimina *ngIf="muestraElimina" [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+</ngx-smart-modal>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

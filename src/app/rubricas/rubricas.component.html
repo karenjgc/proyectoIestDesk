@@ -1,0 +1,54 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="26"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/rubricas']"><label class="current">Rúbricas IEST</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-rubrica">
+                <thead>
+                    <tr class="text-center">
+                        <th width="30%">Título</th>
+                        <th>Tipo</th>
+                        <th>Nivel</th>
+                        <th>Producto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rubrica of rubricas">
+                        <td class="datatable-options pointer">
+                            <span class="link-elemento" (click)="gotoRubrica(rubrica.idRubrica, rubrica.nombre)">{{ rubrica.nombre }}</span>
+                            <span class="options" *ngIf="rolActual == 1 && rubrica.idTipoRubrica == 1"><br><a (click)="gotoEditar(rubrica.idRubrica)">Editar</a> | <span class="pointer" (click)="confEliminar(rubrica.idRubrica, rubrica.nombre)">Eliminar</span></span>
+                        </td>
+                        <td>{{ rubrica.tipoRubrica }}</td>
+                        <td>{{ rubrica.nivel }}</td>
+                        <td>{{ rubrica.tipoProducto }}</td>
+                    <tr *ngIf="!rubricas">
+                        <td colspan="3">Sin rúbricas registradas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

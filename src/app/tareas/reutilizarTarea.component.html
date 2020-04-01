@@ -1,0 +1,40 @@
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-6">
+            <select class="form-control form-control-sm" (change)="revisa($event)">
+                <option value="0">Todas las materias</option>
+                <option *ngFor="let curso of cursos" [value]="curso.idCodigo">{{ curso.materia }}</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="row box-reutilizar">
+        <div class="col-4 listado">
+            <div class="row">
+                <div class="col-12 elemento" *ngFor="let r of reutilizables | searchfilter:'titulo':busquedaTitulo" (click)="vistaPrevia(r.idTarea)">
+                    {{ r.titulo }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8 vista-previa">
+            <div *ngIf="tarea">
+				<idesk-vistaTarea [vistaAlumno]="true" [vistaPrevia]="tarea" ></idesk-vistaTarea>
+            </div>
+			<div class="row" *ngIf="tarea">
+				<div class="col-12 text-center" style="margin-top: 10px;">
+					<button class="btn btn-primary btn-sm" (click)="reutilizar(tarea)">
+						<i class="fas fa-sync"></i>
+						&nbsp;Reutilizar tarea
+					</button><br>&nbsp;
+				</div>
+			</div>
+
+        </div>
+    </div>
+</div>

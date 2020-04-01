@@ -1,0 +1,40 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="18"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>		
+            <label class="current">Carta Descriptiva</label>			
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center">
+        <div class="col-11 div-info-curso border" style="overflow-x: hidden;">
+            <div class="info-curso-heading text-center py-1">
+				<h5 class="pt-2">
+                    <img src="assets/images/elements/carta.png" class="pb-1">
+					Carta Descriptiva
+				</h5>
+            </div>
+            <div class="col-12" *ngIf="mostrar == true">
+                <br>&nbsp;
+                <div class="embed-responsive embed-responsive-16by9 ">
+                    <!--embed [src]="carta.ruta | safeUrl" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html"-->
+                    <iframe class="embed-responsive-item" [src]="carta.ruta | safeUrl" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="col-12 text-center" *ngIf="mostrar == false">
+                <br>&nbsp;<h5>{{ mensaje }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <idesk-infoCursoNav></idesk-infoCursoNav>
+        </div>
+    </div>
+</div>

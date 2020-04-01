@@ -1,0 +1,146 @@
+<div class="container-fluid idesk-content">
+    <div class="w-100 d-flex flex-row">
+        <div class="flex-fill mx-md-2 align-items-center">
+            <label for="rangoFechas" class="col-form-label text-strong">FECHAS &nbsp;</label>
+
+            <label class="col-form-label w-60" *ngIf="_disenador.tipoCursoSeleccionado == 2">
+                <input class="form-control-sm input3 rangoFechas" selectMode="range" [(ngModel)]="_disenador.rangoFechas" [owlDateTime]="dt" readonly #rangoFechas>
+                <label class="icon-main-color ml-2 pointer" [owlDateTimeTrigger]="dt" ><i class="far fa-calendar-alt"></i></label>
+                <owl-date-time pickerType="calendar" pickerMode="dialog" #dt></owl-date-time>
+            </label>
+
+            <label class="col-form-label w-60" *ngIf="_disenador.tipoCursoSeleccionado != 2">
+                <select class="form-control form-control-sm" [(ngModel)]="_disenador.fechasSemana">
+                    <option *ngFor="let semana of semanas" [ngValue]="semana.valor">{{ semana.texto }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="flex-fill mx-md-2 align-items-center">
+            <label for="tipoConsulta" class="col-form-label text-strong">RANGO &nbsp;</label>
+            <label class="col-form-label w-60">
+                <select class="form-control form-control-sm" #tipoConsulta [(ngModel)]="tipo">
+                    <option value="0">Ambos</option>
+                    <option value="1">Inicio</option>
+                    <option value="2">Cierre</option>
+                </select>
+            </label>
+        </div>
+        <div class="flex-fill mx-md-2 my-auto">
+            <div class="flex-row flex-fill text-center ">
+                <button class="btn btn-primary btn-sm" (click)="cargaReporte()"><i class="fa fa-file-alt"></i>&nbsp; Consultar</button>
+            </div>
+        </div>
+        <div class="flex-fill mx-md-2 align-items-center">
+            <img src="assets/images/extensiones/page_white_excel.png" class="img-sm pointer" ngbTooltip="Exportar a Excel" (click)="exportarExcel()">
+        </div>
+    </div>
+
+    <div class="col-sm-12 py-3 my-2" *ngIf="procesoCarga">
+        <h3>
+            <img src="assets/images/editor/spinner-big.gif">
+            Cargando Información...
+        </h3>
+    </div>
+
+    <div class="w-100 mt-2 mb-1">
+        <h6>{{ _disenador.semanaSeleccionada }}</h6>
+    </div>
+
+    <div class="sticky-table mat-elevation-z8 mx-auto mb-5 mt-2" *ngIf="cargaCompleta">
+        <table mat-table [dataSource]="ObjectKeys(reporte)" class="tabla-reporte">
+            <ng-container matColumnDef="posicion" sticky>
+                <th mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element"> <label class="w-20px mb-0">{{ reporte[element].datos[0].index }}</label></td>
+            </ng-container>
+
+            <ng-container matColumnDef="materia" sticky>
+                <th mat-header-cell *matHeaderCellDef> Materia / Maestro </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <label class="w-180px mb-0"><strong>{{ reporte[element].datos[0].curso }}</strong><br> 
+                    {{ reporte[element].datos[0].maestro }}</label>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="temas">
+                <th mat-header-cell *matHeaderCellDef> Temas </th>
+                <td mat-cell *matCellDef="let element">  
+                    <label class="w-280px mb-0"><ng-container *ngFor="let tema of reporte[element].temas; let i = index;">
+                        {{ tema.tema }}<br>
+                    </ng-container></label>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaini" sticky>
+                <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
+                <td mat-cell *matCellDef="let element">  
+                    <label class="w-120px mb-0"><ng-container *ngFor="let tema of reporte[element].temas; let i = index;">
+                        {{ tema.fechaIni }}<br>
+                    </ng-container></label>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechafin">
+                <th mat-header-cell *matHeaderCellDef> Fecha de cierre </th>
+                <td mat-cell *matCellDef="let element">  
+                    <label class="w-120px mb-0"><ng-container *ngFor="let tema of reporte[element].temas; let i = index;">
+                        {{ tema.fechaFin }}<br>
+                    </ng-container></label>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="duracion">
+                <th mat-header-cell *matHeaderCellDef> Duración </th>
+                <td mat-cell *matCellDef="let element">  
+                    <label class="w-80px mb-0"><ng-container *ngFor="let tema of reporte[element].temas; let i = index;">
+                        {{ tema.semanas }} semana{{ tema.semanas > 1 ? 's' : '' }}<br>
+                    </ng-container></label>
+                </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="columnas; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+        </table>
+    </div>
+
+    <table #reporteTemas style="display: none;" cellspacing="0" *ngIf="reporte">
+        <thead>
+            <tr>
+                <th>Materia / Maestro</th>
+                <th>Tema(s)</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de cierre</th>
+                <th>Duración</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let curso of ObjectKeys(reporte); let i = index;">
+                <tr>
+                    <td class="align-middle">
+                        <span class="text-strong">{{ reporte[curso].datos[0].curso }}</span><br>
+                        {{ reporte[curso].datos[0].maestro }}
+                    </td>
+                    <td>
+                        <ng-container *ngFor="let tema of reporte[curso].temas; let i = index;">
+                            <!--span class="text-strong">{{ i + 1 }}.</span--> {{ tema.tema }}<br>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngFor="let tema of reporte[curso].temas; let i = index;">
+                            {{ tema.fechaIni }}<br>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngFor="let tema of reporte[curso].temas; let i = index;">
+                            {{ tema.fechaFin }}<br>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngFor="let tema of reporte[curso].temas; let i = index;">
+                            {{ tema.semanas }} semana{{ tema.semanas > 1 ? 's' : '' }}<br>
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>

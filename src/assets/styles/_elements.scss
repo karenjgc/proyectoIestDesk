@@ -1,0 +1,763 @@
+@import 'colors';
+
+body {
+	font-family: OpenSans;
+    color: $notSoBlack;
+    font-size: 0.95rem;
+}
+
+a { 
+    color: $main; 
+    &:hover {
+        color: $darkMain;
+    }
+}
+
+.a-no-format:hover { 
+    text-decoration: none; 
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.rem9 { 
+    font-size: 0.9rem; 
+}
+
+.hidden {
+    display: none;
+}
+
+.text-info-dialog {
+    font-size: 1.2rem !important;
+}
+
+.btn-primary {
+	background-color: $main;
+    border-color: $main;
+    &:hover {
+        background-color: $darkMain;
+	    border-color: $darkMain;
+    }
+    &:active {
+        background-color: $darkMain !important;
+	    border-color: $darkMain !important;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(215, 140, 67, 1);
+    }
+
+    &:disabled {
+        color: #fff;
+        background-color: $lightMain;
+        border-color: $lightMain;
+    }
+}
+
+.btn-light {
+    color: #212529;
+    background-color: $lightGray;
+    border-color: $lightGray;
+    &:hover {
+        background-color: $d9;
+	    border-color: $d9;
+    }
+    &:active {
+        background-color: $d9 !important;
+	    border-color: $d9 !important;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(217, 217, 217, 1);
+    }
+
+    &:disabled {
+        color: #fff;
+        background-color: $lightGray;
+        border-color: $lightGray;
+    }
+}
+
+.btn-tertiary {
+    color: $main;
+    background-color: $mercury;
+    border-color: $mercury;
+    &:hover {
+        color: $white;
+        background-color: $notSoGray;
+	    border-color: $notSoGray;
+    }
+    &:active {
+        color: $white;
+        background-color: $notSoGray !important;
+	    border-color: $notSoGray !important;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(217, 217, 217, 1);
+    }
+
+    &:disabled {
+        color: #fff;
+        background-color: $lightGray;
+        border-color: $lightGray;
+    }
+}
+
+.vista-alumno {
+    margin-right: 10px; 
+    margin-top: 5px;
+}
+
+.white-link { 
+    color: $white; 
+    text-decoration: none; 
+    &:hover {
+        color: $white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
+.text-strong {
+    font-weight: bold;
+}
+
+.support {
+    background-color: transparent;
+    border: none;
+}
+
+.idesk-content {
+    width: 98%;
+    padding-top: 15px;
+	margin-top: 5px;
+    margin-bottom: 5px;
+    //margin-bottom: 65px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.label-short {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 60%;
+}
+
+// ICONS
+.idesk-option-icon {
+    color: $white;
+}
+
+.reutilizar-icon {
+    width: 36px;
+    cursor: pointer;
+}
+
+.info-icon {
+    width: 22px !important;
+    cursor: pointer;  
+}
+
+.icon-main-color {
+    color: $main;
+}
+
+.tooltip.show {
+    z-index: 200000;
+}
+
+//
+
+.notification-badge[data-badge]:after {
+    content:attr(data-badge);
+    position: absolute;
+    top: 40px;
+    margin-left: -20px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    background-color: $redNotification;
+    color: $white;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 50%;
+    box-shadow: 0 0 1px $dirty;
+}
+
+// Tablas
+.table-rounded th:first-child{
+  border-radius: 8px 0 0 0;
+}
+
+.table-rounded th:last-child{
+  border-radius: 0 8px 0 0;
+}
+
+.tabla-no-border {
+	border-collapse: separate;
+	th {
+		border-bottom: 0;
+	}
+	td {
+		min-height: 40px;
+	}
+}
+
+.tabla-inner-border {
+	border-collapse: separate;
+	th {
+		border: 1px solid #dee2e6;
+		border-bottom: 0;
+	}
+	td {
+		min-height: 40px;
+	}
+}
+
+.table-header-orange { 
+	background-color: $main;
+	color: $white;
+}
+
+.dataTable {
+    td {
+        font-size: 0.8rem !important; 
+        padding: .5rem !important; 
+    }
+    th {
+        font-size: 0.95rem !important; 
+        background-color: $main;
+        color: $white;
+        border-left: 0.8px solid #fff;
+    }
+}
+
+table.dataTable thead .sorting::after, table.dataTable thead .sorting::before{
+    opacity: 0.8;
+}
+
+.odd {
+    background-color: #EAEAEA;
+}
+.even {
+    background-color: #F9F9F9;
+}
+
+.table-header {
+	background-color: #959495;
+	color: $white;
+	border-radius: 10px 10px 0 0;
+	margin-bottom: -5px;
+}
+
+.new-element {
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.dataTables_filter {
+	text-align: left !important;
+}
+
+.dataTables_filter input {
+	margin-top: 5px;
+	left: 0;
+}
+
+.paging_simple .page-link {
+	background-color: $white;
+	margin: 2px;
+	color: $main;
+	padding: .02rem .60rem;
+}
+
+.dataTables_filter input, input.search {
+	background-image: url("../src/assets/images/elements/search.png");
+    background-position: 3px 3px;
+    background-repeat: no-repeat;
+	border-radius: 15px;
+    padding-left: 30px;
+    //border: none;
+}
+
+.dataTables_filter input:focus {
+	border-color: $main;
+}
+
+.a-datatable { 
+    color: $notSoBlack; 
+    &:hover {
+        color: $main; 
+        text-decoration: none;
+    }
+}
+
+.options {
+	color: $main;
+	font-size: 0.65rem;
+	display: none;
+}
+
+.datatable-options {
+    cursor: pointer;
+    &:hover .options{
+        display: block;
+    }
+}
+
+.team-table {
+	margin: auto;
+}
+
+.img-table {
+    height: 20px;
+}
+
+.link-elemento:hover {
+    text-decoration: underline;
+    color: $main;
+}
+
+.page-link {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0.2rem 0.55rem !important;
+}
+
+
+//DataTable Angular
+.angular-datatable{
+    .dataTables_wrapper{
+        width: 100% !important;
+    }
+    
+    .dataTables_filter{
+        input{
+            border: none;
+            background-position: 3px 0px !important;
+            margin-top: 7px;
+        }
+    }
+
+    .dataTables_paginate{
+        padding-top: 4px;
+        
+    }
+
+	.table .thead-clones th {
+		color: #fff;
+		background-color: #454f55; //#434b53;
+		border-color: #65717d;
+	}
+}
+
+
+// Forms
+.obligatorio {
+    font-weight: bold;
+    color: $redNotification;
+}
+
+textarea {
+    font-size: 0.85rem;
+}
+
+.bloque-reutilizar {
+    margin-bottom: 10px;
+}
+
+.calendar {
+    background-color: $white !important;
+    text-align: center !important;
+}
+
+.border-grey-rounded {
+	border-style: solid;
+	border-width: thin;
+    border-color: #E6E5E4;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.col-form-label {
+	font-size: 0.85rem;
+}
+
+.form-check-input {
+	position: relative;
+	margin-left: 0.6rem !important;
+}
+
+.opciones-pub-heading {
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    background-color: #F2F2F2;
+}
+
+.btn-form {
+    cursor: pointer !important;
+    width: 60px;
+}
+
+.btn-attach {
+    margin-bottom: 10px;
+    img {
+        width: 28px;
+    }
+}
+
+.btn-group {
+    .active {
+        background-color: $darkMain !important;
+	    border-color: $darkMain !important;
+    }
+}
+
+// Acordiones
+.acordion-content {
+    width: 99%;
+    color: $notSoBlack;
+}
+
+.vinculos .card-body {
+    background-color: $lightGray;
+}
+
+.acordion .card-body{
+    width: 95%;
+    margin: 5px auto auto auto;
+    
+	border-color: #EAEAEA;
+	border-style: solid;
+	border-width: 1px;
+    border-radius: 10px;
+    
+	font-size: 0.9rem;
+}
+
+.acordion-row {
+    color: $notSoBlack !important;
+    font-size: 0.85rem;
+    padding-bottom: 8px !important;
+}
+
+.acordion-info {
+    background-color: $lightGray;
+    border-radius: 5px;
+    display: inline;
+    padding: 1px 10px 1px 10px;
+	margin-left: 5px;
+}
+
+.mis-clases-cards{
+    .card {
+        border: none !important;
+    }
+    
+    .card-header{
+        position: relative;
+        display: block;
+        padding: 0 0 0 1em;
+        margin-top: 10px;
+        background: $brownBramble; //$brown1
+        font-size: 1.1em;
+        color: $white;
+        border-radius: 0.5em !important;
+        text-align: center !important;
+        line-height: 2;
+        cursor: pointer;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        
+        button {
+            color: $white !important;
+            font-weight: bold !important;
+            width: 95% !important;
+            &:hover {
+                text-decoration: none !important;
+            }
+        }
+    }
+    
+    .card-header button::after {
+        color: $white !important;
+        position: absolute;
+        right: 15px;
+        top: 0;
+        display: block;
+        width: 3em;
+        height: 3em;
+        line-height: 2;
+        text-align: center;
+        -webkit-transition: all .35s;
+        -o-transition: all .35s;
+        transition: all .35s;
+    }
+    
+    .card-header button::after{
+        content: "\25bc";
+        text-align: right;
+    }
+    
+    .card-header button.collapsed::after{
+        content: "\25C0" !important;
+        text-align: right;
+    }
+}
+
+
+// Modals
+.modal-dialog {
+    max-width: 80% !important;
+}
+
+.modal-sm {
+    max-width: 40% !important;
+}
+
+.vista-alumno-body {
+    min-height: 500px;
+}
+
+// Dialogs
+.titulo-aviso {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.fecha-aviso {
+    font-size: 0.85rem;
+}
+
+.nsm-dialog.nsm-dialog-open{
+    position: fixed;
+}
+
+.simple-textarea {
+    resize: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.ng-touched {
+    .switch {
+        background: $main !important;
+    }
+}
+
+span.switch {
+    background: $main !important;
+}
+
+button.close{
+    color: #fff !important;
+}
+
+//Botón Flotante ///////////////////
+.menu-flotante{
+    .botonFlotante{
+        cursor: pointer;
+        position:fixed;
+        width:55px;
+        height:55px;
+        bottom: 20px;
+        right:40px;
+        background-color:#FF8500;
+        border-radius:30px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #999;
+    }  
+    
+    .iconoBotonFlotante{
+        margin-top:20px;
+        color:#FFFFFF;
+    }
+    
+    .imgBotonFlotante{
+       margin-top: 8px;
+    }
+
+    .ul-flotante{
+        z-index: 1021;
+        position:fixed;
+        right:55px;
+        bottom:40px;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        width: 18rem;
+        border: none;
+
+        &:hover{
+            visibility:visible!important;
+            opacity:1!important;
+        }
+
+        li{
+            background-color: #FF8500;
+            color: #FFFFFF;
+
+            &:hover{
+                font-weight: bold;
+            }
+        }
+    }
+
+    a#menu + .ul-flotante{
+      visibility: hidden;
+    }
+    
+    a#menu:hover + .ul-flotante{
+      visibility: visible;
+      animation: aumenta-escala 0.5s;
+    }
+    
+    @keyframes aumenta-escala {
+        from {transform: scale(0);opacity: 0;}
+        to {transform: scale(1);opacity: 1;}
+    }
+}
+////////////////////////////////////////
+
+//////// Redondea modales  ////////////////
+.nsm-dialog-open, .modal-content{
+    border-radius: 1.25rem !important;
+}
+
+.modal-header{
+    border-top-left-radius: 1.25rem !important;
+    border-top-right-radius: 1.25rem !important;
+    background-color: $notSoBlack;
+    color: $white;
+}
+
+.acordion-info {
+	p {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.tooltip-inner{
+   z-index: 1071;
+}
+
+.input-number {
+    max-width: 4rem;
+}
+
+
+/////////////////////// Switch Temario ///////////////////////////
+
+.onoffswitch {
+    position: relative; width: 84px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #DEE2E6; border-radius: 44px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 26px; padding: 0; line-height: 26px;
+    font-size: 13px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Temas";
+    padding-left: 10px;
+    background-color: #80380a; 
+    color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "Meses";
+    padding-right: 10px;
+    background-color: #C05E00; 
+    color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 18px; margin: 4px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 54px;
+    border: 1px solid #DEE2E6; border-radius: 44px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+.tooltip-info {
+    .tooltip-inner {
+        text-align: left !important; 
+        max-width: 260px;
+    }
+}
+
+.inside-div-right {
+    float: right;
+    position: initial !important;
+}
+
+/////////////////////////////// Toast ///////////////////////////////
+
+.toast-info {
+    background-color: $main !important;
+}
+
+/////////////////////////////// Angular Tabs ///////////////////////////////
+
+.nav-tabs{
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/////////////////////////////// Notificaciones ///////////////////////////////
+.titulo-configuracion {
+    width: 30%;
+    //background-color: $lightGray;
+    margin: 1px;
+    padding-left: 10px; 
+}
+
+.dividor {
+    background-color: $main;
+    height: 8px;
+}
+
+.label-switch {
+    vertical-align: top;
+}

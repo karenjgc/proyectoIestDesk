@@ -1,0 +1,58 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="5"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/apuntes']"><label class="current">Apuntes</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-apuntes">
+                <thead>
+                    <tr class="text-center">
+                        <th>Título</th>
+                        <th>Tema</th>
+                        <th>Fecha Publicación</th>
+                        <th>Archivos</th>
+                        <th>Descarga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let apunte of apuntes">
+                        <td class="datatable-options pointer">
+                            <div class="w-100 link-elemento" (click)="gotoApunte(apunte.idApunte, apunte.titulo)">{{ apunte.titulo }}</div>
+                            <span class="options" *ngIf="rolActual == 1"><br><a (click)="gotoEditar(apunte.idApunte)">Editar</a> | <span class="pointer" (click)="confEliminar(apunte.idApunte, apunte.titulo)">Eliminar</span></span>
+                        </td>
+                        <td>{{ apunte.tema }}</td>
+                        <td class="text-center">{{ apunte.fechaPublicacion }}</td>
+                        <td class="text-center">{{ apunte.archivos }}</td>
+						<td class="text-center">
+							<span *ngIf="apunte.archivos >= 1" class="link-elemento pointer" (click)="descargar(apunte.idApunte, apunte.titulo)"><i class="fas fa-download"></i></span>
+							<span *ngIf="apunte.archivos == 0"><i class="fas fa-download"></i></span>
+						</td>
+                    </tr>
+                    <tr *ngIf="!apuntes">
+                        <td colspan="5">Sin apuntes asignados a este curso</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

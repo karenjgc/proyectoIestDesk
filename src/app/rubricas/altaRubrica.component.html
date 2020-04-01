@@ -1,0 +1,152 @@
+<div class="sticky-top" *ngIf="!altaExterna">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="26"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/rubricas-iest']"><label class="path">Rúbricas IEST</label></a>	
+            <a><label class="current">{{ tituloPagina }}</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="d-flex flex-column border rounded-lg">
+        <label class="w-100 text-center m-0 background-grey font-white font-weight-bold rounded-t-lg py-2" *ngIf="!altaExterna">
+            {{ tituloPagina }}
+        </label>
+        <div class="row align-items-center px-4 pt-3">
+            <div class="col-4 pointer"></div>
+            <div class="col-6"></div>	
+            <!--div class="col-2 text-right">
+                <button class="btn btn-sm btn-primary" id="vista-previa" style="margin-right: 10px; margin-top: 5px;"><i class="fa fa-eye"></i> Vista Alumno</button>
+            </div-->	
+        </div>
+        <br>
+        <div class="row px-4 pt-3">
+            <div class="col-12">
+                <form [formGroup]="rubrica">
+                    <div class="form-group row">
+                        <label class="col-sm-1 col-form-label text-strong"> TÍTULO <span class="obligatorio">*</span> </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm input1 input-color-1" #titulo formControlName="titulo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <ng-template #desI>Describe la rúbrica que diseñarás. Puedes incluir el propósito de su uso o a grandes rasgos cómo se utilizará para la evaluación.</ng-template>
+                        <label for="objetivo" class="col-sm-12 col-form-label text-strong">
+                            DESCRIPCIÓN&nbsp; <span class="obligatorio mr-1">*</span> 
+                            <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="desI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                        </label>
+                        <div class="col-sm-12">
+                            <textarea [froalaEditor]="options" formControlName="descripcion" class="froala" #descripcion></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <ng-template #nivI>Selecciona el nivel de estudios al que está dirigida la rúbrica de evaluación: Preparatoria, Profesional, Posgrado, Especialidad, Doctorado.</ng-template>
+                        <label for="nivelEstudios" class="col-sm-3 col-form-label text-strong">
+                            NIVEL DE ESTUDIOS&nbsp; <span class="obligatorio mr-1">*</span> 
+                            <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="nivI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                        </label>
+                        <div class="col-sm-3">
+                            <select class="form-control input1 form-control-sm" #nivelEstudios formControlName="nivelEstudios"> 
+                                <option *ngFor="let g of grados" [value]="g.IdGrado">{{ g.nombre }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <ng-template #prodI>Selecciona el producto que se evaluará con la rúbrica.</ng-template>
+                        <label for="nivelEstudios" class="col-sm-3 col-form-label text-strong">
+                            PRODUCTO&nbsp; <span class="obligatorio mr-1">*</span> 
+                            <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="prodI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                        </label>
+                        <div class="col-sm-3">
+                            <select class="form-control input1 form-control-sm" #producto formControlName="producto"> 
+                                <option *ngFor="let p of productos" [value]="p.idProductoRubrica"> {{ p.nombre }} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="permiteArchivos" class="col-sm-2 col-form-label text-strong">
+                            COMPARTIR
+                        </label>
+                        <div class="col-2">
+                            <label class="col-form-label">No&nbsp;</label>
+                            <ui-switch #compartir id="compartir" [checked]="false"></ui-switch>
+                            <label class="col-form-label">Sí&nbsp;</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-rounded-lg tabla-rubrica" cellspacing="0">
+                        <thead class="head-rubrica">
+                            <tr class="text-center top-table">
+                                <th rowspan="2">
+                                    <ng-template #catI>Añade los rubros o características que se van a evaluar.</ng-template>
+                                    Categorías &nbsp;
+                                    <img src="assets/images/elements/info_blanco.png" class="info-icon pointer" [ngbTooltip]="catI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;&nbsp;
+                                    <span class="pointer" (click)="aumentarCategorias()">
+                                        <img src="assets/images/elements/nuevo-blanco.png" width="20px" ngbTooltip="Agregar categoría">
+                                    </span>
+                                </th>
+                                <th [attr.colspan]="colspanNiveles">
+                                    <ng-template #nivI>Indica el nivel de logro que se alcanza, siendo el primero a la izquierda el de mayor logro alcanzado.</ng-template>
+                                    Niveles &nbsp;
+                                    <img src="assets/images/elements/info_blanco.png" class="info-icon pointer" [ngbTooltip]="nivI" placement="top" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;&nbsp;
+                                    <span class="pointer" (click)="aumentarNiveles()">
+                                        <img src="assets/images/elements/nuevo-blanco.png" width="20px" ngbTooltip="Agregar nivel">
+                                    </span>
+                                </th>
+                            </tr>
+                            <tr class="text-center">
+                                <th *ngFor="let n of niveles; let i = index;">
+                                    <div class="d-inline-flex">
+                                        {{ colspanNiveles - i }} &nbsp;&nbsp;
+                                        <input type="text" [value]="niveles[i]" id="nombreValor-{{ colspanNiveles - i }}" class="form-control form-control-sm input1 input-color-1">&nbsp;&nbsp;
+                                        <span class="pointer" (click)="eliminarNiveles(i)">
+                                            <img src="assets/images/elements/eliminar-blanco.png" width="20px" ngbTooltip="Eliminar nivel">
+                                        </span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let rubrica of objectKeys(_rubrica); let i = index;" class="niveles"> 
+                                <td class="categorias">
+                                    <div class="d-inline-flex align-items-center">
+                                        <span class="pointer" (click)="eliminarCategorias(i)">
+                                            <img src="assets/images/elements/eliminar-blanco.png" width="20px" ngbTooltip="Eliminar categoría">
+                                        </span>&nbsp;&nbsp;
+                                        <textarea class="froala mx-auto" [froalaEditor]="basic" [(ngModel)]="categorias[i]"></textarea>
+                                    </div>
+                                </td>
+                                <ng-container *ngFor="let r of _rubrica[rubrica]">
+                                    <td> 
+                                        <div class="d-inline-flex justify-content-center align-items-center">
+                                            <textarea class="froala mx-auto" [froalaEditor]="basic" [(ngModel)]="r.contenido"></textarea>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-12 text-center"><br>
+                <button class="btn btn-primary btn-sm" (click)="validaRubrica()"><i class="fas fa-save"></i> Guardar</button>&nbsp;&nbsp;
+                <button class="btn btn-light btn-sm" (click)="cancelar()"><i class="fas fa-times"></i> Cancelar</button>
+            </div>
+            <br> &nbsp;
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacionRubrica identifier="dialogoInformacionRubrica" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

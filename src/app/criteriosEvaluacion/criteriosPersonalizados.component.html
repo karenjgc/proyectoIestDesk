@@ -1,0 +1,43 @@
+<div class="row align-items-center">
+    <div class="col-12">
+        <form [formGroup]="formulario">
+            <div class="form-group row">
+                <label for="criterio" class="col-sm-2 col-form-label text-strong">TÍTULO </label>
+                <div class="col-sm-10">
+                    <input type="text" #criterio formControlName="criterio" class="form-control" maxlength="100">
+                </div>
+            </div>
+			<div class="form-group row">
+                <label class="col-sm-2 col-form-label text-strong pt-3">PERIODO </label>
+				<div class="col d-flex">
+					<div class="p-2 flex-fill" *ngIf="idGrado < 3">
+						<label class="form-check-label col-form-label">
+							<input class="form-check-input" type="radio" value="1" formControlName="idTipoCriterioEvaluacion" [checked]="formulario.value.idTipoCriterioEvaluacion == 1">
+							&nbsp; Parcial
+						</label>
+					</div>
+					<div class="p-2 flex-fill">
+						<label class="form-check-label col-form-label">
+							<input class="form-check-input" type="radio" value="2" formControlName="idTipoCriterioEvaluacion" [checked]="formulario.value.idTipoCriterioEvaluacion == 2">
+							&nbsp; Ordinario
+						</label>
+					</div>
+				</div>
+			
+			</div>
+            <div class="form-group row">
+                <div class="col-12 text-center">
+                    <button class="btn btn-primary btn-sm" (click)="validaCriterio()"><i class="fas fa-save"></i> Guardar</button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-tertiary btn-sm" (click)="cerrar(0)"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacionC identifier="dialogoInformacionC">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

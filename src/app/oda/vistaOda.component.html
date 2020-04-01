@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="d-flex flex-column p-3 px-5 my-3 border rounded-lg" *ngIf="oda">
+        <label class="font-weight-bold">TÍTULO</label>
+        <label>{{ oda.titulo }}</label> 
+        
+        <ng-container *ngIf="!vistaAlumno">
+            <label class="font-weight-bold">FECHA DE PUBLICACIÓN</label>
+            <label>{{ oda.fechaPublicacion }}</label>
+        </ng-container>
+
+        <label class="font-weight-bold">DESCRIPCIÓN</label>
+        <p [innerHTML]="oda.descripcion | safeHtml"></p>
+
+        <label class="font-weight-bold">OBJETO DE APRENDIZAJE</label>
+        <ng-container *ngIf="iestdesk.rolActual != 2">
+            <div class="containerFrame rounded-lg border" *ngIf="rutaFrame && adjuntarCarpetasService.getDirectorioTemporal().length == 0">
+                <iframe class="frame m-3" [src]="'https://sie.iest.edu.mx/iestdesk_archivos/ODA/' + rutaFrame | safeUrl" frameborder="0"></iframe>
+            </div>
+            <div *ngIf="adjuntarCarpetasService.getDirectorioTemporal().length > 0">
+                <div class="card">
+                    <div class="card-img text-center">
+                        <img class="img-md mt-2 card-img-top formatoArchivo" src="assets/images/editor/formato-archivos/file.png">
+                    </div>
+                    <div class="card-body text-dark" style="min-height:auto;">
+                        <p class="card-text text-center">
+                            {{ nombreCarpetaTemporal }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="iestdesk.rolActual == 2">
+            <div class="containerFrame rounded-lg border" *ngIf="rutaFrame">
+                <iframe class="frame m-3" [src]="'https://sie.iest.edu.mx/iestdesk_archivos/ODA/' + rutaFrame | safeUrl" frameborder="0"></iframe>
+            </div>
+        </ng-container>
+    </div>
+</div>

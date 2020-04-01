@@ -1,0 +1,106 @@
+<div class="container-fluid idesk-content">
+    <div class="row align-items-center bloque-reutilizar" *ngIf="!mostrarReutilizar">
+        <div class="col-4 pointer">
+            <img src="assets/images/elements/reutilizar.png" class="reutilizar-icon pointer" (click)="reutilizar()">&nbsp;
+            <label class="rem9 pointer" (click)="reutilizar()">Reutilizar Equipos&nbsp;</label>
+			<ng-template #reuEquipo>Selecciona una plantilla de equipos que hayas elaborado previamente.</ng-template>
+            <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="reuEquipo" placement="right" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;&nbsp;
+        </div>
+        <div class="col-6"></div>	
+        <div class="col-2 text-right">
+			<ng-template #asig>1. Arrastra a un alumno a "Nuevo equipo". Aparecerá el "Equipo 1" con el alumno seleccionado; arrastra aquí a otro alumno para integrarlo al equipo y repite para crear equipos.<br>2. Para eliminar un integrante, arrástralo a la lista de alumnos.<br>3. Edita el nombre del Equipo dando clic en el ícono que aparece a un lado y guárdalo.<br>4. Para finalizar, da clic en "Guardar". <br>Tus alumnos verán a qué equipo fueron asignados al consultar la actividad.</ng-template>
+			<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="asig" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+		</div>
+    </div>
+
+	<div *ngIf="!mostrarReutilizar">
+		<form [formGroup]="equipo">
+			<div class="form-group row">
+				<label for="nombrePlantilla" class="col-sm-2 col-form-label text-strong">NOMBRE DE LA PLANTILLA </label>
+				<div class="col-sm-10">
+					<input type="text" #nombrePlantilla formControlName="nombrePlantilla" class="form-control" [value]="tituloPlantilla">
+				</div>
+			</div>
+		</form>
+
+		<!--
+		<div class="row" *ngIf="mostrarListado">
+			<div class="col-4" *ngFor="let alumnos of alumnosU">
+				<div class="col-12" droppable (onDrop)="onItemDrop($event, alumnos.numEquipo, alumnos.equipo)" id="0" [dropScope]="'team'">
+					<div class="lista-integrantes"  >
+						<div class="integrante" [draggable] [dragScope]="'team'" [dragData]="alumnos.idPerson" *ngIf="alumnos.numEquipo == 0">
+							{{ alumnos.nombre }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		-->
+		<div class="row" *ngIf="mostrarListado" droppable (onDrop)="onItemDrop(0, 'Equipo 0', 0, $event)" id="0" [dropScope]="'team'">
+			<div class="col-4 lista-integrantes" *ngFor="let alumnos of alumnosU">
+				<div class="col-12" *ngIf="alumnos.numEquipo == 0">
+					<div class="integrante" [draggable] [dragScope]="'team'" [dragData]="alumnos.idPerson" >
+						{{ alumnos.nombre }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row equipos-vista" *ngIf="alumnos">
+
+			<div class="col-4 my-1" *ngFor="let alumno of alumnos">
+				<div class="col-12">
+					<div class="table-header-orange text-center equipo-header">
+						<label class="text-center">
+							<span *ngIf="editando != alumno.numEquipo"  class="d-inline-block mt-2 mb-1">{{ alumno.equipo }}</span>
+							<input type="text" class="mt-1 rounded" *ngIf="editando == alumno.numEquipo" [value]="alumno.equipo" [id]="'nuevoNombre'+alumno.numEquipo">
+
+							<img class="support pointer float-right mr-2 edita" width="16px" src="assets/images/elements/edit.png" *ngIf="editando != alumno.numEquipo" (click)="muestraInputNombre(alumno.numEquipo)">
+							<img class="support pointer float-right mr-2 edita" width="16px" src="assets/images/elements/save-white.png" *ngIf="editando == alumno.numEquipo" (click)="actualizaNombreEquipo(alumno.numEquipo, 'nuevoNombre'+alumno.numEquipo)">
+							
+						</label>
+					</div>	
+					<div class="lista-integrantes" droppable (onDrop)="onItemDrop(alumno.numEquipo, alumno.equipo, 0, $event)" [id]="alumno.numEquipo" [dropScope]="'team'">
+						<div class="integrante accion-hover" [draggable] [dragScope]="'team'" [dragData]="a.idPerson" *ngFor="let a of alumno.alumnos">
+							{{ a.nombre }} <img class="pointer float-right mr-2 hover" width="16px" src="assets/images/elements/delete.png" (click)="onItemDrop(0, 'Equipo 0', a.idPerson)">  <!-- (click)="borrarEquipo(a)"-->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-4">
+				<div class="col-12" title="Arrastre para crear un nuevo equipo">
+					<div class="nuevo-equipo-header text-center">
+						<label class="text-center">
+							<span class="d-inline-block mt-2 mb-1">Nuevo Equipo</span>
+						</label>
+					</div>
+					<div class="lista-integrantes" droppable (onDrop)="onItemDrop(equipoNuevo, '', 0, $event)" [id]="equipoNuevo" [dropScope]="'team'">
+						<div class="integrante" [draggable] [dragScope]="'team'" class="nuevo-equipo"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-12 text-center">
+				<button class="btn btn-primary btn-sm" (click)="validaEquipos()"><i class="fas fa-save"></i> Guardar</button>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-light btn-sm" (click)="cerrar()"><i class="fas fa-times"></i> Cancelar</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" *ngIf="mostrarReutilizar">
+        <div class="col-12">
+            <idesk-reutilizarEquipo (regresarReutilizado)="reutilizado($event)"></idesk-reutilizarEquipo>
+        </div>
+    </div>
+	
+</div>
+
+<ngx-smart-modal #dialogoInformacionA identifier="dialogoInformacionA">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

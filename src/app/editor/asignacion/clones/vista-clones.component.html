@@ -1,0 +1,58 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" cellspacing="0" class="table table-hover">
+	<thead class="thead-clones">
+		<tr>
+			<th>Nombre</th>
+			<th>Descripción</th>
+			<th>Fecha Clonación</th>
+			<th>Estado</th>
+			<th>Asignar</th>
+			<th>Temario</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let clon of editorService.listadoClones">
+			<td class="pointer" (click)="abreModal(1, clon)">{{ clon.nombre }}</td>
+			<td>
+				<p class="my-0" [innerHTML]="(clon.descripcion.length > 90) ? ((clon.descripcion.trim() | slice:0:90).trim() +'...') : (clon.descripcion) | safeHtml"></p>
+			</td>
+			<td>{{ clon.fechaHora | date:'dd/MM/yyyy HH:mm' }}</td>
+			<td>
+				<ng-container *ngIf="clon.asignado == 0">Sin Asignar</ng-container>
+				<ng-container *ngIf="clon.asignado >= 1">Asignado</ng-container>
+			</td>
+			<td class="text-center">
+				<!--img class="pointer hover mx-1" width="20px" src="assets/images/editor/asignacion/asignar.png" (click)="abreModal(2, clon)" *ngIf="clon.asignado == 0">
+				<img class="hover mx-1" width="20px" style="opacity: 0.62; filter: alpha(opacity=62);" src="assets/images/editor/asignacion/asignar.png" *ngIf="clon.asignado >= 1"-->
+				<img class="pointer hover mx-1" width="20px" src="assets/images/editor/asignacion/asignar.png" (click)="abreModal(2, clon)">
+			</td>
+			<td class="text-center">
+				<img class="pointer hover mx-1" width="24px" src="assets/images/editor/asignacion/temario-no-asignado.png" (click)="editorService.abrirTemario(clon)" ngbTooltip="Temario Clonado">
+				<img class="pointer hover mx-1" width="24px" src="assets/images/editor/asignacion/temario-asignado.png" (click)="editorService.abrirTemario(clon, 1)" *ngIf="clon.asignado >= 1" ngbTooltip="Temario Asignado">
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<!--ng-template #asignar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-clone mr-2"></i>Asignar Molde</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+	<div class="modal-body">
+		<editor-modal-asignacion [form]="infoClon" [modal]="1" (cerrado)="cerrarModal($event)"></editor-modal-asignacion>
+	</div>
+</ng-template>
+
+<ng-template #editarClon let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-clone mr-2"></i>Editar Información</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+	<div class="modal-body">
+		<editor-modal-asignacion [form]="infoClon" [modal]="2" (cerrado)="cerrarModal($event)"></editor-modal-asignacion>
+	</div>
+</ng-template-->

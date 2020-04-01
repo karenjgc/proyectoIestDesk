@@ -1,0 +1,24 @@
+<div class="container-fluid iestdesk-course-menu px-0">
+	<div class="d-flex col-md-12 align-items-center px-0" id="idesk-class-items">
+		<div class="col-md-3 py-2 di-nav-element" [ngClass]="{ 'selected-element': vista == 2 }" (click)="irMenuVista(2)">
+			<div class="support" placement="bottom">
+				<i class="fa fa-calendar-alt"></i>&nbsp; Cronograma
+			</div>
+		</div>
+		<div class="col-md-3 py-2 di-nav-element" [ngClass]="{ 'selected-element': vista == 1 }" (click)="irMenuVista(1)">
+			<div class="support" placement="bottom">
+				<i class="fa fa-list-ul"></i>&nbsp; Consulta de Temas
+			</div>
+		</div>
+		<div class="col-md-3 py-2 di-nav-element" [ngClass]="{ 'selected-element': vista == 3 }" (click)="irMenuVista(3)">
+			<div class="support" placement="bottom">
+				<i class="fa fa-file-alt"></i>&nbsp; Supervisión
+			</div>
+		</div>
+		<!--div class="col-md-3 py-2 di-nav-element" [ngClass]="{ 'selected-element': vista == 4 }" (click)="irMenuVista(4)">
+			<div class="support" placement="bottom">
+				<i class="fa fa-address-book"></i>&nbsp; Contacto
+			</div>
+		</div-->
+	</div>    
+</div>

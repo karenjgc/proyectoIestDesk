@@ -1,0 +1,118 @@
+<div class="container-fluid idesk-content">
+    <div class="row align-items-center bloque-reutilizar">
+        <div class="col-4 pointer">
+            <div *ngIf="btnReutilizar">
+                <img src="assets/images/elements/reutilizar.png" class="reutilizar-icon pointer" (click)="verReutilizar()">&nbsp;
+                <label class="rem9 pointer" (click)="verReutilizar()">Reutilizar Bibliografía&nbsp;</label>
+                <!--img src="assets/images/elements/info.png" class="info-icon pointer"-->
+            </div>
+        </div>
+        <div class="col-6"></div>	
+        <div class="col-2 text-right"> </div>	
+    </div>
+    <div class="row" *ngIf="reutilizar == false">
+        <div class="col-12">
+            <form [formGroup]="bibliografia">
+                <div class="form-group row">
+                    <label for="titulo" class="col-sm-2 col-form-label text-strong">TÍTULO <span class="obligatorio">*</span> </label>
+                    <div class="col-sm-10">
+                        <input type="text" #titulo formControlName="titulo" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="titulo" class="col-sm-12 col-form-label text-strong">
+                        AUTOR <span class="obligatorio">*</span> 
+                        <button class="support pointer" (click)="agregaAutores()">
+                            <img src="assets/images/elements/add.png" width="20px">
+                        </button>
+                    </label>
+                    <div class="col-sm-12">
+                        <div class="row" *ngFor="let a of arrayAutores; let i = index" style="margin-bottom: 5px;">
+                            <div class="col-sm-11">
+                                <input type="text" id="autor-{{ i }}" class="form-control">
+                            </div>
+                            <div class="col-sm-1" *ngIf="i != 0">
+                                <button class="support pointer float-right mr-2" (click)="eliminaAutores(i)">
+                                    <img src="assets/images/elements/delete.png" width="20px">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="editorial" class="col-sm-2 col-form-label text-strong">EDITORIAL </label>
+                    <div class="col-sm-10">
+                        <input type="text" #editorial formControlName="editorial" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="edicion" class="col-sm-2 col-form-label text-strong">EDICIÓN </label>
+                    <div class="col-sm-2">
+                        <input type="text" #edicion OnlyNumber="true" maxlength="2" formControlName="edicion" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="anio" class="col-sm-2 col-form-label text-strong">AÑO </label>
+                    <div class="col-sm-2">
+                        <input type="text" #anio OnlyNumber="true" maxlength="4" formControlName="anio" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="lugar" class="col-sm-2 col-form-label text-strong">LUGAR </label>
+                    <div class="col-sm-10">
+                        <input type="text" #lugar maxlength="150" formControlName="lugar" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="descripcion" class="col-sm-12 col-form-label text-strong">COMENTARIOS </label>
+                    <div class="col-sm-12">
+                        <textarea [froalaEditor]="options" formControlName="comentarios" class="froala" #comentarios></textarea>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group col-12 d-flex flex-column border-top-0 border rounded-lg my-2 p-0" style="margin-top: 10px">
+                <div class="w-100 flex-fill text-center ">
+                    <label class="text-strong rounded-t-lg opciones-pub-heading">PUBLICAR</label>
+                </div>
+                <div class="col-12 row no-gutters row-eq-height">
+                    <div class="col-12 font-weight-bold font-size-xs border-bottom mr-2 text-center">GRUPO</div>
+                </div>
+
+                <div class="col-12" *ngFor="let curso of pubCursos">
+                    <div class="row no-grutters align-items-center row-eq-height">
+                        <div class="col-12">
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> <label class="col-form-label">{{ curso.materia }} - {{ curso.clave }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row no-grutters align-items-center row-eq-height" *ngIf="editando && curso.idCurso == cursoActual">
+                        <div class="col-12">
+                            <div>
+                                <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> <label class="col-form-label">{{ curso.materia }} - {{ curso.clave }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 text-center">
+                    <button class="btn btn-primary btn-sm" (click)="validaBibliografia()"><i class="fas fa-save"></i> Guardar</button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-light btn-sm" (click)="cancelaBibliografia()"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="reutilizar">
+        <div class="col-12">
+            <idesk-reutilizarBibliografia (regresarReutilizado)="reutilizado($event)" (regresar)="regresarAlta($event)" (regresarReutilizado)="reutilizado($event)"></idesk-reutilizarBibliografia>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

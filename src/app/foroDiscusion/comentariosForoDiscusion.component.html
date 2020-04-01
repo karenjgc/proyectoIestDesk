@@ -1,0 +1,162 @@
+<div class="row no-gutters">
+    <div class="col-12">    
+        <form [formGroup]="comentario">  
+            <div class="row no-gutters align-items-center" *ngIf="_cerrado == 0 || rolActual == 1">
+                <div class="col-11">
+                    <textarea [froalaEditor]="options" formControlName="respuesta" class="froala" #respuesta></textarea>
+                </div>
+                <div class="col-1 text-center">
+                    <button class="btn btn-light btn-sm btn-attach" *ngIf="_permiteArchivos == 1" (click)="adjuntarArchivo(adjuntar)">
+                        <img src="assets/images/elements/attach.png">
+                    </button>
+                    <button class="btn btn-primary btn-sm" [disabled]="bloquearComentario" (click)="validaComentario(0)">Publicar</button>
+                </div>
+                <div class="col-12">
+                    <div class="row align-items-center">
+                        <div class="col-2 pointer" *ngFor="let arch of archivosPub">
+                            <img [src]="arch.imgTipoArch" class="img-mini">
+                            <label class="file-name label-short">{{ arch.nombreArchivo }}</label>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="eliminaArchivo(arch.idArchivo)"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </form>
+    </div>
+
+    <div class="col-12" *ngIf="equipos && rolActual == 1" style="margin-top: 10px;">
+        <div class="row">
+            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="idEquipoActual">
+                <label ngbButtonLabel class="btn-primary" *ngFor="let e of equipos">
+                    <input ngbButton type="radio" [value]="e.idEquipo" (click)="defineOrden(e.idEquipo)"> {{ e.nombreEquipo }}
+                </label>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 sorting-forum">
+                <button class="support pointer" (click)="ordenaResp(1)" *ngIf="ordena == 1">
+                    <img src="assets/images/elements/sort_desc.png" width="20px"> 
+                    <label> Descendente </label>
+                </button>
+                <button class="support pointer" (click)="ordenaResp(0)" *ngIf="ordena == 0">
+                    <img src="assets/images/elements/sort_asc.png" width="20px">
+                    <label> Ascendente </label>
+                </button>
+            </div>
+            <div class="col-12 forum-area" #forumArea toastContainer>
+                <div class="row">
+                    <div class="col-12" id="comentario-{{ comentario.idForoDiscRespuesta }}" *ngFor="let comentario of comentarios">
+                        <div class="{{ comentario.nivel == 0 ? 'forum-first-level' : comentario.nivel == 1 ? 'forum-second-level' : 'forum-third-level' }}">
+                            <div class="picture">
+                                <img src="assets/images/elements/chat.png" width="40px">
+                            </div>
+                            <div class="{{ comentario.nivel == 0 ? 'bubble-first' : comentario.nivel == 1 ? 'bubble-second' : 'bubble-third' }}">
+                                <div class="bubble-first-header">
+                                    <label class="name">{{ comentario.nombre }}</label>&nbsp;<label class="fecha-hora">{{ comentario.fecha }}</label>
+                                </div>
+                                <div class="{{ comentario.nivel == 0 ? 'bubble-first-body' : comentario.nivel == 1 ? 'bubble-second-body' : 'bubble-third-body' }}">
+                                    <label class="body-message" [innerHTML]="comentario.respuesta | safeHtml"></label>
+                                </div>
+                                <div class="{{ comentario.nivel == 0 ? 'bubble-first-footer' : comentario.nivel == 1 ? 'bubble-second-footer' : 'bubble-third-footer' }} row">
+                                    <div class="col-6 my-auto">
+                                        <button type="button" class="btn btn-sm support" (click)="verArchivos(comentario.idForoDiscRespuesta, comentario.idPerson, vistaArchivos)">
+                                            <label class="col-form-label text-strong pointer" *ngIf="comentario.tieneArchivos == 1">
+                                                <i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.
+                                            </label>
+                                        </button>
+                                    </div>	
+                                    <div class="col-6 text-right my-auto">
+                                        <label class="likes">{{ comentario.votos }}&nbsp;</label>
+                                        <img src="assets/images/elements/like.png" width="18px" class=" pointer" *ngIf="comentario.yaVoto == 0" (click)="votar(comentario.idForoDiscRespuesta)">
+                                        <img src="assets/images/elements/yaLike.png" width="18px" class=" pointer" *ngIf="comentario.yaVoto == 1" (click)="votar(comentario.idForoDiscRespuesta)">
+                                        &nbsp;&nbsp;
+                                        <button type="button" class="btn btn-tertiary btn-sm" (click)="responder(comentario.idForoDiscRespuesta)" *ngIf="comentario.nivel != 2 && (_cerrado == 0 || rolActual == 1)">Responder</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 row justify-content-md-center align-items-center" id="div-reply" style="display: none;">
+        <form [formGroup]="respComentario">  
+            <div class="row no-gutters align-items-center">
+                <div class="col-10">
+                    <textarea [froalaEditor]="options" formControlName="respuesta" class="froala" #respuesta></textarea>
+                </div>
+                <div class="col-1 text-center">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <button class="btn btn-light btn-sm btn-attach"  *ngIf="_permiteArchivos == 1" (click)="adjuntarArchivo(adjuntar)">
+                                <img src="assets/images/elements/attach.png">
+                            </button>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <button class="btn btn-primary btn-sm" (click)="cancelaComentario()" style="margin-bottom: 2px;">Cancelar</button>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <button class="btn btn-primary btn-sm" [disabled]="bloquearComentario" (click)="validaComentario(1)">Publicar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" *ngIf="rolActual == 1">
+                    <input class="form-check-input" type="checkbox" #privada formControlName="privada" (change)="revisa($event)"> <label class="col-form-label">Comentario Privado</label>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-2 pointer" *ngFor="let arch of archivosResp">
+                            <img [src]="arch.imgTipoArch" class="img-mini">
+                            <label class="file-name label-short">{{ arch.nombreArchivo }}</label>
+                            <button type="button" class="btn btn-primary btn-sm" (click)="eliminaArchivo(arch.idArchivo)"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </form>
+    </div>
+
+</div>
+
+<ng-template #adjuntar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Adjuntar Archivo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-adjuntarArchivos [esEdicion]="editando" [archivosAdj]="cuantosArch" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)" #chArchivo></idesk-adjuntarArchivos>
+		<hr class="mt-4">
+		<div class="col-sm-12 text-center pt-1">
+			<button class="btn btn-tertiary btn-sm" (click)="cierraDialogoPublicarArchivos()"><i class="fas fa-check"></i> Aceptar&nbsp;</button>
+		</div>
+    </div>
+</ng-template>
+
+<ng-template #vistaArchivos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="container-fluid idesk-content pt-0 mt-1">
+			<!--idesk-vistaArchivos [archivos]="arcComentarios" [personAlta]="rolActual == 1 ? '0' : 'ID'+idPersonAlta" [nombreActividad]="'ComForo-'+idPersonAlta" [previsualizador]="false"></idesk-vistaArchivos-->
+			<idesk-vistaArchivos [archivos]="arcComentarios" [personAlta]="0" [nombreActividad]="" [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

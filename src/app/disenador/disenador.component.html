@@ -1,0 +1,145 @@
+<div class="sticky-top">
+    <idesk-primerNav #primerNav></idesk-primerNav>
+	<idesk-disenadorNav (vistaSeleccionada)="vistaActual($event)"></idesk-disenadorNav>
+</div>
+
+
+<div class="container-fluid idesk-content mt-0 pt-0">
+	<div class="d-flex flex-row my-2">
+		<div class="d-inline-flex flex-fill align-items-center">
+			<label for="periodo" class="col-form-label text-strong ">PERIODO &nbsp;</label>
+			<label class="col-form-label w-65">
+				<select class="form-control form-control-sm" #periodo (change)="listadoCursos($event)" disabled>
+					<option *ngFor="let p of periodos" [value]="p.idPeriodo">{{ p.Periodo }}</option>
+				</select>
+			</label>
+		</div>
+		
+		<div class="d-inline-flex flex-fill mx-md-2 align-items-center">
+			<label for="curso" class="col-form-label text-strong ">TIPO DE CURSO &nbsp;</label>
+			<label class="col-form-label w-55">
+				<select class="form-control form-control-sm" #curso [(ngModel)]="tipoCursoSeleccionado" (change)="listadoCursos()">
+					<option value="0" selected="selected">Todos</option>
+					<option *ngFor="let c of tipoCursos" [value]="c.idTipoCurso">{{ c.tipoCurso }}</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="d-inline-flex flex-fill align-items-center">
+			<label for="modalidad" class="col-form-label text-strong ">MODALIDAD &nbsp;</label>
+			<label class="col-form-label w-65">
+				<select class="form-control form-control-sm" #modalidad [(ngModel)]="modalidadSeleccionada" (change)="listadoCursos()">
+					<option value="0">Todas</option>
+					<option value="2">En línea</option>
+					<option value="3">Semipresencial</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="d-inline-flex flex-fill ml-md-2 align-items-center" *ngIf="tipoCursoSeleccionado == 1 || tipoCursoSeleccionado == 9">
+			<label for="grado" class="col-form-label text-strong ">GRADO &nbsp;</label>
+			<label class="col-form-label w-60">
+				<select class="form-control form-control-sm" #grado [(ngModel)]="gradoSeleccionado" (change)="listadoCursos()">
+					<option value="0">Todos</option>
+					<!--option value="1">Bachillerato</option-->
+					<option value="2">Licenciatura</option>
+					<option value="3">Posgrado</option>
+				</select>
+			</label>
+		</div>
+	</div>
+
+	<div class="d-flex w-100">
+		<div class="flex-column w-20 height-reportes" [ngClass]=" { 'hidden': oculto,  'd-inline-flex': !oculto }"> 
+			<div class="d-flex flex-row align-items-center rounded-t-md bg-chocolate text-white text-strong h-40px">
+				<label class="col-form-label flex-grow-1 text-strong" [ngClass]="{ 'ml-4': vista == 2 }">
+					<input *ngIf="vista != 2" type="checkbox" class="form-check-input" [(ngModel)]="todoSeleccionado" (change)="marcarTodo()"/>&nbsp; MATERIAS
+				</label>
+				<div *ngIf="!oculto" class="px-3 pointer" (click)="toggleMaterias()">
+					<i class="fa fa-caret-down"></i>
+				</div>
+			</div>
+			<div class="calificaciones">
+				<div class="item-calificaciones d-flex align-items-start pr-2" *ngFor="let c of cursos">
+					<label class="col-form-label pointer text-nowrap text-truncate flex-fill" *ngIf="vista != 2" placement="right" [ngbTooltip]="(c.idTipoCurso == 9 ? 'Intersemestral -' : '')+ c.materia+' '+c.clave">
+						<input type="checkbox" [value]="c.idCurso" name="checkCursos" [(ngModel)]="c.seleccionado" class="form-check-input" (change)="verificaMarcados()"/>&nbsp;{{ c.materia }} {{ c.idTipoCurso == 9 ? ' - Intersemestral' : '' }}
+					</label>
+					<label class="col-form-label pointer text-nowrap text-truncate flex-fill" *ngIf="vista == 2" placement="right" [ngbTooltip]="(c.idTipoCurso == 9 ? 'Intersemestral -' : '')+ c.materia+' '+c.clave">
+						<input type="radio" [value]="c.idCurso" name="radioCursos" [checked]="c.seleccionado" (click)="gotoCronograma(c.idCurso, c.materia)" class="form-check-input"/>&nbsp;{{ c.materia }} {{ c.idTipoCurso == 9 ? ' - Intersemestral' : '' }}
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="d-inline-flex flex-column" [ngClass]=" { 'hidden': !oculto }"> 
+			<div class="d-flex flex-row align-items-center rounded-md bg-chocolate text-white text-strong h-40px">
+				<div *ngIf="oculto" class="px-3 pointer" (click)="toggleMaterias()">
+					<i class="fa fa-caret-left"></i>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="d-flex flex-column border rounded ml-1 mb-1 height-reportes {{ !oculto ? 'w-80' : 'w-95' }}"> 
+			<div class="d-flex flex-row my-1 mx-2">
+				<div class="flex-fill mx-md-2 align-items-center" *ngIf="vista == 3 && tipoReporte != 14">
+					<label for="rangoFechas" class="col-form-label text-strong">FECHAS &nbsp;</label>
+					<label class="col-form-label w-60" *ngIf="tipoCursoSeleccionado == 2">
+						<input class="form-control-sm input3 rangoFechas" selectMode="range" [(ngModel)]="_disenador.rangoFechas" [owlDateTime]="dt" readonly #rangoFechas (ngModelChange)="cambiaFechas()">
+						<label class="icon-main-color ml-2 pointer" [owlDateTimeTrigger]="dt" ><i class="far fa-calendar-alt"></i></label>
+						<owl-date-time pickerType="calendar" pickerMode="dialog" #dt></owl-date-time>
+					</label>
+					<label class="col-form-label w-60" *ngIf="tipoCursoSeleccionado != 2">
+						<select class="form-control form-control-sm" [(ngModel)]="_disenador.fechasSemana" (ngModelChange)="cambiaFechas($event)">
+							<option *ngFor="let semana of semanas" [ngValue]="semana.valor">{{ semana.texto }}</option>
+						</select>
+					</label>
+				</div>
+
+				<div class="flex-fill mx-md-2 align-items-center" *ngIf="vista == 3">
+					<label for="reporte" class="col-form-label text-strong">REPORTE &nbsp;</label>
+					<label class="col-form-label w-60">
+						<select class="form-control form-control-sm" [(ngModel)]="tipoReporte" #reporte>
+							<option value="0">Seleccione un reporte</option>
+							<ng-container *ngFor="let rep of ObjectKeys(reportes)">
+								<option *ngIf="!reportes[rep].hijos" [value]="rep">{{ reportes[rep].reporte }}</option>
+								<optgroup *ngIf="reportes[rep].hijos" [label]="reportes[rep].reporte">
+									<option *ngFor="let subrep of ObjectKeys(reportes[rep].hijos)" [value]="subrep">{{ reportes[rep].hijos[subrep].reporte }}</option>
+								</optgroup>
+							</ng-container>
+						</select>
+					</label>
+				</div>
+
+				<div class="flex-fill mx-md-2 my-auto" *ngIf="vista == 3">
+					<div class="flex-row flex-fill text-center ">
+						<button class="btn btn-primary btn-sm" (click)="mostrarReporte()"><i class="fa fa-file-alt"></i>&nbsp; Consultar</button>
+					</div>
+				</div>
+
+				<div class="flex-fill mx-md-2 align-items-center" *ngIf="vista == 3 && tipoReporte != 14">
+					<img src="assets/images/extensiones/page_white_excel.png" class="img-sm pointer" ngbTooltip="Exportar a Excel" (click)="exportarExcel()">
+				</div>
+			</div>
+
+			<div class="d-flex flex-row flex-column my-1">
+				<idesk-temasConsulta #temasConsulta *ngIf="vista == 1" [idCurso]="cursosSeleccionados"></idesk-temasConsulta>
+				<idesk-cronograma-disenador #cronograma *ngIf="vista == 2" [idCurso]="cursoActual"></idesk-cronograma-disenador>
+				<ng-container *ngIf="vista == 3">
+					<idesk-reporteContenido #reporteContenido *ngIf="tipoReporte == 1" [idCurso]="cursosSeleccionados" [fechas]="_disenador.fechasSemana"></idesk-reporteContenido>
+					<!-- <idesk-interaccionElementoAlumno #intElementoMaestro *ngIf="tipoReporte == 16" [idCurso]="cursosSeleccionados" [fechas]="_disenador.fechasSemana"></idesk-interaccionElementoAlumno> -->
+					<idesk-interaccionElementoMaestro #intElementoMaestro *ngIf="tipoReporte == 13" [idCurso]="cursosSeleccionados" [fechas]="_disenador.fechasSemana"></idesk-interaccionElementoMaestro>
+					<idesk-reporteAvance #reporteAvance *ngIf="tipoReporte == 14" [idCurso]="cursosSeleccionados" [fechas]="_disenador.fechasSemana"></idesk-reporteAvance>
+					<!-- <idesk-reporteIngresoCierre #reporteIngresoCierre *ngIf="tipoReporte == 15" [idCurso]="cursosSeleccionados" [fechas]="_disenador.fechasSemana"></idesk-reporteIngresoCierre> -->
+				</ng-container>
+				
+				<!-- <idesk-interaccionElementoAlumno #intElementoAlumno *ngIf="vista == 3" [idCurso]="cursosSeleccionados" [fechas]="fechas"></idesk-interaccionElementoAlumno> -->
+				
+				<div class="w-100 mr-4" *ngIf="vista != 2 && vista != 3 && vista != 1">
+					<p class="text-center text-strong">PENDIENTE</p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+

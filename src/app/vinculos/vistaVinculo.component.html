@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="d-flex flex-column p-3 px-5 my-3 border rounded-lg" *ngIf="vinculo">
+        <label class="font-weight-bold">TÍTULO</label>
+        <a [href]="vinculo.vinculo" target="_blank" (click)="registrarAcceso(vinculo.idVinculo)" (contextmenu)="registrarAcceso(vinculo.idVinculo)" >
+           <label class="text-underline cursor-pointer">{{ vinculo.titulo != "" ? vinculo.titulo : vinculo.vinculo }}</label> 
+        </a>
+        
+        <ng-container *ngIf="!vistaAlumno">
+            <label class="font-weight-bold">FECHA DE PUBLICACIÓN</label>
+            <label class="text-muted">{{ vinculo.fechaPublicacion }}</label>
+        </ng-container>
+
+        <label class="font-weight-bold">DESCRIPCIÓN</label>
+        <p [innerHTML]="vinculo.descripcion | safeHtml"></p>
+
+        <a class="cursor-pointer text-center" [href]="vinculo.vinculo" target="_blank" *ngIf="vinculo.urlImagen != ''" (click)="registrarAcceso(vinculo.idVinculo)" (contextmenu)="registrarAcceso(vinculo.idVinculo)" >
+            <img class="bg-gris rounded-lg p-2" [src]="vinculo.urlImagen">
+        </a>
+    </div>
+</div>

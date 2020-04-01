@@ -1,0 +1,69 @@
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-6">
+            <select class="form-control form-control-sm" (change)="revisa($event)">
+                <option value="0">Todas las materias</option>
+                <option *ngFor="let curso of cursos" [value]="curso.idCodigo">{{ curso.materia }}</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control form-control-sm search" [(ngModel)]="busquedaTitulo" type="search">
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <div class="row box-reutilizar">
+        <div class="col-4 listado">
+            <div class="row">
+                <div class="col-12 elemento" *ngFor="let r of reutilizables | searchfilter:'titulo':busquedaTitulo" (click)="vistaPrevia(r.idApunte)">
+                    {{ r.titulo }}
+                </div>
+            </div>
+        </div>
+        <div class="col-8 vista-previa">
+            <div *ngIf="apunte">
+                <div class="row">
+                    <div class="col-auto">
+                        <label class="text-strong col-form-label">TÍTULO </label>
+                        <label class="col-form-label">{{ apunte.titulo }}</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <label class="text-strong col-form-label">TEMA </label>
+                        <label class="col-form-label">{{ apunte.tema }}</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <label class="text-strong col-form-label">FECHA DE PUBLICACIÓN </label>
+                        <label class="col-form-label">{{ apunte.fechaPublicacion }}</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-strong col-form-label">DESCRIPCIÓN </label>
+                    </div>
+                    <div class="col-12 col-form-label" [innerHTML]="apunte.descripcion | safeHtml"></div>
+                </div>
+
+                <div class="row justify-content-md-center" *ngIf="numeroArchivos > 0">
+					<div class="col-10">
+						<idesk-vistaArchivos [archivos]="archivos" [personAlta]="'0'" [nombreActividad]="" [previsualizador]="false"></idesk-vistaArchivos>
+					</div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-sm" style="margin-right: 10px; margin-top: 5px;" (click)="reutilizar(apunte)">
+                            <i class="fas fa-sync"></i>
+                            &nbsp;Reutilizar apunte
+                        </button><br>&nbsp;
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

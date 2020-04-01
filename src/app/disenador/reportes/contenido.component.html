@@ -1,0 +1,128 @@
+<div class="container-fluid idesk-content" *ngIf="reporteCompleto">
+    <div class="w-100 mb-2">
+        <h5><strong>Contenido</strong></h5>
+    </div>
+    <div class="w-100 my-1">
+        <h6>{{ disenador.semanaSeleccionada }}</h6>
+    </div>
+    <div class="w-100 my-2" *ngIf="_idCurso != ''">
+        <div *ngIf="resumen.length > 0">
+            <div class="w-100 mb-1">
+                <label class="mb-0 px-2 text-strong"> Resumen </label>
+            </div>
+            <div class="d-inline-flex align-items-stretch rounded-t-lg header-calificacion" style="height: 50px !important; width: 500px;">
+                <div class="w-50 p-2 text-strong d-inline-flex align-items-center" style="min-height: 50px;">
+                    <label class="w-100 mb-0 text-center">Elemento</label>
+                </div>
+                <div class="w-50 p-2 text-strong d-inline-flex align-items-center" style="min-height: 50px;">
+                    <label class="w-100 mb-0 text-center">Cantidad</label>
+                </div>
+            </div>
+
+            <div class="flex-column calificaciones" style="width: 500px;">
+                <div class="w-100 py-2 d-inline-flex align-items-center item-calificaciones" *ngFor="let elemento of resumen; let i = index;">
+                    <div class="w-50 px-2">
+                        <span class="text-strong px-2">{{ elemento.elemento }}</span>
+                    </div>
+                    <div class="w-50 px-2 text-center">
+                        <span>{{ elemento.total }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 py-3 mt-4" *ngIf="procesoCarga">
+            <h3>
+                <img src="assets/images/editor/spinner-big.gif">
+                Cargando Información...
+            </h3>
+        </div>
+
+        <div *ngIf="detalle">
+            <ng-container *ngFor="let curso of ObjectKeys(detalle); let i = index;">
+                <div class="w-100 mb-1 mt-4">
+                    <label class="mb-0 px-2"> <span class="text-strong">{{ detalle[curso].datos[0].curso }}</span> - {{ detalle[curso].datos[0].maestro }} </label> 
+                    <table class="px-1" style="width: 750px;">
+                        <thead>
+                            <tr>
+                                <th width="40%"><strong>Tema(s)</strong></th>
+                                <th width="20%"><strong>Fecha de inicio</strong></th>
+                                <th width="20%"><strong>Fecha de cierre</strong></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td class="px-1" [innerHTML]="detalle[curso].datos[0].tema"></td>
+                            <td class="px-1" [innerHTML]="detalle[curso].datos[0].fechaini"></td>
+                            <td class="px-1" [innerHTML]="detalle[curso].datos[0].fechafin"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="d-inline-flex align-items-stretch rounded-t-lg header-calificacion" style="height: 50px !important; width: 500px;">
+                    <div class="w-50 p-2 text-strong d-inline-flex align-items-center" style="min-height: 50px;">
+                        <label class="w-100 mb-0 text-center">Elemento</label>
+                    </div>
+                    <div class="w-50 p-2 text-strong d-inline-flex align-items-center" style="min-height: 50px;">
+                        <label class="w-100 mb-0 text-center">Cantidad</label>
+                    </div>
+                </div>
+                <div class="flex-column calificaciones" style="width: 500px;">
+                    <div class="w-100 py-2 d-inline-flex align-items-center item-calificaciones" *ngFor="let elemento of detalle[curso].info; let i = index;">
+                        <div class="w-50 px-2">
+                            <span class="text-strong px-2">{{ elemento.elemento }}</span>
+                        </div>
+                        <div class="w-50 px-2 text-center">
+                            <span>{{ elemento.total }}</span>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <table #reporteContenido style="display: none;" cellspacing="0" *ngIf="_idCurso">
+        <tr>
+            <td colspan="2">Resumen</td>
+        </tr>
+        <tr>
+            <td>Elemento</td>
+            <td>Total</td>
+        </tr>
+        <tr *ngFor="let elemento of resumen">
+            <td>{{ elemento.elemento }}</td>
+            <td>{{ elemento.total }}</td>
+        </tr>
+        <ng-container *ngFor="let curso of ObjectKeys(detalle); let i = index;">
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2"> {{ detalle[curso].datos[0].curso }} - {{ detalle[curso].datos[0].maestro }} </td>
+            </tr>
+            <tr>
+                <td>Tema(s)</td>
+                <td>Fecha de inicio</td>
+                <td>Fecha de cierre</td>
+            </tr>
+            <tr>
+                <td [innerHTML]="detalle[curso].datos[0].tema"></td>
+                <td [innerHTML]="detalle[curso].datos[0].fechaini"></td>
+                <td [innerHTML]="detalle[curso].datos[0].fechafin"></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Elemento</td>
+                <td>Total</td>
+            </tr>
+            <tr *ngFor="let elemento of detalle[curso].info">
+                <td>{{ elemento.elemento }}</td>
+                <td>{{ elemento.total }}</td>
+            </tr>
+        </ng-container>
+    </table>
+
+</div>

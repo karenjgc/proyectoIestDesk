@@ -1,0 +1,83 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="4"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/foro-discusion']" (click)="_iestdesk.registraAcceso(2, 0)"><label class="current">Foro de Discusión</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover" cellspacing="0" id="tabla-foros-discusion">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Tema</th>
+                        <th>Fecha Publicación</th>
+                        <th>Fecha Cierre</th>
+                        <th>Modalidad de Trabajo</th>
+                        <th *ngIf="rolActual == 1">Participación</th>
+                        <th *ngIf="rolActual == 1">Revisar</th>
+                        <th *ngIf="rolActual != 1">Calificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let foro of foros">
+                        <td class="datatable-options pointer">
+                            <div class="w-100 link-elemento" (click)="gotoForo(foro.idForoDisc)">{{ foro.titulo }}</div>
+                            <span class="options" *ngIf="rolActual == 1"><br><a (click)="editar(foro.idForoDisc)">Editar</a> | <span class="delete-homework pointer" (click)="confEliminar(foro.idForoDisc, foro.titulo)">Eliminar</span></span>
+                        </td>
+                        <td>{{ foro.tema }}</td>
+                        <td class="text-center">{{ foro.fechaPublicacion }}</td>
+                        <td class="text-center">{{ foro.fechaCierre }}</td>
+                        <td class="text-center">
+                            <img src="assets/images/elements/individual.png" ngbTooltip="Individual" placement="top" class="img-table" *ngIf="foro.idModTrabajo == 1">
+                            <img src="assets/images/elements/grupal.png" ngbTooltip="Equipos" placement="top" class="img-table pointer" *ngIf="foro.idModTrabajo != 1" (click)="verEquipos(foro.idPlantillaEquipos, muestraEquipos)">
+                        </td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            {{ foro.participacion }}
+                        </td>
+                        <td class="text-center" *ngIf="rolActual == 1">
+                            <img src="assets/images/elements/sin_revisar.png" class="img-table pointer" (click)="gotoRevision(foro.idForoDisc)">
+                        </td>
+                        <td class="text-center" *ngIf="rolActual != 1">
+                            <span *ngIf="foro.calificacion">{{ foro.calificacion }}</span> 
+                            <span *ngIf="!foro.calificacion">Pendiente de revisión</span>
+                        </td>
+                        
+                    </tr>
+                    <tr *ngIf="!foros">
+                        <td colspan="8" *ngIf="rolActual == 1">Sin Foros asignados a este curso</td>
+                        <td colspan="6" *ngIf="rolActual == 2">Sin Foros publicados en este curso</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ng-template #muestraEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada"></idesk-vistaEquipos>
+    </div>
+</ng-template>
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

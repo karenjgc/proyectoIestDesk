@@ -1,0 +1,67 @@
+<div class="container-fluid iestdesk-course-menu">
+    <div class="row no-lateral-margins">
+        <div class="col-2 left-menu">
+            <div ngbDropdown class="d-inline-block" style="display: inline;">	
+                <button type="button" id="idesk-left-menu" class="idesk-left-menu btn" ngbDropdownToggle>
+                    <i class="fas fa-bars fa-2x iestdesk-option-icon"></i></button>
+                <div class="idesk-lateral-menu" ngbDropdownMenu aria-labelledby="idesk-left-menu"> 
+                    <button id="menu-calificaciones" class="dropdown-item {{ componente == 24 ? 'active' : undefined}}" (click)="irMenuPrincipal(24)">Calificaciones</button>
+                    <button id="menu-criterios-evaluacion" class="dropdown-item {{ componente == 28 ? 'active' : undefined}}" *ngIf="idTipoCursoActual == 1 || idTipoCursoActual == 9" (click)="irMenuPrincipal(28)">Criterios de Evaluación</button>
+                    <button id="menu-cronograma" class="dropdown-item {{ componente == 29 ? 'active' : undefined}}" *ngIf="idTipoCursoActual == 1 || idTipoCursoActual == 2 || idTipoCursoActual == 9" (click)="irMenuPrincipal(29)">Cronograma</button>
+                    <button id="menu-info-curso" class="dropdown-item {{ componente == 18 ? 'active' : undefined}}" (click)="irMenuPrincipal(18)">Información del Curso</button>
+                    <button id="menu-videoconferencia" class="dropdown-item {{ componente == 30 ? 'active' : undefined}}" (click)="irMenuPrincipal(30)"> {{ rolActual == 1 ? 'Mis alumnos' : 'Mis compañeros' }}</button>
+                    <button id="menu-reportes" class="dropdown-item {{ componente == 31 ? 'active' : undefined}}" *ngIf="rolActual == 1"  (click)="irMenuPrincipal(31)"> Reportes</button>
+                    <button id="menu-rubricas" class="dropdown-item {{ componente == 26 ? 'active' : undefined}}" *ngIf="rolActual == 1" (click)="irMenuPrincipal(26)"> Rúbricas IEST</button>
+                    <button id="menu-vinculos" class="dropdown-item {{ componente == 22 ? 'active' : undefined}}" (click)="irMenuPrincipal(22)">Vínculos</button>
+                    <button id="menu-videoconferencia" class="dropdown-item {{ componente == 27 ? 'active' : undefined}}" (click)="irMenuPrincipal(27)"> Videoconferencias</button>
+                    <!--button id="menu-cuaderno" class="dropdown-item" *ngIf="rolActual != 1">Cuaderno</button-->
+                    <!--button id="menu-muro" class="dropdown-item {{ componente == 19 ? 'active' : undefined}}" (click)="irMenuPrincipal(19)">Muro</button-->
+                    <!--button id="menu-examenes" class="dropdown-item {{ componente == 23 ? 'active' : undefined}}" (click)="irMenuPrincipal(23)">Exámenes</button-->
+                    <!--button id="menu-portafolio" class="dropdown-item" *ngIf="rolActual == 1">Portafolio de evidencias</button-->
+                    <!--button id="menu-glosario" class="dropdown-item {{ componente == 25 ? 'active' : undefined}}" (click)="irMenuPrincipal(25)">Glosario</button-->
+                    <div class="col-md-12 user-rol {{ faltas.excede == 1 ? 'excede' : undefined}}" *ngIf="rolActual != 1 && idTipoCursoActual == 1">Faltas: {{ faltas.faltas }} </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8 d-flex justify-content-around" id="idesk-class-items">
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Inicio de Clase" (click)="irMenuPrincipal(1)">
+                <img id="img-inicio" class="icon-subject-menu" src='assets/images/navs/inicio.png' *ngIf="componente != 1">
+                <img id="img-inicio" class="icon-subject-menu" src='assets/images/navs/inicio_active.png' *ngIf="componente == 1">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Temario" (click)="irMenuPrincipal(2)">
+                <img id="img-temario" src="assets/images/navs/temario.png" class="icon-subject-menu" *ngIf="componente != 2">
+                <img id="img-temario" src="assets/images/navs/temario_active.png" class="icon-subject-menu" *ngIf="componente == 2">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Tareas" (click)="irMenuPrincipal(3)">
+                <img id="img-tareas" src="assets/images/navs/tareas.png" class="icon-subject-menu" *ngIf="componente != 3">
+                <img id="img-tareas" src="assets/images/navs/tareas_active.png" class="icon-subject-menu" *ngIf="componente == 3">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Foros de Discusión" (click)="irMenuPrincipal(4)">
+                <img id="img-foros" src="assets/images/navs/foroDiscusion.png" class="icon-subject-menu" *ngIf="componente != 4">
+                <img id="img-foros" src="assets/images/navs/foroDiscusion_active.png" class="icon-subject-menu" *ngIf="componente == 4">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Apuntes" (click)="irMenuPrincipal(5)">
+                <img id="img-apuntes" src="assets/images/navs/apuntes.png" class="icon-subject-menu" *ngIf="componente != 5">
+                <img id="img-apuntes" src="assets/images/navs/apuntes_active.png" class="icon-subject-menu" *ngIf="componente == 5">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Actividades de Clase" (click)="irMenuPrincipal(6)">
+                <img id="img-actividades" src="assets/images/navs/actividad_clase.png" class="icon-subject-menu" *ngIf="componente != 6">
+                <img id="img-actividades" src="assets/images/navs/actividad_clase_active.png" class="icon-subject-menu" *ngIf="componente == 6">
+            </button>
+            <button class="support notification-badge" placement="bottom" ngbTooltip="Foro de dudas" (click)="irMenuPrincipal(7)">
+                <img id="img-dudas" src="assets/images/navs/foroDudas.png" class="icon-subject-menu" *ngIf="componente != 7">
+                <img id="img-dudas" src="assets/images/navs/foroDudas_active.png" class="icon-subject-menu" *ngIf="componente == 7">
+            </button>
+        </div>
+        <div class="col-2 text-right right-menu">
+            <div ngbDropdown class="d-inline-block">	
+                <button type="button" id="idesk-right-menu" class="idesk-right-menu btn" ngbDropdownToggle>
+                    <i class="fas fa-th fa-2x idesk-option-icon"></i></button>
+                <div class="idesk-lateral-menu right-menu" ngbDropdownMenu aria-labelledby="iestdesk-right-menu"> 
+                    <button class="dropdown-item" id="menu-info-curso" (click)="gotoMain()">Todos los Cursos</button>
+                    <button class="dropdown-item {{ cursoActual == curso.idCurso ? 'active' : undefined}}" id="menu-info-curso" *ngFor="let curso of cursos" id="curso-{{ curso.idCurso }}" (click)="goToCurso(curso)">{{ curso.materia }} {{ curso.clave }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

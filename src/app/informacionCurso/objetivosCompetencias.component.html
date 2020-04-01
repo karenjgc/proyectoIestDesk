@@ -1,0 +1,49 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="18"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>		
+            <label class="current">Objetivos y Competencias</label>			
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row justify-content-md-center">
+        <div class="col-11 div-info-curso border" style="overflow-x: hidden;">
+            <div class="info-curso-heading text-center py-1">
+                <h5 class="pt-2">
+                    <img src="assets/images/elements/objetivos.png">
+                    Objetivos y Competencias
+                </h5>
+            </div>
+            <div class="col-12">
+                <br>&nbsp;
+                <div class="row">
+                    <div class="col-12" *ngIf="objetivos">
+                        <h6>Objetivos</h6>
+                        <div [innerHTML]="objetivos | safeHtml"></div>
+                    </div>
+                    <div class="col-12" *ngIf="competencias">
+                        <h6>Competencias</h6>
+                        <ul>
+                            <li *ngFor="let c of competencias" [innerHTML]="c.descripcion | safeHtml"></li>
+                        </ul>
+                    </div>
+                    <div class="col-12 text-center" *ngIf="!objetivos && !competencias">
+                        <p>Objetivos y Competencias no capturados</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <idesk-infoCursoNav></idesk-infoCursoNav>
+        </div>
+    </div>
+</div>

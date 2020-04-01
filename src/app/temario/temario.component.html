@@ -1,0 +1,337 @@
+<div class="sticky-top" *ngIf="!modoEditor">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="2"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/temario']"><label class="current">Temario</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-3">
+    <!-- Botones -->
+    <div class="d-flex mb-2 justify-content-end" *ngIf="!elementoActual && !mostrarOrdenTemas && !mostrarOrdenElementos && !mostrarCronograma && cargando == 0">
+        <!--Editor-->
+        <div class="d-flex flex-fill ml-4" *ngIf="iestdeskService.rolActual == 3"> 
+            <button class="btn btn-primary btn-sm mt-3 font-white float-right" (click)="regresarListadoEditor()">
+                <i class="fas fa-arrow-left mr-2"></i>Regresar Listado
+            </button>
+            <label class="text-strong flex-fill text-center mt-3"> {{ editorService.materia.materia }} - {{ editorService.materia.ClaveAlfa }} </label>
+        </div>
+
+        <!--Favoritos-->
+        <div class="div-favoritos" *ngIf="iestdeskService.rolActual == 2">
+            <img class="img-sm mt-1 p-2 cursor-pointer rounded-circle boton-favoritos" [ngClass]="{ 'bg-amarillo' : elementosCopia, 'bg-gris-hierro' : !elementosCopia }" src="./assets/images/temario/star-blanco.png" container="body" placement="bottom" ngbTooltip="Favoritos" (click)="filtrarFavoritos()">
+        </div>
+
+        <!--Meses-->
+        <div class="mt-3 ml-2" *ngIf="iestdeskService.modalidadActual == 1 && (iestdeskService.rolActual == 1 || iestdeskService.rolActual == 2)">
+            <div class="onoffswitch mx-auto" container="body" placement="bottom" ngbTooltip="Cambiar Orden">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" (change)="cambiarOrdenacion($event)" [checked]="ordenadoPor">
+                <label class="onoffswitch-label" for="myonoffswitch">
+                    <span class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                </label>
+            </div>
+        </div>
+
+        <!--Cronograma & Temas-->
+        <div class="mr-4" [ngClass]="{'flex-fill': iestdeskService.rolActual != 3 }">
+            <button class="btn btn-primary btn-sm mt-3 font-white float-right" (click)="irACronograma()" *ngIf="(iestdeskService.rolActual == 1 || iestdeskService.rolActual == 2) && ( idTipoCursoActual == 1 || idTipoCursoActual == 2 || idTipoCursoActual == 9 )" ><i class="far fa-calendar-alt mr-1"></i>Cronograma</button>
+            <button class="btn btn-primary btn-sm mt-3 mr-2 font-white float-right" *ngIf="iestdeskService.rolActual == 1 || iestdeskService.rolActual == 3" (click)="irOrdenTemas()"><i class="fas fa-pencil-alt mr-1"></i>Organizar Temas</button>
+            <button class="btn btn-primary btn-sm mt-3 mr-2 font-white float-right" *ngIf="iestdeskService.rolActual == 1 || iestdeskService.rolActual == 3" (click)="nuevoTema()"><i class="fas fa-plus mr-1"></i>Agregar Tema</button>
+        </div>
+    </div>
+    
+    <!-- Mensajes -->
+    <div class="text-center" *ngIf="elementosTemario && !elementoActual && cargando == 0">
+        <!--Mensaje sin favoritos-->
+        <h4 *ngIf="elementosCopia && objectKeys(elementosTemario).length == 0" class="font-weight-bold">No se han registrado favoritos.</h4>
+
+        <!--Mensaje sin contenidos en meses-->
+        <h4 *ngIf="ordenadoPor && objectKeys(elementosTemario).length == 0 && !elementosCopia" class="font-weight-bold">No hay contenido registrado en el temario.</h4>
+    </div>
+
+    <!-- Temario -->
+    <div class="d-flex" *ngIf="elementosTemario && !elementoActual && !mostrarOrdenTemas && !mostrarOrdenElementos && !mostrarCronograma && cargando == 0">
+        <div #lineatiempo class="lineatiempo">
+            <div class="linea-central"></div>
+            
+            <!--Titulos-->
+            <div [attr.id]="tema" class="elementos-lineatiempo" *ngFor="let tema of ordenTemas; let i = index;">
+                <div class="lineatiempo-articulo">
+                    <!-- Titulo Tema -->
+                    <div class="contenedor-titulo rounded-lg" (click)="alternarTema(tema)" *ngIf="tema.indexOf('-') == -1">
+                        <div class="d-flex card-body m-0 p-0 rounded-lg cursor-pointer lineatiempo-titulo accion-hover" [ngClass]="[(!ordenadoPor ? 'bg-cafe-nuez'  : 'bg-cafe-' + (i+1)), iestdeskService.rolActual == 2 && (iestdeskService.modalidadActual == 2 || iestdeskService.modalidadActual == 3 )? 'flex-column' : '']">
+                            <div class="d-flex flex-fill">
+                                <div class="flex-fill">
+                                    <h5 *ngIf="!ordenadoPor" class="font-weight-bold font-white m-0 ml-3" [class.avance-tema]="iestdeskService.rolActual == 2 && (iestdeskService.modalidadActual == 2 || iestdeskService.modalidadActual == 3)">{{ i + 1 }}. {{ elementosTemario[tema].nombreTema }}</h5>
+    
+                                    <!--En realidad no es el tema si no el mes, pero se maneja el mismo nombre para poder tener el mismo objeto-->
+                                    <h5 *ngIf="ordenadoPor" class="font-weight-bold font-white m-0 ml-3" [class.avance-tema]="iestdeskService.rolActual == 2 && (iestdeskService.modalidadActual == 2 || iestdeskService.modalidadActual == 3)">{{ tema }}</h5>
+                                </div>
+                                <div class="mx-2 mt-1 font-weight-bold py-2 pr-1" *ngIf="iestdeskService.rolActual == 2">
+                                    <label>{{ calcularPorcentajeAvance(tema).elementosCompletos + '/'}}</label>
+                                    <label>{{ elementosTemario[tema].elementos[0].idElemento == 0 ? 0 : calcularPorcentajeAvance(tema).cantidadElementos  }}</label>
+                                </div>
+                            </div>
+
+                            <div class="mx-2 hover" *ngIf="iestdeskService.rolActual == 3">
+                                <img class="img-sm m-0 mt-2 p-1 img-actividad rounded-circle bg-gris-rata" placement="bottom"  container="body" ngbTooltip="Organizar Elementos" src="./assets/images/editor/orden.png" (click)="irOrdenElementos(tema)">
+                            </div>
+                            
+                            <ngb-progressbar class="rounded-b-lg" showValue="true" *ngIf="iestdeskService.rolActual == 2 && (iestdeskService.modalidadActual == 2 || iestdeskService.modalidadActual == 3)" type="avance" [value]="calcularPorcentajeAvance(tema).porcentaje"></ngb-progressbar>
+                        </div>
+                    </div>
+
+
+                    <!-- Titulo Act. Clase y Examen -->
+                    <div class="contenedor-examen d-flex flex-column rounded-lg bg-azul-cielo-claro" *ngIf="tema.indexOf('-') != -1">
+                        <div class="flex-fill">
+                            <h5 class="w-100 m-0 pl-3 py-2 rounded-t-lg bg-azul-petroleo font-white font-weight-bold">
+                                {{ elementosTemario[tema].elementos[0].tipoElemento }}
+                                <img *ngIf="iestdeskService.rolActual == 1" class="rounded-circle mr-2 p-1 background-light-grey cursor-pointer eliminar-elemento float-right " src="./assets/images/temario/cerrar-gris.png" container="body" placement="bottom" [ngbTooltip]="'Eliminar ' + elementosTemario[tema].elementos[0].tipoElemento" (click)="confEliminar(elementosTemario[tema].elementos[0])">
+                            </h5>
+                        </div>
+                        <div class="d-flex cursor-pointer" (click)="establecerElemento(1, elementosTemario[tema].elementos[0], 0)">
+                            <div class="flex-column my-2 px-3 text-center border-right border-color-grey">
+                                <h5 class="font-weight-bold font-dark-grey m-0">{{ formatoFecha(elementosTemario[tema].elementos[0].fechaPublicacionS)[1] | titlecase }}</h5>
+                                <h4 class="font-weight-bold font-dark-grey m-0">{{ formatoFecha(elementosTemario[tema].elementos[0].fechaPublicacionS)[0] }}</h4>
+                            </div>
+                            <div class="card-body text-dark py-3 pr-2">
+                                <h5 class="card-title cursor-pointer font-dark-grey">{{ elementosTemario[tema].nombreTema }}</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bolitas Tema -->
+                    <div class="lineatiempo-circulo" (click)="alternarTema(tema)">
+                        <img class="img-md img-titulo rounded-circle" [ngClass]="{'bg-cafe-con-leche' : !ordenadoPor && tema.indexOf('-') == -1, 'bg-cafe-claro' : tema.indexOf('-') == -1 && ordenadoPor, 'bg-azul-petroleo-claro' : !ordenadoPor && tema.indexOf('-') != -1 }" [src]="tema.indexOf('-') == -1 ? './assets/images/temario/temario_sf.png' : './assets/images/temario/' + elementosTemario[tema].elementos[0].imagen">
+                    </div>
+                </div>
+
+                <!--Elementos-->
+                <ng-container *ngIf="elementosTemario[tema].mostrar && tema.indexOf('-') == -1">
+                    <div class="lineatiempo-articulo" *ngFor="let elemento of elementosTemario[tema].elementos;let numElemento = index;">
+                        <ng-container *ngIf="elemento.idElemento != 0">
+                            <div class="contenedor-info d-flex bg-gris-claro rounded-lg" [ngClass]="{'bg-cafe-editor contenedor-info-editor' : (iestdeskService.rolActual == 1 && elemento.anabels == 1 && iestdeskService.modalidadActual != 1) || (iestdeskService.rolActual == 3 && elemento.anabels == 1 && editorService.esAsignado == 1)}">
+                                <div *ngIf="iestdeskService.modalidadActual == 1 && (iestdeskService.rolActual == 1 || iestdeskService.rolActual == 2)" class="flex-column px-3 my-2 text-center border-right border-color-grey">
+                                    <h5 class="m-0 font-weight-bold">{{ formatoFecha(elemento.fechaPublicacionS)[1] | titlecase }}</h5>
+                                    <h4 class="m-0">{{ formatoFecha(elemento.fechaPublicacionS)[0] }}</h4>
+                                </div>
+                                <div class="d-flex flex-fill">
+                                    <!-- Vista Maestro -->
+                                    <div class="card-body text-dark py-2 pr-2 cursor-pointer" *ngIf="iestdeskService.rolActual == 1" (click)="establecerElemento(1, elemento, numElemento)">
+                                        <h5 class="card-title cursor-pointer font-weight-bold mb-1">{{  elemento.titulo }}</h5>
+                                        <p *ngIf="ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento + ' - ' + elemento.tema }}</p>
+                                        <p *ngIf="!ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento }}</p>
+                                    </div>
+    
+                                    <!-- Vista Alumno -->
+                                    <div class="card-body text-dark py-2 pr-2 cursor-pointer" *ngIf="iestdeskService.rolActual != 1" (click)="establecerElemento(1, elemento, numElemento)">
+                                        <ng-container *ngIf="elemento.idTipoElemento != 5">
+                                            <h5 class="card-title cursor-pointer mb-1">{{ elemento.titulo }}</h5>
+                                            <p *ngIf="ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento + ' - ' + elemento.tema }}</p>
+                                            <p *ngIf="!ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento }}</p>
+                                        </ng-container>
+                                        <ng-container *ngIf="elemento.idTipoElemento == 5">
+                                                <a [href]="elemento.vinculo" target="_blank" (click)="registrarAcceso(elemento.idElemento)" (contextmenu)="registrarAcceso(elemento.idElemento)" >
+                                                    <h5 class="card-title cursor-pointer text-underline">{{ elemento.titulo }}</h5>
+                                                </a>
+                                                <p *ngIf="ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento + '-' + elemento.tema }}</p>
+                                                <p *ngIf="!ordenadoPor" class="card-text text-muted">{{ elemento.tipoElemento }}</p>
+                                        </ng-container>
+                                    </div>
+    
+                                    <div class="flex-column mr-2">
+                                        <div class="text-right">
+                                            <!-- Vista Maestro -->
+                                            <img *ngIf="(iestdeskService.rolActual == 1 && elemento.anabels == 0) || (iestdeskService.rolActual == 3)" class="p-1 mt-1 rounded-circle bg-gris-rata cursor-pointer eliminar-elemento" src="./assets/images/temario/cerrar.png" container="body" placement="bottom" [ngbTooltip]="'Eliminar ' + elemento.tipoElemento" (click)="confEliminar(elemento)">
+                                            
+                                            <!-- Vista Alumno -->
+                                            <ng-container  *ngIf="iestdeskService.rolActual == 2">
+
+                                                <img class="img-sm mt-3 p-2 cursor-pointer rounded-circle favoritos boton-favoritos" [ngClass]="{ 'bg-amarillo' : elemento.favorito != 1, 'bg-gris-hierro' : elemento.favorito == 1 }" container="body" placement="bottom" ngbTooltip="Agregar a favoritos" src="./assets/images/temario/star-blanco.png" (click)="agregarFavoritos(elemento)">
+    
+                                                <!--img *ngIf="elemento.favorito == 1" class="img-sm mt-4 p-2 cursor-pointer favoritos" src="./assets/images/temario/star-gris.png" container="body" placement="bottom" ngbTooltip="Agregar a favoritos" (click)="agregarFavoritos(elemento)"-->
+                                            </ng-container>
+                                        </div>
+                                        <div class="d-flex text-right pt-3 mr-3">
+                                            <button class="btn btn-primary btn-sm mb-2 mr-2" *ngIf="iestdeskService.rolActual == 1 && catalogoElementos[elemento.idTipoElemento].idTemarioElemento == 2" (click)="participarForo(elemento)">Participar</button>
+
+                                            <button class="btn btn-primary btn-sm mb-2" *ngIf="iestdeskService.rolActual == 1 && catalogoElementos[elemento.idTipoElemento].revisar == 1" (click)="establecerElemento(3, elemento, numElemento)">Revisar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!-- Bolitas Elemento -->
+                            <div class="lineatiempo-circulo cursor-pointer" (click)="establecerElemento(1, elemento, numElemento)">
+                                <img class="img-sm img-actividad rounded-circle" [ngClass]="elemento.completo == 1 && iestdeskService.rolActual == 2 ? 'bg-verde-mexicano' : 'bg-gris-rata'" [src]="'./assets/images/temario/' + elemento.imagen">
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="elemento.idElemento == 0">
+                            <div class="contenedor-info d-flex bg-gris-claro rounded-lg">
+                                <div class="d-flex flex-fill">
+                                    <!-- Mensaje Sin Contenido -->
+                                    <div class="card-body text-dark py-3 pr-2">
+                                        <h5 class="card-title m-0">{{ elemento.titulo }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bolitas Elemento -->
+                            <div class="lineatiempo-circulo cursor-pointer" *ngIf="elemento.idElemento != 0" (click)="establecerElemento(1, elemento, numElemento)">
+                                <img class="img-sm img-actividad rounded-circle" [ngClass]="{'bg-gris-rata' : elemento.completo == 0 , 'bg-verde' : elemento.completo == 1  && iestdeskService.rolActual != 3}" [src]="'./assets/images/temario/' + elemento.imagen">
+                            </div>
+                            <div class="lineatiempo-circulo" *ngIf="elemento.idElemento == 0">
+                                <img class="img-sm img-actividad rounded-circle bg-gris-rata" src="./assets/images/temario/sincontenido_sf.png">
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <!-- Establecer Elemento -->
+    <div class="flex-fill" *ngIf="elementoActual">
+        <div class="d-flex py-3">
+            <!-- Alta/Edicion Elemento -->
+            <div class="flex-fill">
+                <div class="d-flex flex-column px-3">
+                    <div class="flex-fill text-center">
+                        <h4 class="font-weight-bold ml-4 pt-1">{{ elementoActual.tema }}</h4>
+                    </div>
+                    <div class="d-flex flex-fill ml-2">
+                        <div class="mr-2">
+                            <img class="img-md cursor-pointer rounded-circle" (click)="regresarTemario()" src="./assets/images/temario/regresar.png" placement="bottom" ngbTooltip="Regresar Temario">
+                        </div>
+                        <div class="d-flex flex-fill mr-2 bg-naranja rounded-lg justify-content-around">
+                            <div class="text-left" *ngIf="!revisando">
+                                <img class="img-md ml-2 p-1 cursor-pointer" src="./assets/images/elements/left-arrow.png" *ngIf="elementoActual.idElemento != 0 && posicionActual != 0" (click)="elementoAnterior()">
+                            </div>
+                            <div class="flex-fill text-center" *ngIf="!revisando">
+                                <h5 class="font-white font-weight-bold pt-2">{{ elementoActual.tipoElemento }}</h5>
+                            </div>
+                            <div class="flex-fill text-center" *ngIf="revisando">
+                                <h5 class="font-white font-weight-bold pt-2">{{ 'Revisando ' + elementoActual.tipoElemento + ' - ' + elementoActual.titulo }}</h5>
+                            </div>
+                            <div class="text-right" *ngIf="!revisando">
+                                <img class="img-md mr-2 p-1 cursor-pointer" src="./assets/images/elements/right-arrow.png" *ngIf="elementoActual.idElemento != 0 && posicionActual < elementosTema.length - 1" (click)="elementoSiguiente()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex p-5 justify-content-center" *ngIf="cargando == 1">
+                    <img class="img-lg" src="./assets/images/elements/spinnerBig.gif">
+                </div>
+
+                <!-- Vista Maestro -->
+                <ng-container *ngIf="cargando == 0 && (iestdeskService.rolActual == 1 || iestdeskService.rolActual == 3) && !revisando">
+                    <idesk-altaTareas [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 1"></idesk-altaTareas>
+                    <idesk-altaForoDiscusion [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 2"></idesk-altaForoDiscusion>
+                    <idesk-altaApuntes [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 3"></idesk-altaApuntes>
+                    <idesk-altaVinculo [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 5"></idesk-altaVinculo>
+                    <idesk-altaActividad [modoTemario]="true" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 6 && elementoActual.idTipoActividad == 0"></idesk-altaActividad>
+                    <alta-ruleta [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 6 && elementoActual.idTipoActividad == 1"></alta-ruleta>
+                    <alta-jeopardy [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 6 && elementoActual.idTipoActividad == 2"></alta-jeopardy>
+                    <idesk-altaActividadLibre [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 6 && (elementoActual.idTipoActividad == 6 || elementoActual.idTipoActividad == 7)"></idesk-altaActividadLibre>
+                    <idesk-AltaContenidoWeb [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 7"></idesk-AltaContenidoWeb>
+                    <idesk-altaVideos [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 8"></idesk-altaVideos>
+                    <idesk-altaPodcast [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 9"></idesk-altaPodcast>
+                    <idesk-altaImagenes [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 10"></idesk-altaImagenes>
+                    <idesk-altaVideoconferencias [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 11"></idesk-altaVideoconferencias>
+                    <iestdesk-altaOda [modoTemario]="true" [contenidoEditor]="elementoActual.anabels == 1" (regresaTemario)="regresarTemario()" *ngIf="elementoActual.idTipoElemento == 13"></iestdesk-altaOda>
+                </ng-container>
+                
+                <!-- Vista Alumno -->
+                <ng-container *ngIf="cargando == 0 && iestdeskService.rolActual == 2">
+                    <idesk-vistaTarea [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 1"></idesk-vistaTarea>
+                    <idesk-vistaForoDisc [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 2"></idesk-vistaForoDisc>
+                    <idesk-vistaApunte [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 3"></idesk-vistaApunte>
+                    <idesk-vistaVinculo [idTema]="elementoActual.idTema" *ngIf="elementoActual.idTipoElemento == 5"></idesk-vistaVinculo>
+                    <alumno-actividad [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 6 && elementoActual.idTipoActividad == 1 || elementoActual.idTipoActividad == 2"></alumno-actividad>
+                    <idesk-vistaActividadLibre [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 6 && (elementoActual.idTipoActividad == 6 || elementoActual.idTipoActividad == 7)"></idesk-vistaActividadLibre>
+                    <idesk-vistaContenidoWeb *ngIf="elementoActual.idTipoElemento == 7"></idesk-vistaContenidoWeb>
+                    <idesk-vistaVideo *ngIf="elementoActual.idTipoElemento == 8"></idesk-vistaVideo>
+                    <idesk-vistaPodcast *ngIf="elementoActual.idTipoElemento == 9"></idesk-vistaPodcast>
+                    <idesk-vistaImagen *ngIf="elementoActual.idTipoElemento == 10"></idesk-vistaImagen>
+                    <idesk-vistaVideoconferencias [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 11"></idesk-vistaVideoconferencias>
+                    <idesk-vistaOda *ngIf="elementoActual.idTipoElemento == 13"></idesk-vistaOda>
+                </ng-container>
+
+                <!--Revisión (maestro)-->
+                <ng-container *ngIf="cargando == 0 && iestdeskService.rolActual == 1 && revisando">
+                    <idesk-revisionTarea [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 1"></idesk-revisionTarea>
+                    <idesk-revisionForoDisc [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 2"></idesk-revisionForoDisc>
+                    <idesk-revisionActividadLibre [modoTemario]="true" *ngIf="elementoActual.idTipoElemento == 6 && (elementoActual.idTipoActividad == 6 || elementoActual.idTipoActividad == 7)"></idesk-revisionActividadLibre>
+                </ng-container>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ordenamiento de Temas -->
+    <div class="flex-fill mt-4 px-3" *ngIf="!elementoActual && mostrarOrdenTemas">
+        <div class="d-flex flex-fill ml-2">
+            <div class="mr-2">
+                <img class="img-md cursor-pointer rounded-circle" (click)="regresarTemario(true)" src="./assets/images/temario/regresar.png" placement="bottom" ngbTooltip="Regresar Temario">
+            </div>
+            <div class="d-flex flex-fill bg-naranja rounded-lg">
+                <h5 class="flex-fill text-center font-white font-weight-bold pt-2">Organizar Temas</h5>
+                <p class="m-0 p-0 mt-2 mr-1 text-white">Agregar Tema</p>
+                <img class="cursor-pointer float-right mr-3 agregar-tema" src="assets/images/elements/nuevo-blanco.png" (click)="nuevoTema()">
+            </div>
+        </div>
+        <idesk-ordenTemas></idesk-ordenTemas>
+    </div>
+
+    <!-- Ordenamiento de Elementos -->
+    <div class="flex-fill mt-4 px-3" *ngIf="!elementoActual && mostrarOrdenElementos">
+        <div class="d-flex flex-fill ml-2">
+            <div class="mr-2">
+                <img class="img-md cursor-pointer rounded-circle" (click)="regresarTemario(true)" src="./assets/images/temario/regresar.png" placement="bottom" ngbTooltip="Regresar Temario">
+            </div>
+            <div class="d-flex flex-fill bg-naranja rounded-lg">
+                <h5 class="flex-fill text-center font-white font-weight-bold pt-2">Organizar Elementos</h5>
+            </div>
+        </div>
+        <idesk-ordenElementos [idTema]="idTemaEditor"></idesk-ordenElementos>
+    </div>
+
+    <!-- Cronograma -->
+    <div class="flex-fill mt-4 px-3" *ngIf="!elementoActual && mostrarCronograma">
+        <div class="d-flex flex-fill ml-2">
+            <div class="mr-2">
+                <img class="img-md cursor-pointer rounded-circle" (click)="regresarTemario(true)" src="./assets/images/temario/regresar.png" placement="bottom" ngbTooltip="Regresar Temario">
+            </div>
+            <div class="d-flex flex-fill bg-naranja rounded-lg">
+                <h5 class="flex-fill text-center font-white font-weight-bold pt-2">Cronograma</h5>
+            </div>
+        </div>
+        <idesk-cronograma [modoTemario]="true"></idesk-cronograma>
+    </div>
+</div>
+
+<!-- Agregar Elemento -->
+<div class="menu-flotante" *ngIf="!elementoActual && !mostrarOrdenTemas && !mostrarCronograma && cargando == 0 && (iestdeskService.rolActual == 1 || iestdeskService.rolActual == 3)">
+    <a class="float-right botonFlotante" id="menu" placement="left">
+        <i class="fa fa-plus iconoBotonFlotante"></i>
+    </a>
+    <div class="card ul-flotante rounded-lg">
+        <ul class="list-group list-group-flush">
+            <ng-container *ngFor="let elemento of ordenCatalogo">
+                <li class="list-group-item cursor-pointer" *ngIf="elemento.tipoRol == 1 || iestdeskService.rolActual == 3" (click)="establecerElemento(2, elemento)">
+                    {{ elemento.nombre }}
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+</div>
+
+<ngx-smart-modal #confirmacionDialog identifier="confirmacionDialog" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="1" [mensajePrincipal]="mensajeDialog" [imagen]="1" [accion]="0" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

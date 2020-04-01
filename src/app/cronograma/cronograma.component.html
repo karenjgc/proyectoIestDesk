@@ -1,0 +1,118 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="29"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <label class="current">Cronograma</label>			
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div *ngIf="!mostrarOrdenTemas">
+        <div class="row mb-2">
+            <div class="col-6">
+                <div class="d-inline-flex">
+                    <div class="hoy align-items-stretch" style="width: 20px"></div>
+                    <label class="mb-0 form-label">&nbsp;&nbsp;Hoy&nbsp;</label>
+                </div>
+                <div class="d-inline-flex">
+                    <div class="festivo align-items-stretch" style="width: 20px"></div>
+                    <label class="mb-0 form-label">&nbsp;&nbsp;Festivo&nbsp;</label>
+                </div>
+                <div class="d-inline-flex">
+                    <div class="examen align-items-stretch" style="width: 20px"></div>
+                    <label class="mb-0 form-label">&nbsp;&nbsp;Examen&nbsp;</label>
+                </div>
+            </div>
+            <div class="col-6 text-right">
+                <button class="btn btn-primary btn-sm font-white" *ngIf="(rolActual == 1 || rolActual == 3) && !modoTemario" (click)="irOrdenTemas()"><i class="fas fa-pencil-alt mr-1"></i>Organizar Temas</button>&nbsp;&nbsp;&nbsp;
+                <ng-template #infoCronograma>Utiliza el cronograma para calendarizar por sesión la impartición de temas del semestre.<br>Para marcar la duración de un tema, da clic en la casilla de la sesión inicial y luego en la final o ve seleccionando una por una. Para deshacer una selección, da clic en la casilla correspondiente.<br>Los días de examen y los festivos se marcan automáticamente y no pueden editarse.                                      
+                </ng-template> 
+                <img src="assets/images/elements/info.png" *ngIf="rolActual == 1" class="info-icon pointer" [ngbTooltip]="infoCronograma" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+            </div>
+        </div>
+
+        <div class="w-100 d-inline-flex align-items-stretch rounded-t-lg">
+            <div class="tema">
+                <div class="rounded-tl-lg header-cronograma">
+                    <div class="tema p-2 text-strong d-flex align-items-center" style="min-height: 57px;">
+                        <label class="mb-0 pl-2">
+                            Tema&nbsp;
+                            <!--img src="assets/images/elements/nuevo-blanco.png" class="pointer" width="20px" (click)="nuevoTema(altaTema)" *ngIf="rolActual == 1 && modalidadActual != 2"-->
+                        </label>
+                    </div>
+                </div>
+                <div class="cronograma tema">
+                    <div class="tema-cronograma align-items-stretch" *ngFor="let t of temas; let i = index;">
+                        <div class="tema p-2 text-nowrap text-truncate" [ngbTooltip]="t.tema" placement="right">
+                            {{ i + 1 }}. {{ t.tema }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cronograma-responsive flex-column">
+                <div>
+                    <div class="flex-fill d-inline-flex rounded-tr-lg header-cronograma">
+                        <ng-container *ngFor="let fecha of objectKeys(_fechasVista); let i = index;">
+                            <div class="align-items-center  {{ (i%2 == 0) ? 'mes-x' : 'mes-y' }}">
+                                <div class="meses mr-2 border-bottom text-center text-strong">{{ fecha }}</div>
+                                <div class="dias mt-1 d-inline-flex">
+                                    <ng-container *ngFor="let dia of _fechasVista[fecha]">
+                                        <div class="fecha p-1 text-center {{ dia.semana == 0 ? 'semana-x' : 'semana-y' }}">{{ dia.dia }}</div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="d-inline-flex flex-column cronograma">
+                    <ng-container *ngFor="let c of temas">
+                        <div class="d-inline-flex tema-cronograma" *ngFor="let crono of cronograma[c.idTema]">
+                            <div class="fecha p-2 {{ rolActual == 1 && modalidadActual != 2 ? 'pointer' : '' }} text-center {{ f.seleccionado == 0 ? '' : crono.color }} {{ f.festivo == 1 ? 'festivo' : '' }} {{ f.parciales != 0 ? 'examen' : '' }} {{ f.hoy == 1 ? 'hoy' : '' }}" *ngFor="let f of crono.fechas" (click)="selecciona(c.idTema, f.id)">{{ modalidadActual != 1 ? ( f.parciales > 0 && f.seleccionado > 0 ? 'E' : ( f.tipoSesion == '' ? '&nbsp;' : f.tipoSesion ) ) : '&nbsp;' }} 
+                                <div class="div-overlaping {{ crono.color }}" *ngIf="(f.festivo == 1 || f.parciales != 0 || f.hoy == 1)&& f.seleccionado != 0"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-center" *ngIf="modalidadActual != 1">
+                <strong>P</strong>: Presencial &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <strong>L</strong>: Línea &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <strong>SP</strong>: Semipresencial &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <strong>V</strong>: Videoconferencia &nbsp;&nbsp;|&nbsp;&nbsp; 
+                <strong>E</strong>: Examen
+            </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="rolActual == 1 && modalidadActual != 2">
+            <div class="col-12 text-center">
+                <button class="btn btn-primary btn-sm" (click)="guardaCronograma()"><i class="fas fa-save"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ordenamiento de Temas -->
+    <div class="flex-fill mt-4 px-3" *ngIf="mostrarOrdenTemas && !modoTemario">
+        <div class="d-flex flex-fill ml-2">
+            <div class="mr-2">
+                <img class="img-md cursor-pointer rounded-circle" (click)="regresarCronograma(true)" src="./assets/images/temario/regresar.png" placement="bottom" ngbTooltip="Regresar Temario">
+            </div>
+            <div class="d-flex flex-fill bg-naranja rounded-lg">
+                <h5 class="flex-fill text-center font-white font-weight-bold pt-2">Organizar Temas</h5>
+                <img class="cursor-pointer float-right mr-3 agregar-tema" src="assets/images/elements/nuevo-blanco.png" (click)="nuevoTema()" >
+            </div>
+        </div>
+        <idesk-ordenTemas></idesk-ordenTemas>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>

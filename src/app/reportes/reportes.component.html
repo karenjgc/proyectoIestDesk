@@ -1,0 +1,45 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="31"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <label class="current">Reportes</label>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content" *ngIf="!mostrarDetalle">
+    <div class="row">
+        <div class="col-12 text-right">
+            <button class="btn btn-primary btn-sm font-white" (click)="detalleTema()"><i class="fas fa-search-plus mr-1"></i> Detalle por tema</button>
+        </div>
+    </div>
+
+    <idesk-reportes-avancextema></idesk-reportes-avancextema>
+</div>
+
+<div *ngIf="mostrarDetalle">
+    <div class="container-fluid idesk-content">
+        <div class="row">
+            <div class="col-12 text-right">
+                <button class="btn btn-primary btn-sm font-white" (click)="regresar()"><i class="fas fa-undo mr-1"></i>Regresar</button>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-4 text-right">
+                <label class="col-form-label text-strong">
+                    TEMA  
+                </label>
+            </div>
+            <div class="col-4">
+                <select class="form-control form-control-sm" name="tema" [(ngModel)]="idTema">
+                    <option *ngFor="let tema of objectKeys(temas); let i = index;" [value]="temas[tema].idTema">{{ i + 1 }}. {{ temas[tema].tema }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="idTema != 0">
+        <idesk-reportes-avancextema_detalle [idpersonidesk]="idpersonidesk" [idTema]="idTema"></idesk-reportes-avancextema_detalle>
+    </div>
+</div>

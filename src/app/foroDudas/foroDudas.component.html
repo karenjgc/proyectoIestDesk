@@ -1,0 +1,290 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="7"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+		<div class="row">
+			<a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/foro-dudas']"><label class="current">Foro de Dudas</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content" style="overflow-x: hidden;">
+    <div class="row">
+        <div class="col-3">
+            <div class="col-12">
+                <label class="info-dudas">Escoge el tema de tu duda</label>
+            </div>
+            <div class="col-12" *ngFor="let foro of foros">
+                <button class="btn btn-tertiary btn-lg btn-block dudas-temas {{ foro.idForoDudas == foroActual ? 'foro-activo' : undefined }} pointer {{ foro.nuevo == 1 ? 'comentarios-nuevos' : undefined }}" id="boton-foro-{{ foro.idForoDudas }}" (click)="abreForo(foro.idForoDudas)"><!--data-badge="99+" -->{{ foro.tema }}</button>
+            </div>
+        </div>
+
+        <div class="col-9" *ngIf="verComentarios == false">
+            <div class="row no-gutters">
+                <div class="col-12">    
+                    <img src="assets/images/elements/nuevo.png" class="reutilizar-icon pointer" (click)="abrirDialogo(nuevaDuda)">&nbsp;
+                    <label class="rem9 pointer" (click)="abrirDialogo(nuevaDuda, 0)">Agregar Duda &nbsp;</label>
+                    <ng-template #nvaDuda>Añade una duda al tema correspondiente.</ng-template>
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="nvaDuda" placement="right" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;&nbsp;
+                </div>
+
+                <div class="col-12 mt-1 questions-area" #questionsArea>
+                    <div class="row">
+                        <div class="pregunta" *ngFor="let pregunta of preguntas">
+                            <div class="row align-items-center">
+                                <div class="col-12 pointer" (click)="verPregunta(pregunta)">
+                                    <label class="col-sm-12 foro-pregunta pointer" [innerHTML]="pregunta.pregunta | safeHtml"></label>
+                                </div>
+                                <div class="col-4"></div>
+                                <div class="col-8 row">
+                                    <div class="col-6">
+                                        <label class="col-sm-12 pregunta-nombre pointer">{{ pregunta.nombre }} </label>
+                                        <label class="col-sm-12 pregunta-fecha pointer">{{ pregunta.fecha }}</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="info-pregunta">
+                                            <img src="assets/images/elements/like.png" class="cursor-pointer pregunta-img" *ngIf="pregunta.yaVoto == 0" (click)="votarPregunta(pregunta.idPregunta, pregunta)">
+                                            <img src="assets/images/elements/yaLike.png" class="cursor-pointer pregunta-img" *ngIf="pregunta.yaVoto == 1" (click)="votarPregunta(pregunta.idPregunta, pregunta)">
+                                            &nbsp;<label>{{ pregunta.votos }}</label>
+                                        </div>&nbsp;&nbsp;
+                                        <div class="info-pregunta">
+                                            <img src="assets/images/elements/chat.png" class="pregunta-img">
+                                            &nbsp;<label>{{ pregunta.respuestas }}</label>
+                                        </div>&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-sm support"  *ngIf="pregunta.archivos > 0" (click)="verArchivosPreguntas(pregunta.idPregunta, vistaArchivos)">
+                                            <label class="col-form-label text-strong pointer">
+                                                <i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.
+                                            </label>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sin-dudas" *ngIf="mostrarMensaje">No hay dudas registradas</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-9" *ngIf="verComentarios">
+            <div class="row no-gutters">
+                <div class="col-10">
+                    <button class="btn btn-primary btn-sm" (click)="regresarPreguntas()"><i class="fa fa-undo"></i> Regresar al listado de dudas</button><br>&nbsp;
+                </div>
+				<div class="col-2">
+                    <button class="btn btn-primary btn-sm" (click)="tooglePreguntaComentarios()" *ngIf="!mostrarPreguntaComentarios">Mostrar duda</button>
+					<button class="btn btn-primary btn-sm" (click)="tooglePreguntaComentarios()" *ngIf="mostrarPreguntaComentarios">Ocultar duda</button><br>&nbsp;
+                </div>
+                <div class="col-12 pregunta-foro" id="preguntaForo" >
+                    <div [innerHTML]="preg | safeHtml"></div>
+					
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="col-sm-12 pregunta-nombre pointer">{{ nombre }} </label>
+                            <label class="col-sm-12 pregunta-fecha pointer">{{ fecha }}</label>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-sm support"  *ngIf="archivosPregunta > 0" (click)="verArchivosPreguntas(preguntaActual, vistaArchivos)">
+                                <label class="col-form-label text-strong pointer">
+                                    <i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.
+                                </label>
+                            </button>&nbsp;&nbsp;
+                            <img src="assets/images/elements/like.png" width="18px" class="pointer" *ngIf="yaVoto == 0" (click)="votarPregunta(preguntaActual)">
+                            <img src="assets/images/elements/yaLike.png" width="18px" class="pointer" *ngIf="yaVoto == 1" (click)="votarPregunta(preguntaActual)">
+                            &nbsp;&nbsp;
+                            <label class="likes">{{ votosPregunta }}</label>
+                        </div>
+                    </div>
+                </div><br>&nbsp;
+                <div class="col-12">    
+                    <form [formGroup]="comentario">  
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-11">
+                                <textarea [froalaEditor]="options" formControlName="respuesta" class="froala" #respuesta></textarea>
+                            </div>
+                            <div class="col-1 text-center">
+                                <button class="btn btn-light btn-sm btn-attach" (click)="adjuntarArchivo(adjuntar)">
+                                    <img src="assets/images/elements/attach.png">
+                                </button>
+                                <button class="btn btn-primary btn-sm" [disabled]="bloquearComentario" (click)="validaComentario(0)">Publicar</button>
+                            </div>
+                            <div class="col-12">
+                                <div class="row align-items-center">
+                                    <div class="col-3 pointer" *ngFor="let arch of archivosPub">
+                                        <img [src]="arch.imgTipoArch" class="img-mini">
+                                        <label class="file-name label-short">{{ arch.nombreArchivo }}</label>
+                                        <button type="button" class="btn btn-primary btn-sm" (click)="eliminaArchivo(arch.idArchivo)"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </form>
+                </div>
+
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 sorting-forum">
+                            <button class="support pointer" (click)="ordenaResp(1)" *ngIf="ordena == 1">
+                                <img src="assets/images/elements/sort_desc.png" width="20px"> 
+                                <label> Descendente </label>
+                            </button>
+                            <button class="support pointer" (click)="ordenaResp(0)" *ngIf="ordena == 0">
+                                <img src="assets/images/elements/sort_asc.png" width="20px">
+                                <label> Ascendente </label>
+                            </button>
+                        </div>
+                        <div class="col-12 forum-area" #forumArea>
+                            <div class="row">
+                                <div class="col-12" id="comentario-{{ comentario.idForoDudasRespuesta }}" *ngFor="let comentario of comentarios">
+                                    <div class="{{ comentario.nivel == 0 ? 'forum-first-level' : comentario.nivel == 1 ? 'forum-second-level' : 'forum-third-level' }}">
+                                        <div class="picture">
+                                            <img src="assets/images/elements/chat.png" width="40px">
+                                        </div>
+                                        <div class="{{ comentario.nivel == 0 ? 'bubble-first' : comentario.nivel == 1 ? 'bubble-second' : 'bubble-third' }}">
+                                            <div class="bubble-first-header">
+                                                <label class="name">{{ comentario.nombre }}</label>&nbsp;<label class="fecha-hora">{{ comentario.fecha }}</label>
+                                            </div>
+                                            <div class="{{ comentario.nivel == 0 ? 'bubble-first-body' : comentario.nivel == 1 ? 'bubble-second-body' : 'bubble-third-body' }}">
+                                                <label class="body-message" [innerHTML]="comentario.respuesta | safeHtml"></label>
+                                            </div>
+                                            <div class="{{ comentario.nivel == 0 ? 'bubble-first-footer' : comentario.nivel == 1 ? 'bubble-second-footer' : 'bubble-third-footer' }} row">
+                                                <div class="col-6">
+                                                    <button type="button" class="btn btn-sm support" (click)="verArchivos(comentario.idForoDudasRespuesta, vistaArchivos)">
+                                                        <label class="col-form-label text-strong pointer" *ngIf="comentario.tieneArchivos == 1">
+                                                            <i class="fas fa-paperclip"></i> &nbsp;Ver archivos adjuntos.
+                                                        </label>
+                                                    </button>
+                                                </div>	
+                                                <div class="col-6 text-right">
+                                                    <label class="likes">{{ comentario.votos }}&nbsp;</label>
+                                                    <img src="assets/images/elements/like.png" width="18px" class="pointer" *ngIf="comentario.yaVoto == 0" (click)="votar(comentario.idForoDudasRespuesta)">
+                                                    <img src="assets/images/elements/yaLike.png" width="18px" class="pointer" *ngIf="comentario.yaVoto == 1" (click)="votar(comentario.idForoDudasRespuesta)">
+                                                    &nbsp;&nbsp;
+                                                    <button type="button" class="btn btn-tertiary btn-sm" (click)="responder(comentario.idForoDudasRespuesta, respuestaC)" *ngIf="comentario.nivel != 2">Responder</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="sin-dudas" *ngIf="mostrarMensajeC">No hay comentarios para esta duda</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <form [formGroup]="respComentario">  
+                    <div class="col-12 row justify-content-md-center align-items-center" id="div-reply" style="display: none;">
+                        <div class="col-10">
+                            <textarea [froalaEditor]="options" autofocus formControlName="respuesta" class="froala estaEsRespuestaC" #respuestaC></textarea>
+                        </div>
+                        <div class="col-1 text-center">
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button class="btn btn-light btn-sm btn-attach" (click)="adjuntarArchivo(adjuntar)">
+                                        <img src="assets/images/elements/attach.png">
+                                    </button>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button class="btn btn-primary btn-sm" (click)="cancelaComentario()" style="margin-bottom: 2px;">Cancelar</button>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button class="btn btn-primary btn-sm" [disabled]="bloquearComentario" (click)="validaComentario(1)">Publicar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-11" *ngIf="rolActual == 1">
+                            <input class="form-check-input" type="checkbox" #privada formControlName="privada" (change)="revisa($event)"> <label class="col-form-label">Comentario Privado</label>
+                        </div>
+                        <div class="col-11">
+                            <div class="row">
+                                <div class="col-2 pointer" *ngFor="let arch of archivosResp">
+                                    <img [src]="arch.imgTipoArch" class="img-mini">
+                                    <label class="file-name label-short">{{ arch.nombreArchivo }}</label>
+                                    <button type="button" class="btn btn-primary btn-sm" (click)="eliminaArchivo(arch.idArchivo)"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #nuevaDuda let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-comments"></i> Agregar Duda</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row no-gutters">
+            <div class="col-12">    
+                <form [formGroup]="pregunta">  
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-12">
+                            <textarea [froalaEditor]="options" formControlName="preg" class="froala" #preg></textarea><br>&nbsp;
+                        </div>
+                        <div class="col-12">
+                            <idesk-adjuntarArchivos [esEdicion]="0" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)"></idesk-adjuntarArchivos><br>&nbsp;
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-danger" role="alert" *ngIf="mostrarAlertaPregunta">
+                                Escriba su comentario antes de continuar
+                            </div>  
+                        </div>
+                        <div class="col-12 text-center">
+                            <button class="btn btn-primary btn-sm mr-2" (click)="validaPregunta()"><i class="fa fa-check"></i>&nbsp;Publicar</button>
+                            <button class="btn btn-light btn-sm ml-2" (click)="cancelaPregunta()"><i class="fa fa-times"></i>&nbsp;Cancelar</button>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #adjuntar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Adjuntar Archivo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-adjuntarArchivos [esEdicion]="editando" [archivosAdj]="cuantosArch" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)"></idesk-adjuntarArchivos>
+		<hr class="mt-4">
+		<div class="col-sm-12 text-center pt-1">
+			<button class="btn btn-tertiary btn-sm" (click)="cierraDialogoPublicarArchivos()"><i class="fas fa-check"></i> Aceptar&nbsp;</button>
+		</div>
+    </div>
+</ng-template>
+
+<ng-template #vistaArchivos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-paperclip"></i> Archivos adjuntos</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container-fluid idesk-content pt-0 mt-1">
+            <idesk-vistaArchivos [archivos]="arcComentarios" [personAlta]="'0'" [nombreActividad]=" " [previsualizador]="false"></idesk-vistaArchivos>
+        </div>
+    </div>
+</ng-template>

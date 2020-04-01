@@ -1,0 +1,235 @@
+<div class="sticky-top">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="23"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/examenes']"><label class="path">Exámenes</label></a>	
+            <a [routerLink]="['/examenes/nuevo']"><label class="current">Exámenes</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+        <!--div class="row align-items-center">
+            <div class="col-4 pointer">
+                <img src="assets/images/elements/reutilizar.png" class="reutilizar-icon pointer" (click)="reutilizar(reutilizarForoDisc)">&nbsp;
+                <label class="rem9 pointer" (click)="reutilizar(reutilizarForoDisc)">Reutilizar Examen&nbsp;</label>
+                <img src="assets/images/elements/info.png" class="info-icon pointer">
+            </div>
+            <div class="col-6">
+            </div>	
+            <div class="col-2 text-right">
+                <button class="btn btn-primary" (click)="vistaPrevia(vistaAlumno)" id="vista-previa" style="margin-right: 10px; margin-top: 5px;"><i class="fa fa-eye"></i> Vista Alumno</button>
+            </div>	
+        </div-->
+    
+        <div class="row">
+            <div class="col-12 border-grey-rounded">
+                <form [formGroup]="formulario">
+                    
+                    <div class="form-group row">
+                        <label for="titulo-tarea" class="col-sm-1 col-form-label text-strong"> TÍTULO </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-sm input1 input-color-1" #titulo formControlName="titulo">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="seccionesAleatorias" class="col-sm-3 col-form-label text-strong">
+                            ORDEN DE SECCIONES ALEATORIO</label>
+                        <div class="col-2">
+                            <label class="col-form-label">No&nbsp;</label>
+                            <ui-switch #seccionesAleatorias formControlName="seccionesAleatorias"></ui-switch>
+                            <label class="col-form-label">Sí&nbsp;</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="reactivosAleatorios" class="col-sm-3 col-form-label text-strong">
+                            ORDEN DE REACTIVOS ALEATORIO</label>
+                        <div class="col-2">
+                            <label class="col-form-label">No&nbsp;</label>
+                            <ui-switch #reactivosAleatorios formControlName="reactivosAleatorios"></ui-switch>
+                            <label class="col-form-label">Sí&nbsp;</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="reactivosAleatorios" class="col-sm-3 col-form-label text-strong">
+                            TIEMPO DE EXAMEN</label>
+                        <div class="col-2">
+                            <ng-number-picker #tiempoExamen formControlName="tiempoExamen" [step]="15" [min]="15" [max]="90" [inputReadOnly]="true"></ng-number-picker>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/falso_verdadero.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/relacionar.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/completar_con_opciones.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/completar_sin_opciones.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/preguntas_abiertas.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/opcion_multiple.png" class="pointer"/>
+                        </div>
+                        <div class="col-1 mr-2">
+                            <img src="assets/images/examenes/jerarquizacion.png" class="pointer"/>
+                        </div>
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-12 text-center"><label class="text-strong">PUBLICAR</label></div>
+                        <div class="col-12 row no-gutters row-eq-height align-items-center opciones-pub-heading">
+                            <div class="col"> GRUPO </div>
+                            <div class="col-2"> FECHA DE PUBLICACIÓN </div>
+                            <div class="col-2"> FECHA DE CIERRE </div>
+                        </div>
+    
+                        <div class="col-12" *ngFor="let curso of pubCursos">
+                            <div class="row no-grutters align-items-center row-eq-height">
+                                <div class="col">
+                                    <label class="col-form-label pointer"><input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> {{ curso.materia }} - {{ curso.clave }}</label>
+                                </div>
+                                <div class="col-2 row no-gutters {{ curso.idCurso != cursoActual ? 'hidden' : undefined }}" id="pub-{{ curso.idCurso }}">
+                                    <div class="col-9 text-center">
+                                        <input type="text" class="form-control form-control-sm input3 calendar" id="publicacion-{{ curso.idCurso }}" [value]="fechaPublicacionSeleccionada" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" readonly>
+                                        <owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt1></owl-date-time>
+                                    </div>
+                                    <div class="col-2 text-center icon-main-color" [owlDateTimeTrigger]="dt1">
+                                        &nbsp;<i class="far fa-calendar-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="col-2 row no-gutters {{ curso.idCurso != cursoActual ? 'hidden' : undefined }}" id="cie-{{ curso.idCurso }}">
+                                    <div class="col-9 text-center">
+                                        <input type="text" class="form-control form-control-sm input3 calendar" id="cierre-{{ curso.idCurso }}" [value]="fechaCierreSeleccionada" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" (click)="setStartAt()" readonly>
+                                        <owl-date-time stepMinute="10" [startAt]="startAt" pickerMode="dialog" #dt2></owl-date-time>
+                                    </div>
+                                    <div class="col-2 text-center icon-main-color" (click)="setStartAt()" [owlDateTimeTrigger]="dt2">
+                                        &nbsp;<i class="far fa-calendar-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+    
+                       </div>
+    
+                    </div>
+    
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">
+                            <button class="btn btn-primary btn-sm" (click)="validaExamen()"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </div>
+                        
+                </form>
+            </div>
+        </div>
+    
+    </div>
+    
+    <ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+        <div class="container-fluid">
+            <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+        </div>
+    </ngx-smart-modal>
+    
+    <ng-template #altaTema let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-edit"></i> Alta Tema</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-altaTema (temaAlta)="tema($event)"></idesk-altaTema>
+        </div>
+    </ng-template>
+    
+    <ng-template #generarEquipos let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-users"></i> Generar Equipos: {{ modalidadEquipos }}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-generaEquipos (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Aleatorio'"></idesk-generaEquipos>
+            <idesk-equipoAsignado (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Asignado'"></idesk-equipoAsignado>
+        </div>
+    </ng-template>
+    
+    <ng-template #muestraEquipos let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada" *ngIf="idPlantillaSolicitada > 0"></idesk-vistaEquipos>
+        <div class="container-fluid idesk-content" *ngIf="idPlantillaSolicitada <= 0">
+            <div class="row">
+				<div class="col-12">
+					No es posible crear o modificar equipos después de que haya pasado la fecha de publicación.
+				</div>
+			</div>
+		</div>
+        </div>
+    </ng-template>
+    
+    <ng-template #reutilizarForoDisc let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-sync"></i> Reutilizar Foro de Discusión</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-reutilizarForoDisc (regresarReutilizado)="reutilizado($event)"></idesk-reutilizarForoDisc>
+        </div>
+    </ng-template>
+    
+    <ng-template #altaRubricas let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-plus"></i> Nueva Rúbrica</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-altaRubrica [altaExterna]="altaE" (alta)="rubrica($event)"></idesk-altaRubrica>
+        </div>
+    </ng-template>
+    
+    <ng-template #rubricasEx let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-plus"></i> Rúbricas IEST</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-rubricaExistente (regresarRubrica)="rubrica($event)"></idesk-rubricaExistente>
+        </div>
+    </ng-template>
+    
+    <ng-template #vistaAlumno let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-eye"></i> Vista Alumno</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <idesk-infoForoDisc [vistaAlumno]="true" [vistaPreviaForo]="vistaPreviaForo"></idesk-infoForoDisc>
+        </div>
+    </ng-template>

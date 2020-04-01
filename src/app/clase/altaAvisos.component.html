@@ -1,0 +1,108 @@
+<div class="container-fluid idesk-content">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <form [formGroup]="aviso">
+                <div class="form-group row">
+                    <label for="titulo" class="col-sm-2 col-form-label text-strong">TÍTULO </label>
+                    <div class="col-sm-10">
+                        <input type="text" #titulo formControlName="titulo" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="mensaje" class="col-sm-12 col-form-label text-strong">MENSAJE </label>
+                    <div class="col-sm-12">
+                        <textarea [froalaEditor]="options" formControlName="mensaje" #mensaje></textarea>
+                    </div>
+                </div>
+                <div class="form row">
+                    <div class="col-12">
+                        <idesk-audio (adjuntaAudio)="agregaAudio($event)" ></idesk-audio>
+                    </div>
+
+					<div id="buttonset" *ngIf="idAudio > 0" class="row align-items-center row-eq-height">
+						<div class="col-12">
+							&nbsp;&nbsp;
+							<button class="btn btn-sm support" (click)="confEliminar()">
+								<img src="assets/images/elements/delete.png" class="audio-controls" />
+							</button>
+							&nbsp;&nbsp;
+							<audio id="audio" controls="controls" preload="none"></audio>
+						</div>
+					</div>
+                </div>
+                
+                <div class="form-group col-12 d-flex flex-column border-top-0 border rounded-lg my-2 p-0" style="margin-top: 10px">
+                    <div class="w-100 flex-fill text-center ">
+                        <label class="text-strong rounded-t-lg opciones-pub-heading">PUBLICAR</label>
+                    </div>
+
+					<div class="col-12 row no-gutters row-eq-height">
+						<div class="col-8 font-weight-bold font-size-xs border-bottom mr-2 text-center">GRUPO</div>
+                        <div class="col font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE PUBLICACIÓN</div>
+                        <div class="col font-weight-bold font-size-xs border-bottom text-center">FECHA DE CADUCIDAD</div>
+                    </div>
+
+                    <div class="col-12" *ngFor="let curso of pubCursos">
+                        <div class="row no-grutters align-items-center row-eq-height">
+                            <div class="col-8">
+                                <div>
+                                    <label class="col-form-label">
+                                        <input class="form-check-input" type="checkbox" id="curso-{{ curso.idCurso }}" [value]="curso.idCurso" [checked]="curso.idCurso == cursoActual" [disabled]="curso.idCurso == cursoActual" (change)="revisa($event)"> {{ curso.materia }} - {{ curso.clave }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col row no-gutters {{ curso.idCurso != cursoActual ? 'hidden' : undefined }}" id="pub-{{ curso.idCurso }}">
+                                <div class="col-10 text-center">
+                                    <input type="text" class="form-control form-control-sm input3 calendar" id="publicacion-{{ curso.idCurso }}" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" [value]="hoy" readonly>
+									<owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt1></owl-date-time>
+                                </div>
+                                <div class="col text-center" [owlDateTimeTrigger]="dt1">
+                                    <label class="icon-main-color">
+                                        &nbsp;<i class="far fa-calendar-alt"></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col row no-gutters {{ curso.idCurso != cursoActual ? 'hidden' : undefined }}" id="cad-{{ curso.idCurso }}">
+                                <div class="col-10 text-center">
+                                    <input type="text" class="form-control form-control-sm input3 calendar" id="caducidad-{{ curso.idCurso }}" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" readonly>
+									<owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt2></owl-date-time>
+                                </div>
+                                <div class="col text-center" [owlDateTimeTrigger]="dt2">
+                                    <label class="icon-main-color">
+                                        &nbsp;<i class="far fa-calendar-alt"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary btn-sm" (click)="validaAviso()"><i class="fas fa-save"></i> Guardar</button>
+                        &nbsp;&nbsp;
+                        <button class="btn btn-tertiary btn-sm" (click)="cancelaAviso()"><i class="fas fa-times"></i> Cancelar</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<ngx-smart-modal #dialogoInformacionAviso identifier="dialogoInformacionAviso" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensajeDialogo" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #confirmarEliminacion identifier="confirmarEliminacion" style="position: fixed; z-index: 1000;" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-confirmaElimina [queEs]="elementoEliminar" (respuesta)="confirmarCerrado($event)"></idesk-confirmaElimina>
+    </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #confirmacionDialog identifier="confirmacionDialog" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="1" [mensajePrincipal]="mensajeDialogo" [imagen]="1" [accion]="1" (respuesta)="cerrarDialogConfirmacion($event)"></confirmacion-dialogo>
+</ngx-smart-modal>
+    

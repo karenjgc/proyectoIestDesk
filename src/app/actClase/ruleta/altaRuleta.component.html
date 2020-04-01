@@ -1,0 +1,138 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="6"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/actividades-clase']"><label class="path">Actividades de Clase</label></a>
+            <a [routerLink]="['/actividades-clase/nueva']"><label class="path">Agregar</label></a>
+            <a [routerLink]="['/actividades-clase/nueva/jeopardy']"><label class="current">Ruleta</label></a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mb-4 idesk-content">
+    <!--Formulario-->
+    <div class="d-flex flex-column border rounded-lg">
+        <label class="w-100 text-center m-0 background-grey font-white font-weight-bold rounded-t-lg py-2">
+            <!--img class="img-sm" src="./assets/images/actividades/jeopardy-naranja.png"-->
+            Alta Ruleta
+        </label>
+
+        <form class="px-4 pt-3">
+
+            <!--Datos Generales-->
+            <div class="flex-fill">
+                <div class="d-flex mx-2">
+                    <label class="font-weight-bold mr-2">Titulo</label>
+                    <input type="text" class="form-control form-control-sm" name="tituloActividad" [(ngModel)]="tituloActividad">
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap my-3" *ngIf="preguntasRespuestas && preguntasRespuestas.length >= 0">
+                <ng-container *ngFor="let pregunta of preguntasRespuestas;let numPregunta = index;">
+                    <div class="flex-equipos card rounded-lg mr-3 cursor-pointer mb-2" *ngIf="pregunta.idReactivo != 0 " (click)="altaReactivo(numPregunta)">
+                        <div class="text-right">
+                            <img class="img-xs mr-2" src="./assets/images/elements/cancel.png" (click)="quitarReactivo(numPregunta)">
+                        </div>
+                        <div class="card-body text-dark pt-0">
+                            <p class="card-text">
+                                <span class="numero-reactivo bg-naranja font-weight-bold font-white">{{ numPregunta + 1 }}</span>
+                                {{ pregunta.reactivo.length > 70 ? (pregunta.reactivo | slice:0:70) + '...' : pregunta.reactivo }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex-equipos text-center border-xl-darkgray border-dashed rounded-lg py-3 cursor-pointer" *ngIf="(numPregunta + 1) == preguntasRespuestas.length" (click)="altaReactivo(numPregunta)">
+                        <img class="img-md" src="./assets/images/elements/add-black.png"> 
+                        <h4 class="p-3">Agregar Nuevo Reactivo</h4>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- Publicación a Varios Grupos -->
+            <div class="col-12 d-flex flex-column border-top-0 border rounded-lg mb-2 p-0 pb-3">
+                <div class="w-100 flex-fill text-center ">
+                    <label class="text-strong rounded-t-lg opciones-pub-heading">PUBLICAR</label>
+                </div>
+                <div class="col-12 row no-gutters row-eq-height mb-2">
+                    <div class="col font-weight-bold font-size-xs border-bottom mr-2 text-center">GRUPO</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE PUBLICACIÓN</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE CIERRE</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">MODALIDAD DE TRABAJO</div>
+                </div>
+                <div class="col-12" *ngFor="let curso of pubCursos">
+                    <ng-container *ngIf="!modoTemario || curso.idCurso == cursoActual">
+                        <form #formularioPublicacion>
+                            <div class="row no-grutters align-items-center row-eq-height">
+                                <div class="col">
+                                    <label class="col-form-label pointer"><input class="form-check-input" type="checkbox" [value]="curso.idCurso" [checked]="curso.seleccionada" [disabled]="curso.idCurso == cursoActual" (change)="curso.seleccionada = !curso.seleccionada"> {{ curso.materia }} - {{ curso.clave }}</label>
+                                </div>
+                                <ng-container *ngIf="curso.seleccionada">
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaPublicacion" [(ngModel)]="curso.fechaPublicacion" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" readonly>
+                                            <owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt1></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" [owlDateTimeTrigger]="dt1">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaCierre" [(ngModel)]="curso.fechaCierre" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" (click)="setStartAt()" [min]="curso.fechaPublicacion" readonly>
+                                            <owl-date-time stepMinute="10" [startAt]="startAt" pickerMode="dialog" #dt2></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" (click)="setStartAt()" [owlDateTimeTrigger]="dt2">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters align-items-center">
+                                        <div class="col-9 text-center">
+                                            <select class="form-control form-control-sm" name="modalidadTrabajo" [(ngModel)]="curso.modalidadTrabajo">
+                                                <ng-container *ngFor="let mt of modalidadTrabajo">
+                                                    <option [value]="mt.idModTrabajo" *ngIf="mt.idModTrabajo != 1">{{ mt.modalidadTrabajo }}</option>
+                                                </ng-container>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-2 text-center">
+                                        
+                                            <img class="pointer" width="20px" *ngIf="curso.modalidadTrabajo != 1 && !cerradoObj[curso.idCurso]" (click)="abrir(generarEquipos, curso.idCurso)" src="assets/images/elements/genera_equipo.png">
+                                            <img class="pointer" width="25px" *ngIf="curso.modalidadTrabajo != 1 && cerradoObj[curso.idCurso] && (modificaEquipos == 1 || curso.fechaPublicacion > hoy)" (click)="abrir(generarEquipos, curso.idCurso)" src="assets/images/elements/team.png">
+                                            <img class="pointer" width="25px" *ngIf="curso.modalidadTrabajo != 1 && cerradoObj[curso.idCurso] && (modificaEquipos != 1 && curso.fechaPublicacion < hoy)" (click)="verEquipos(muestraEquipos)" src="assets/images/elements/team.png">
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </form>
+                    </ng-container>
+                </div>
+            </div>
+        </form>
+
+        <!--Botones-->
+        <div class="py-2 text-center">
+            <button class="btn btn-primary btn-sm" (click)="validaActividad()" *ngIf="iestdesk.rolActual == 3 || (iestdesk.rolActual == 1 && !contenidoEditor)"><i class="fas fa-save"></i> Guardar</button>
+        </div>
+        
+    </div>
+</div>
+
+<!--Generar equipos-->
+<ng-template #generarEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-users"></i> Generar Equipos: {{ modalidadEquipos }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-generaEquipos (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Aleatorio'"></idesk-generaEquipos>
+        <idesk-equipoAsignado (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Asignado'"></idesk-equipoAsignado>
+    </div>
+</ng-template>
+
+<!--Modal-->
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="imagenDialog" [accion]="accionDialog" (respuesta)="cierraDialogoInfo($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

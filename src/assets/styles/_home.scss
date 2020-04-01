@@ -1,0 +1,107 @@
+.idesk-section {
+	background-color: $mercury;
+	font-size: 1.2em;
+    font-weight: 600;
+    .mis-clases {
+        color: $academico
+    }
+    .mis-capacitaciones {
+        color: $capacitaciones;
+    }
+    .mis-cursos-ec {
+        color: $educacionContinua;
+    }
+    .mis-cursos-epad {
+        color: $epads;
+    }
+}
+.subjects-home { 
+    cursor: pointer; 
+	border-color: transparent;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.card-body { 
+    color: $white; 
+    font-size: 1rem !important;
+	border-radius: 10px 10px 0 0;
+	font-weight: 500; 
+    min-height: 112px;
+}
+
+.academico {
+	.card-body { 
+        background-color: $academico; 
+    }
+    .hvr-shutter-out-vertical {
+        &:before {
+            background-color: $darkAcademico !important;
+            border-radius: 10px 10px 0 0 !important;
+        }
+    }
+}
+
+.capacitacion {
+    .card-body { 
+        background-color: $capacitaciones; 
+    }
+    .hvr-shutter-out-vertical {
+        &:before {
+            background-color: $darkCapacitaciones !important;
+            border-radius: 10px 10px 0 0 !important;
+        }
+    }
+}
+
+.educacion-continua {
+    .card-body { 
+        background-color: $educacionContinua; 
+    }
+    .hvr-shutter-out-vertical {
+        &:before {
+            background-color: $darkEducacionContinua !important;
+            border-radius: 10px 10px 0 0 !important;
+        }
+    }
+}
+
+.epads {
+    .card-body { 
+        background-color: $epads; 
+    }
+    .hvr-shutter-out-vertical {
+        &:before {
+            background-color: $darkEpads !important;
+            border-radius: 10px 10px 0 0 !important;
+        }
+    }
+}
+
+.subjects-footer {
+	background-color: $notSoBlack; 
+	font-size: 0.85em !important;
+	font-weight: 100;
+	color: $white; 
+    border-radius: 0 0 10px 10px !important;
+    min-height: 45px;
+}
+
+.contenido-nuevo[data-badge]:after {
+	content: attr(data-badge);
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	font-size: 1.8em;
+	background: $notSoGray;
+	color: $black;
+	font-weight: 900;
+	width: 35px;
+	height: 35px;
+	text-align: center;
+	line-height: 1.2em;
+	border-radius: 50%;
+	border-color: $white;
+	box-shadow: 0 0 6px $white;
+}

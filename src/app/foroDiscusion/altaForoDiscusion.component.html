@@ -1,0 +1,416 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="4"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>
+            <a [routerLink]="['/foro-discusion']"><label class="path">Foro de Discusión</label></a>
+            <label class="current">{{ titulito }}</label>
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+        
+    <div class="d-flex flex-column border rounded-lg">
+        <label *ngIf="!modoTemario" class="w-100 text-center m-0 background-grey font-white font-weight-bold rounded-t-lg py-2">
+            {{ titulito }}
+        </label>
+        <div class="row align-items-center px-4 pt-3">
+            <div class="col-4 pointer">
+                <img src="assets/images/elements/reutilizar.png" class="reutilizar-icon pointer" (click)="reutilizar(reutilizarForoDisc)">&nbsp;
+                <label class="rem9 pointer" (click)="reutilizar(reutilizarForoDisc)">Reutilizar Foro de Discusión&nbsp;</label>
+                <ng-template #reuForo>Asigna un foro que hayas utilizado previamente.</ng-template>
+                <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="reuForo" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+            </div>
+            <div class="col-6">
+            </div>	
+            <div class="col-2 text-right">
+                <button class="btn btn-sm btn-primary" (click)="vistaPrevia(vistaAlumno)" id="vista-previa" style="margin-right: 10px; margin-top: 5px;"><i class="fa fa-eye"></i> Vista Alumno</button>
+            </div>	
+        </div>
+
+        <form [formGroup]="formulario" class="px-4 pt-3">
+            
+            <div class="form-group row">
+                <label for="titulo-tarea" class="col-sm-1 col-form-label text-strong"> TÍTULO <span class="obligatorio">*</span>&nbsp;</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control form-control-sm input1 input-color-1" #titulo formControlName="titulo">
+                </div>
+            </div>
+            <div class="form-group row">
+                <ng-template #objI>Redacta el objetivo de aprendizaje del foro.</ng-template>
+                <label for="objetivo" class="col-sm-12 col-form-label text-strong">
+                    OBJETIVO &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="objI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-sm-12">
+                    <textarea [froalaEditor]="options" formControlName="objetivo" class="froala" #objetivo></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <ng-template #actI>Detalla lo que alumno debe realizar antes de participar en el foro, por ejemplo: leer un texto, ver un video, realizar una investigación, estudio de casos, etc.</ng-template>
+                <label for="actividadesAntes" class="col-sm-12 col-form-label text-strong">
+                    ACTIVIDADES A REALIZAR ANTES DE PARTICIPAR&nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="actI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-sm-12">
+                    <textarea [froalaEditor]="options" formControlName="actividadesAntes" class="froala" #actividadesAntes></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <ng-template #desI>Escribe las instrucciones que describen lo que los alumnos deben hacer, así como cualquier lineamiento que consideres necesario.</ng-template>
+                <label for="descripcion" class="col-sm-12 col-form-label text-strong">
+                    INSTRUCCIONES&nbsp;<span class="obligatorio">*</span>&nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="desI" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-sm-12">
+                    <textarea [froalaEditor]="options" formControlName="descripcion" class="froala" #descripcion></textarea>
+                </div>
+            </div>
+            <div class="form-group d-inline-flex w-100 align-items-center">
+                <ng-template #aportI>Las aportaciones mínimas son las veces que el alumno deberá escribir una aportación principal al foro.</ng-template>
+                <label for="aportacionMinima" class="col-form-label text-strong">
+                    APORTACIÓN MÍNIMA &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="aportI" placement="right" tooltipClass="tooltip-info" triggers="click:blur"> &nbsp; &nbsp;
+                </label>
+                <div class="w-5">
+                    <select class="form-control input1 form-control-sm" #aportacionMinima formControlName="aportacionMinima"> 
+                        <option value="1"> 1 </option>
+                        <option value="2"> 2 </option>
+                        <option value="3"> 3 </option>
+                        <option value="4"> 4 </option>
+                        <option value="5"> 5 </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group d-inline-flex w-100 align-items-center">
+                <ng-template #retroI>Las retroalimentaciones mínimas son las veces que el alumno deberá retroalimentar a sus compañeros. La retroalimentación se da como respuesta a una aportación principal.</ng-template>
+                <label for="retroMinima" class="col-form-label text-strong">
+                    RETROALIMENTACIÓN MÍNIMA &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="retroI" placement="right" tooltipClass="tooltip-info" triggers="click:blur"> &nbsp; &nbsp;
+                </label>
+                <div class="w-5">
+                    <select class="form-control input1 form-control-sm" #retroMinima formControlName="retroMinima"> 
+                        <option value="1"> 1 </option>
+                        <option value="2"> 2 </option>
+                        <option value="3"> 3 </option>
+                        <option value="4"> 4 </option>
+                        <option value="5"> 5 </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <ng-template #archAd>Adjunta un archivo desde tu computadora, de Google Drive o un enlace a un video o una página web.</ng-template>
+                <label class="col-sm-12 col-form-label text-strong">
+                    ARCHIVOS ADJUNTOS &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="archAd" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-12">
+                    <idesk-adjuntarArchivos [esEdicion]="editando" (archivosAdjuntados)="archivos($event)" (respuesta)="getRespuesta($event, 2)"></idesk-adjuntarArchivos>
+                </div>
+                <div class="col-12">
+                    <!--idesk-links [esEdicion]="editando" (linksAdjuntos)="links($event)" [tipoAdjunto]="1"></idesk-links-->
+                    <idesk-docsLink [esEdicion]="editando" (linksAdjuntos)="links($event)" [tipoAdjunto]="1"></idesk-docsLink>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <ng-template #aspEv>Indica a tus alumnos cómo serán evaluados y lo que se espera de ellos en cuanto a requerimientos específicos, lineamientos, tiempos, calidad del trabajo, etc.</ng-template>
+                <label for="aspectosEvaluacion" class="col-sm-12 col-form-label text-strong">
+                    ASPECTOS DE EVALUACIÓN &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="aspEv" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-sm-12">
+                    <textarea [froalaEditor]="options" class="froala" #aspectosEvaluacion formControlName="aspectosEvaluacion"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row" id="rubricaExterna" *ngIf="idRubrica == 0">
+                <ng-template #rubExt>Adjunta un archivo de una rúbrica desde tu computadora o Drive. Agrega un enlace a una rúbrica en línea.</ng-template>
+                <label for="aspectosEvaluacion" class="col-sm-12 col-form-label text-strong">
+                    RÚBRICA EXTERNA &nbsp;
+                    <img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="rubExt" placement="right" tooltipClass="tooltip-info" triggers="click:blur">
+                </label>
+                <div class="col-sm-12" *ngIf="idRubricaExternaLink == 0">
+                    <idesk-adjuntaUnArchivo [esEdicion]="editando == 0 ? false : true" [idArchivoObtenido]="idRubricaExterna" (archivosAdjuntos)="obtenRespuesta($event)" (respuesta)="getRespuesta($event)"></idesk-adjuntaUnArchivo>
+                </div>
+                <div class="col-sm-12" *ngIf="idRubricaExterna == 0">
+                    <idesk-docsLink [esEdicion]="editando" (linksAdjuntos)="linksRubrica($event)" [tipoAdjunto]="3"></idesk-docsLink>
+                </div>
+            </div>
+
+            <div class="form-group d-inline-flex w-100 align-items-center" id="rubricaIEST" *ngIf="idRubricaExterna == 0 && idRubricaExternaLink == 0">
+                <ng-template #rubInt>Diseña o reutiliza una rúbrica IEST existente para activar la función automática de "evaluar con rúbrica".</ng-template>
+                <div class="d-flex w-50">
+					<div class="flex-fill w-10 my-auto col-form-label text-strong">
+						RÚBRICA IEST&nbsp;
+						<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="rubInt" placement="right" tooltipClass="tooltip-info" triggers="click:blur">&nbsp;&nbsp;
+					</div>
+					
+					<div class="flex-fill w-60 ml-1" *ngIf="idRubrica == 0">
+						<button type="button" class="btn btn-primary btn-sm pointer d-inline mr-1" (click)="abreModalNgTemplate(rubricasEx)">Existente</button>
+						<button type="button" class="btn btn-primary btn-sm pointer d-inline ml-1" (click)="abreModalNgTemplate(altaRubricas)">Nueva</button>
+					</div>
+				</div>
+                <div class="row col-sm-12" *ngIf="idRubrica != 0"> 
+                    <div class="col-12 acordion-info my-1 ml-2">
+                        
+                        <div class="col-12" style="font-size: 1rem;">
+                            <span (click)="abreModalNgTemplate(vistaRubrica)" class="pointer">{{ tituloRubrica }}</span> 
+                            &nbsp;&nbsp;<span class="icon-main-color pointer" (click)="eliminaRubrica()"><i class="fas fa-times"></i></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group d-inline-flex w-100 align-items-center">
+                <label for="permiteArchivos" class="col-form-label text-strong">
+                    PERMITIR ADJUNTAR ARCHIVOS A COMENTARIOS&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <div class="w-20">
+                    <label class="col-form-label">No&nbsp;</label>
+                    <ui-switch #permiteArchivos formControlName="permiteArchivos"></ui-switch>
+                    <label class="col-form-label">Sí&nbsp;</label>
+                </div>
+            </div>
+
+            <div class="form-group col-12 d-flex flex-column border-top-0 border rounded-lg my-2 p-0">
+                <div class="w-100 flex-fill text-center ">
+                    <label *ngIf="iestdesk.rolActual == 1 || (iestdesk.rolActual == 3 && editorService.esAsignado == 1)" class="text-strong rounded-t-lg opciones-pub-heading">PUBLICAR</label>
+                    <label *ngIf="iestdesk.rolActual == 3 && editorService.esAsignado == 0" class="text-strong rounded-t-lg opciones-pub-heading">TEMA</label>
+                </div>
+                <div class="col-12 row no-gutters row-eq-height" *ngIf="iestdesk.rolActual == 1">
+                    <div class="col font-weight-bold font-size-xs border-bottom mr-2 text-center">GRUPO</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE PUBLICACIÓN</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE CIERRE</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom text-center">
+                        TEMA&nbsp;
+                        <img src="assets/images/elements/nuevo.png" class="pointer" width="20px" (click)="nuevoTema()" ngbTooltip="Asigna la tarea a un tema existente o a un tema nuevo" *ngIf="!modoTemario && mostrarAltaTema">
+                    </div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom text-center">
+                        MODALIDAD DE TRABAJO
+                        <ng-template #modTrab>Selecciona la modalidad de trabajo para realizar la tarea:<br>- Individual <br>- Grupal Aleatorio (el IEST Desk forma los equipos) <br>- Grupal Asignado (el maestro forma los equipos)</ng-template>
+                        &nbsp;<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="modTrab" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+                    </div>
+                </div>
+                <div class="col-12 row no-gutters row-eq-height" *ngIf="iestdesk.rolActual == 3 && editorService.esAsignado == 1">
+                    <div class="col font-weight-bold font-size-xs border-bottom mr-2 text-center">TEMA</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE PUBLICACIÓN</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom mr-2 text-center">FECHA DE CIERRE</div>
+                    <div class="col-2 font-weight-bold font-size-xs border-bottom text-center">
+                        MODALIDAD DE TRABAJO
+                        <ng-template #modTrab>Selecciona la modalidad de trabajo para realizar la tarea:<br>- Individual <br>- Grupal Aleatorio (el IEST Desk forma los equipos) <br>- Grupal Asignado (el maestro forma los equipos)</ng-template>
+                        &nbsp;<img src="assets/images/elements/info.png" class="info-icon pointer" [ngbTooltip]="modTrab" placement="left" tooltipClass="tooltip-info" triggers="click:blur">
+                    </div>
+                </div>
+                <ng-container *ngIf="iestdesk.rolActual == 3">
+                    <div class="col-12">
+                        <form #formularioChido>
+                            <div class="row no-grutters align-items-center row-eq-height">
+                                <div class="col-6 row no-gutters my-2 mb-2" [ngClass]="{'col-12' : editorService.esAsignado == 0}" *ngIf="temasCursos[cursoActual]">
+                                    <select class="form-control form-control-sm" name="tema" [(ngModel)]="temaSeleccionado">
+                                        <option *ngFor="let tema of temasCursos[cursoActual]; let i = index;" [selected]="temaSeleccionado == tema.idTema" [value]="tema.idTema">{{ i + 1 }}. {{ tema.tema }}</option>
+                                    </select>
+                                </div>
+                                <ng-container *ngIf="editorService.esAsignado == 1 && iestdesk.rolActual == 3">
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaPublicacion" [(ngModel)]="formulario.value.fechaPublicacion" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" readonly>
+                                            <owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt1></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" [owlDateTimeTrigger]="dt1">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaCierre" [(ngModel)]="formulario.value.fechaCierre" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" (click)="setStartAt()" [min]="formulario.value.fechaPublicacion" readonly>
+                                            <owl-date-time stepMinute="10" [startAt]="startAt" pickerMode="dialog" #dt2></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" (click)="setStartAt()" [owlDateTimeTrigger]="dt2">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters align-items-center">
+                                        <div class="col-9 text-center">
+                                            <select class="form-control form-control-sm" name="modalidadTrabajo" [(ngModel)]="formulario.value.idModTrabajo" (change)="revisaMostrarAlerta(formulario.value.idModTrabajo)">
+                                                <option *ngFor="let mt of modalidadTrabajo" [selected]="modalidadTrabajoSeleccionada == mt.idModTrabajo" [value]="mt.idModTrabajo">{{ mt.modalidadTrabajo }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            <img class="pointer" width="20px" *ngIf="formulario.value.idModTrabajo != 1 && !cerradoObj[this.iestdesk.idCursoActual]" (click)="abrir(generarEquipos, formulario.value)" src="assets/images/elements/genera_equipo.png">
+                                            <img class="pointer" width="25px" *ngIf="formulario.value.idModTrabajo != 1 && cerradoObj[this.iestdesk.idCursoActual] && (modificaEquipos == 1 || formulario.value.fechaPublicacion > hoy)" (click)="abrir(generarEquipos, formulario.value)" src="assets/images/elements/team.png">
+                                            <img class="pointer" width="25px" *ngIf="formulario.value.idModTrabajo != 1 && cerradoObj[this.iestdesk.idCursoActual] && (modificaEquipos != 1 && formulario.value.fechaPublicacion < hoy)" (click)="abreModalNgTemplate(muestraEquipos)" src="assets/images/elements/team.png">
+                                        </div>
+                                    </div>
+                                </ng-container> 
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="iestdesk.rolActual != 3">
+                    <div class="col-12" *ngFor="let curso of pubCursos">
+                        <form #formularioChido>
+                            <div class="row no-grutters align-items-center row-eq-height">
+                                <div class="col">
+                                    <label class="col-form-label pointer"><input class="form-check-input" type="checkbox" [value]="curso.idCurso" [checked]="curso.seleccionada" [disabled]="curso.idCurso == cursoActual" (change)="curso.seleccionada = !curso.seleccionada"> {{ curso.materia }} - {{ curso.clave }}</label>
+                                </div>
+                                <ng-container *ngIf="curso.seleccionada">
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaPublicacion" [(ngModel)]="curso.fechaPublicacion" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" readonly>
+                                            <owl-date-time [pickerType]="'calendar'" pickerMode="dialog" #dt1></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" [owlDateTimeTrigger]="dt1">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters">
+                                        <div class="col-9 text-center">
+                                            <input type="text" class="form-control form-control-sm input3 calendar" name="fechaCierre" [(ngModel)]="curso.fechaCierre" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" (click)="setStartAt()" [min]="curso.fechaPublicacion" readonly>
+                                            <owl-date-time stepMinute="10" [startAt]="startAt" pickerMode="dialog" #dt2></owl-date-time>
+                                        </div>
+                                        <div class="col-2 text-center icon-main-color" (click)="setStartAt()" [owlDateTimeTrigger]="dt2">
+                                            &nbsp;<i class="far fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 row no-gutters">
+                                        <select class="form-control form-control-sm" name="tema" [(ngModel)]="curso.tema">
+                                            <option *ngFor="let tema of temasCursos[curso.idCurso]; let i = index;" [selected]="temaSeleccionado == tema.idTema" [value]="tema.idTema">{{ i + 1 }}. {{ tema.tema }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-2 row no-gutters align-items-center" *ngIf="modalidadTrabajoSeleccionada">
+                                        <div class="col-9 text-center">
+                                            <select class="form-control form-control-sm" name="modalidadTrabajo" [(ngModel)]="curso.modalidadTrabajo" (change)="revisaMostrarAlerta()">
+                                                <option *ngFor="let mt of modalidadTrabajo" [selected]="modalidadTrabajoSeleccionada == mt.idModTrabajo" [value]="mt.idModTrabajo">{{ mt.modalidadTrabajo }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            <img class="pointer" *ngIf="curso.modalidadTrabajo != 1 && !cerradoObj[curso.idCurso]" width="20px" (click)="abrir(generarEquipos, curso.idCurso)" src="assets/images/elements/genera_equipo.png">
+                                            <img class="pointer" *ngIf="curso.modalidadTrabajo != 1 && cerradoObj[curso.idCurso] && (modificaEquipos == 1 || curso.fechaPublicacion > hoy)" width="25px" (click)="abrir(generarEquipos, curso.idCurso)" src="assets/images/elements/team.png">
+                                            <img class="pointer" *ngIf="curso.modalidadTrabajo != 1 && cerradoObj[curso.idCurso] && (modificaEquipos != 1 && curso.fechaPublicacion < hoy)"  width="25px" (click)="abreModalNgTemplate(muestraEquipos)" src="assets/images/elements/team.png">
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                
+                <div #errorAlSubir class="col-12 mx-auto my-2 py-2 flex-row alert-warning rounded-md" style="width: 97%" *ngIf="mostrarAlertaEquipos && (this.iestdesk.rolActual == 1 || (this.iestdesk.rolActual == 3 && this.editorService.esAsignado == 1)) && modificaEquipos != 0">
+                    <p class="m-0"><i class="fa fa-exclamation-triangle"></i>&nbsp; No olvide formar los equipos de trabajo en las materias donde seleccionó modalidad grupal.</p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary btn-sm" (click)="validaForo()" *ngIf="iestdesk.rolActual == 3 || (iestdesk.rolActual == 1 && !contenidoEditor)"><i class="fas fa-save"></i> Guardar</button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-light btn-sm" *ngIf="!modoTemario" (click)="cancelaAlta()"><i class="fas fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+                
+        </form>
+    </div>
+
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+    <div class="container-fluid">
+        <idesk-infoDialogo [mensaje]="mensaje" [tipo]="tipoRespuesta" (respuesta)="cierraDialogoInfo($event)"></idesk-infoDialogo>
+    </div>
+</ngx-smart-modal>
+
+<ng-template #generarEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-users"></i> Generar Equipos: {{ modalidadEquipos }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-generaEquipos (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Aleatorio'"></idesk-generaEquipos>
+		<idesk-equipoAsignado (estaCerrado)="altaCerrada($event)" [idPlantillaSolicitada]="idPlantillaSolicitada" *ngIf="modalidadEquipos == 'Asignado'"></idesk-equipoAsignado>
+    </div>
+</ng-template>
+
+<ng-template #muestraEquipos let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-users"></i> Equipo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<idesk-vistaEquipos [idPlantillaEquipos]="idPlantillaSolicitada" *ngIf="idPlantillaSolicitada > 0"></idesk-vistaEquipos>
+        <div class="container-fluid idesk-content" *ngIf="idPlantillaSolicitada <= 0">
+            <div class="row">
+				<div class="col-12">
+					No es posible crear o modificar equipos después de que haya pasado la fecha de publicación.
+				</div>
+			</div>
+		</div>
+    </div>
+</ng-template>
+
+<ng-template #reutilizarForoDisc let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-sync"></i> Reutilizar Foro de Discusión</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-reutilizarForoDisc (regresarReutilizado)="reutilizado($event)"></idesk-reutilizarForoDisc>
+    </div>
+</ng-template>
+
+<ng-template #altaRubricas let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-plus"></i> Nueva Rúbrica</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-altaRubrica [altaExterna]="altaE" (alta)="rubrica($event)"></idesk-altaRubrica>
+    </div>
+</ng-template>
+
+<ng-template #rubricasEx let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-plus"></i> Rúbricas IEST</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-rubricaExistente (regresarRubrica)="rubrica($event)"></idesk-rubricaExistente>
+    </div>
+</ng-template>
+
+<ng-template #vistaRubrica let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-table"></i> Rúbrica IEST</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-vistaRubrica [vistaAlumno]="true"></idesk-vistaRubrica>
+    </div>
+</ng-template>
+
+<ng-template #vistaAlumno let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-eye"></i> Vista Alumno</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <idesk-infoForoDisc [vistaAlumno]="true" [vistaPreviaForo]="vistaPreviaForo"></idesk-infoForoDisc>
+    </div>
+</ng-template>

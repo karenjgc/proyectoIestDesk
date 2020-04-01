@@ -1,0 +1,54 @@
+﻿<div class="container-fluid px-5 py-0 orden-temas">
+		<div class="d-flex my-3 mr-2">
+			<div class="flex-fill">
+				<button class="btn btn-primary btn-sm font-white float-right" (click)="abreDialogo()">
+					<i class="fas fa-clone mr-2"></i>Clonar Molde
+				</button>
+			</div>
+		</div>
+
+
+		<div class="rounded-md px-2 pb-2" *ngIf="editorService.listadoClones.length > 0">
+			<div class="angular-datatable p-1">
+				<vista-clones (abrirDialogo)="abreDialogo($event)" *ngIf="editorService.mostrarTablaFetos"></vista-clones>
+			</div>
+		</div>
+
+		<div class="d-flex border rounded-md px-3" *ngIf="this.editorService.listadoClones.length == 0">
+			<div class="flex-fill p-2 text-center">
+				<label class="text-strong my-2">ESTA MATERIA NO HA SIDO CLONADA</label>
+			</div>
+		</div>
+	
+</div>
+
+<!--ng-template #clonar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-clone mr-2"></i>Clonar Molde</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+		<div class="d-flex mx-3 my-2">
+			<div class="flex-fill col-form-label text-strong text-right w-10 mr-3" for="nombreClon">Nombre: </div>
+			<div class="flex-fill w-90"><input type="text" class="form-control" [(ngModel)]="formClon.nombre" #nombreClon></div>
+		</div>
+		<div class="d-flex mx-3 my-2">
+			<div class="flex-fill col-form-label text-strong text-right w-10 mr-3" for="descripcionClon">Descripción: </div>
+			<div class="flex-fill w-90">	
+				<textarea [froalaEditor]="options" class="froala" [(ngModel)]="formClon.descripcion" #descripcionClon></textarea>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="col-12 text-center">
+				<button class="btn btn-primary btn-sm" (click)="clonarMolde()"><i class="fas fa-save mr-1"></i>Guardar</button>
+				&nbsp;&nbsp;
+				<button class="btn btn-light btn-sm" (click)="cerrar(0)"><i class="fas fa-times mr-1"></i>Cancelar</button>
+			</div>
+		</div>
+    </div>
+	<ngx-smart-modal #dialogoInformacionClonar identifier="dialogoInformacionClonar" [closable]="false" [escapable]="false" [dismissable]="false">
+		<confirmacion-dialogo [tipo]="2" [mensajePrincipal]="mensajeDialog" [imagen]="imagenDialog" [accion]="accionDialog" (respuesta)="cierraDialogoInfo($event)"></confirmacion-dialogo>
+	</ngx-smart-modal>
+</ng-template-->

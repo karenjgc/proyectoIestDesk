@@ -1,0 +1,18 @@
+  <tag-input  
+            [(ngModel)]="editorService.tags"
+            [identifyBy]="'value'"
+            [displayBy]="'display'"
+            [onlyFromAutocomplete]="true" 
+            (onAdd)="enviarTags($event)"
+            (onRemove)="eliminarTags($event)"
+            [secondaryPlaceholder]="'Seleccione tags'">
+    <tag-input-dropdown
+      [autocompleteItems]="items"
+      [showDropdownIfEmpty]="false"
+      [focusFirstElement]="true"
+      [dynamicUpdate]="false"
+      [zIndex]="1600"
+    >
+    </tag-input-dropdown>
+  </tag-input>
+

@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+$dialog-position-top: 10%;
+
+@import "~bootstrap/scss/bootstrap";
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import "~ngx-smart-modal/ngx-smart-modal";
+@import "~ng-drag-drop/style.css";
+@import "assets/styles/style";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f5;
+}

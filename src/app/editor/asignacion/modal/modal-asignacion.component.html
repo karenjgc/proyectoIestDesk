@@ -1,0 +1,138 @@
+<div class='container-fluid'>
+	<div class="row">
+		<div  class="col-sm-12 p-0 m-0">
+			<div class="modal-header">
+				<ng-container [ngSwitch]="modal">
+					<h5 class="modal-title" *ngSwitchCase="1"><i class="fas fa-clone mr-2"></i>Editar Información</h5>
+					<h5 class="modal-title" *ngSwitchCase="2"><i class="fas fa-clone mr-2"></i>Asignar Molde</h5>
+					<h5 class="modal-title" *ngSwitchCase="3"><i class="fas fa-clone mr-2"></i>Clonar Molde</h5>
+				</ng-container>
+				<button class="close" aria-label="Close" type="button" (click)="closeModal(0)">
+					<span class="ng-tns-c1-1" aria-hidden="true">×</span>
+				</button>
+			</div>
+	
+			<!-- Clon -->
+			<ng-container *ngIf="modal == 1 || modal == 3">			
+				<div class="col-sm-12 p-2 m-0">
+					<div class="px-4 pt-2">
+						<div class="form-group d-flex w-100">
+							<div class="font-weight-bold my-auto p-1" for="nombreClon">Nombre: </div>
+							<div class="flex-fill ml-2 my-0 p-1">
+								<input type="text" [(ngModel)]="nombre" class="form-control form-control-sm input1 input-color-1" #nombreClon>
+							<!-- input type="text" class="form-control" [(ngModel)]="formClon.nombre" #nombreClon -->
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="font-weight-bold my-0 p-1" for="descripcionClon">Descripción: </label>
+							<textarea [froalaEditor]="options" class="froala" [(ngModel)]="descripcion" #descripcionClon></textarea>
+						<!-- textarea [froalaEditor]="options" class="froala" [(ngModel)]="formClon.descripcion" #descripcionClon></textarea -->
+						</div>
+					</div>
+				</div>	
+			</ng-container>
+			
+			<ng-container *ngIf="modal == 2">
+			<!--Asignación-->
+				<div class="col-sm-12 p-2 m-0">
+					<ngb-tabset (tabChange)="ocultarBotones($event)">
+						<ngb-tab title="Asignar" id="asignar">
+							<ng-template ngbTabContent>
+								<div class="px-4 pt-2">
+									<div class="form-group d-flex w-100">
+										<div class="font-weight-bold my-auto p-1 w-7">Sección: </div>
+										<div class="flex-fill ml-2 p-1 my-0">
+											<input type="text" [value]="formAsigna.seccion" [ngbTypeahead]="search" [resultTemplate]="rt" (selectItem)="obtenMaestroSeleccionado($event)" class="form-control form-control-sm input1 input-color-1">
+											<ng-template #rt let-r="result" let-t="term">
+												<div class="cursor">
+													<div>
+														<label [innerHTML]="'Sección '+r.seccion+' - '+r.maestro"></label>
+													</div>
+												</div>
+											</ng-template>
+										</div>
+									</div>
+									<div class="form-group d-flex w-100">
+										<div class="font-weight-bold my-auto p-1 w-7">Profesor: </div>
+										<div class="flex-fill ml-2 p-1 my-0">
+											<input type="text" [(ngModel)]="formAsigna.nombreMaestro" readonly class="form-control form-control-sm input1 input-color-1">
+										</div>
+									</div>
+									<!--div class="form-group d-flex w-100">
+										<div class="font-weight-bold my-auto p-1">Correo del profesor: </div>
+										<div class="flex-fill ml-2 my-0 p-1">
+											<input type="text" [(ngModel)]="formCorreo.correo" class="form-control form-control-sm input1 input-color-1" readonly>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="font-weight-bold my-0 p-1">Texto: </label>
+										<textarea [froalaEditor]="options" class="froala" [(ngModel)]="formCorreo.texto"></textarea>        
+									</div-->
+								</div>
+							</ng-template>
+						</ngb-tab>
+						<ngb-tab title="Folio" id="folio">
+							<ng-template ngbTabContent>
+								<div class="px-4 pt-2">
+									<div class="form-group d-flex w-100">
+										<label class="font-weight-bold my-0 p-1">Molde: </label>
+										<div class="flex-fill ml-2 p-1 bg-gris-muy-claro my-0">{{ editorService.materia.materia }} - {{ editorService.materia.ClaveAlfa }}</div>
+									</div>
+									<div class="form-group d-flex w-100">
+										<label class="font-weight-bold my-0 p-1">Molde clonado: </label>
+										<div class="flex-fill ml-2 p-1 bg-gris-muy-claro my-0">{{ form.nombre }}</div>
+									</div>
+									<div class="form-group d-flex w-100">
+										<label class="font-weight-bold my-0 p-1">Folio: </label>
+										<div class="flex-fill ml-2 p-1 bg-gris-muy-claro my-0">{{ form.folio }}</div>
+									</div>
+									<!--div class="form-group">
+										<span class="ml-2 c-rojo font-weight-bold">*</span><label class="font-italic my-0 p-1">Rellene los siguientes campos si desea enviarle un correo al profesor al que se le asignará esta materia.</label>
+									</div>
+									<div class="form-group d-flex w-100">
+										<div class="font-weight-bold my-auto p-1">Correo del profesor: </div>
+										<div class="flex-fill ml-2 my-0 p-1">
+											<input type="text" [(ngModel)]="formCorreo.correo" class="form-control form-control-sm input1 input-color-1">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="font-weight-bold my-0 p-1">Texto: </label>
+										<textarea [froalaEditor]="options" class="froala" [(ngModel)]="formCorreo.texto"></textarea>        
+									</div-->
+								</div>
+							</ng-template>
+						</ngb-tab>
+					</ngb-tabset>
+				</div>
+			</ng-container>
+
+			<!--Alerta correo-->
+			<div class="col-sm-12 px-4 pb-3" *ngIf="muestraAlertaCorreo">
+				<!--div class="alert alert-warning" role="alert" #alertaCorreo-->
+				<div class="alert bg-danger text-white" role="alert" #alertaCorreo>
+					<i class="fas fa-exclamation-triangle mr-1"></i>No ha llenado todos los campos de envío de correo.
+				</div>
+			</div>
+
+			<!--Botones-->
+			<div class="col-sm-12 px-4 pb-3">
+				<button type="button" class="btn btn-primary float-right btn-light mb-3 ml-2" (click)="closeModal(0)">
+					<i class="fas fa-times"></i>&nbsp;Cancelar
+				</button>   
+				<button type="submit" class="btn btn-primary float-right mb-3 mx-2" (click)="validaElemento()" *ngIf="mostrarBotones && modal == 2">
+					<i class="fas fa-save"></i>&nbsp;Asignar
+				</button>
+				<button type="submit" class="btn btn-primary float-right mb-3 mx-2" (click)="validaElemento()" *ngIf="modal == 1 || modal == 3">
+					<i class="fas fa-save"></i>&nbsp;Guardar
+				</button>
+				<!--button type="button" class="btn btn-primary float-right mr-2" (click)="enviarCorreo()">
+					<i class="fas fa-envelope mr-1"></i>Enviar Correo
+				</button-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<ngx-smart-modal #dialogoInformacion identifier="dialogoInformacion" [closable]="false" [escapable]="false" [dismissable]="false">
+	<confirmacion-dialogo [tipo]="tipoDialog" [mensajePrincipal]="mensajeDialog" [mensajeOpcional]="mensajeOpcional" [imagen]="imagenDialog" [accion]="accionDialog" (respuesta)="cierraDialogoInfo($event)"></confirmacion-dialogo>
+</ngx-smart-modal>

@@ -1,0 +1,55 @@
+<div class="sticky-top" *ngIf="!modoTemario">
+    <idesk-primerNav></idesk-primerNav>
+    <idesk-segundoNav [componente]="27"></idesk-segundoNav>
+    <div class="container-fluid breadcrumbs" id="path1">
+        <div class="row">
+            <a [routerLink]="['/iestdesk']"><label class="path">Cursos</label></a>
+            <a [routerLink]="['/curso']"><label class="path">Inicio</label></a>	
+            <a [routerLink]="['/videoconferencias']"><label class="path">Videoconferencias</label></a>
+            <a><label class="current">{{ titulo }}</label></a>		
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-content">
+    <div class="row border rounded-lg p-3 justify-content-md-center">
+        <div class="col-10 text-right" *ngIf="rolActual == 1 && !vistaAlumno">
+            <button class="btn btn-primary btn-sm" id="editar" style="margin-right: 10px; margin-top: 5px;" (click)="gotoEditar(conferencia.idVideoconferencia)">
+                <i class="fas fa-pencil-alt"></i>
+                &nbsp;Editar
+            </button>
+        </div>
+        <div class="col-12" *ngIf="conferencia">
+            <div class="row">
+                <label class="text-strong col-form-label col-sm-12">TÍTULO </label>
+                <label class="col-form-label col-sm-12">{{ conferencia.titulo }}</label>
+            </div>
+            <div class="row" *ngIf="!vistaAlumno">
+                <label class="text-strong col-form-label col-sm-12" >TEMA </label>
+                <label class="col-form-label col-sm-12">{{ conferencia.tema }}</label>
+            </div>
+            <div class="row" *ngIf="!vistaAlumno">
+                <label class="text-strong col-form-label col-sm-12">FECHA DE PUBLICACIÓN </label>
+                <label class="col-form-label col-sm-12">{{ conferencia.fechaPublicacion }}</label>
+            </div>
+            <div class="row" *ngIf="!vistaAlumno">
+                <label class="text-strong col-form-label col-sm-12">FECHA DE TRANSMISIÓN </label>
+                <label class="col-form-label col-sm-12">{{ conferencia.fechaTransmision }}</label>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label class="text-strong col-form-label">DESCRIPCIÓN </label>
+                </div>
+                <div class="col-12 col-form-label" [innerHTML]="conferencia.descripcion | safeHtml"></div>
+            </div>
+            <div class="row">
+                <label class="text-strong col-form-label col-sm-12">DURACIÓN </label>
+                <label class="col-form-label col-sm-12">{{ conferencia.duracion }} minutos</label>
+            </div>
+            <div class="row">
+                <label class="text-strong col-form-label col-sm-12">ENLACE </label>
+                <label class="col-form-label col-sm-12"><a [href]="conferencia.enlace" target="_blank">{{ conferencia.enlace }}</a></label>
+            </div>
+            <br>&nbsp;
+        </div>
+    </div>
+</div>

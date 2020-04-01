@@ -1,0 +1,48 @@
+<div class="sticky-top">
+    <!--idesk-primerNav #primerNav [idPerson]="usuario" [roles]="rol"></idesk-primerNav-->
+    <idesk-primerNav #primerNav></idesk-primerNav>
+</div>
+<div class="container-fluid idesk-home" *ngIf="tieneCursos == 1">
+    <div class="row mis-clases-cards" *ngFor="let f of cursosFiltrados" >
+        <div class="col-12 idesk-section mb-1" id="seccion-{{ f.idTipoCurso }}">
+            <label class="{{ f.idTipoCurso == 1 ? 'mis-clases' : f.idTipoCurso == 2 ? 'mis-capacitaciones' : f.idTipoCurso == 3 ? 'mis-cursos-ec' : 'mis-cursos-epad' }} mb-0">{{ f.etiqueta }}</label>
+        </div>
+        <div class="col-md-3 pointer {{ f.idTipoCurso == 1 ? 'academico' : f.idTipoCurso == 2 ? 'capacitacion' : f.idTipoCurso == 3 ? 'educacion-continua' : 'epads' }}" *ngFor="let curso of f.cursos">
+            <a class="a-no-format pointer" (click)="goToCurso(curso)" id="{{ curso.idCurso }}">
+                <div class="card subjects-home">
+                    <div class="card-body hvr-shutter-out-vertical {{ f.idTipoCurso == 1 ? 'mis-clases-body' : f.idTipoCurso == 2 ? 'mis-capacitaciones-body' : 'mis-cursos-ec-body' }} {{ curso.nuevo == 1 ? 'contenido-nuevo' : undefined }}"> <!--data-badge="N"-->
+                        <label class="card-title pointer">{{ curso.materia }}</label>
+                    </div>
+                    <div class="card-footer subjects-footer pointer">
+                        {{ curso.maestro }}{{ curso.clave }}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid idesk-home" *ngIf="tieneCursos == 0">
+    <div class="row">
+        <div class="col-12 text-center">
+            <br><br>
+            <label class="text-strong">No tiene cursos asignados en el IEST Desk este semestre.</label>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" *ngIf="mostrarCambia">
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <div class="row no-grutters align-items-center">
+                <div class="col"></div>
+                <div class="col-3">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="usuario">&nbsp;
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary btn-sm pointer" (click)="cambiaUsuario()">Cambia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
